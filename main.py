@@ -1,6 +1,6 @@
 import pyttsx3
 import speech_recognition as sr
-import os
+import subprocess
 import webbrowser
 import wikipedia
 from ctypes import cast, POINTER
@@ -43,6 +43,35 @@ def speak(audio):
     engine.say(audio)
     # Blocks while processing all the currently queued commands
     engine.runAndWait()
+
+# Function to open applications
+def open_application(app_name):
+    try:
+        process = subprocess.Popen([app_name], shell=True)
+        process.communicate()  # Wait for the process to finish
+        if process.returncode != 0:
+            print(f"Sam: Sorry, I couldn't open {app_name}. Please make sure the application is installed on your system.")
+            speak(f"Sorry, I couldn't open {app_name}. Please make sure the application is installed on your system.")
+        else:
+            speak(f"Opening {app_name} sir")
+    except Exception as e:
+        print(e)
+        print(f"Sam: Sorry, I encountered an error while trying to open {app_name} sir")
+        speak(f"Sorry, I encountered an error while trying to open {app_name} sir")
+
+# Function to close applications
+def close_application(app_name):
+    try:
+        process = subprocess.Popen(["TASKKILL", "/F", "/IM", f"{app_name}.exe"], shell=True)
+        process.communicate()  # Wait for the process to finish
+        if process.returncode != 0:
+            print(f"Sorry, I couldn't close {app_name}. Please make sure the application is running.")
+            speak(f"Sorry, I couldn't close {app_name} sir. Please make sure the application is running.")
+        else:
+            speak(f"Closing {app_name} sir")
+    except Exception as e:
+        print(e)
+        speak(f"Sorry, I encountered an error while trying to close {app_name} sir")
 
 # Function to increase volume
 def volume_up(step):
@@ -192,20 +221,32 @@ def take_query():
 
         # Launching the application
         elif "open" in query:
-            app = query.split("open ")[1]
             try:
-                os.system(f'start {app}.exe')
-                speak(f"Opening {app} sir")
-            except Exception as e:
-                print(e)
-                speak(f"Sorry, I couldn't open {app} sir")
+                app = query.split("open ")[1]
+                open_application(app)
+            except IndexError:
+                print("Sam: Please specify the application to open sir.")
+                speak("Please specify the application to open sir.")
+
+        # Close current application
+        elif "close" in query:
+            try:
+                app_to_close = query.split("close ")[1]
+                close_application(app_to_close)
+            except IndexError:
+                print("Sam: Please specify the application to close sir.")
+                speak("Please specify the application to close sir.")
 
         # Search the web
         elif "search" in query:
-            search_query = query.split("search ")[1]
-            search_url = f"https://www.google.com/search?q={search_query}"
-            speak(f"Searching the web for {search_query}")
-            webbrowser.open(search_url)
+            try:
+                search_query = query.split("search ")[1]
+                search_url = f"https://www.google.com/search?q={search_query}"
+                speak(f"Searching the web for {search_query}")
+                webbrowser.open(search_url)
+            except IndexError:
+                print("Sam: Please specify the search query sir.")
+                speak("Please specify the search query sir.")
 
         # Search on Wikipedia
         elif "from wikipedia" in query:
