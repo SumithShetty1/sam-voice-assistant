@@ -1,3 +1,4 @@
+import requests  # Import requests module for checking internet connectivity
 import pyttsx3
 import speech_recognition as sr
 import webbrowser
@@ -175,6 +176,14 @@ def decrease_brightness(step):
         print("Brightness decreased.")
         speak("Brightness decreased.")
 
+# Function to check internet connectivity
+def check_internet():
+    try:
+        requests.get('http://www.google.com', timeout=3)  # Attempt to make a request to Google
+        return True
+    except requests.ConnectionError:
+        return False
+
 # Function to interact with the user and perform actions based on their commands
 def take_query():
     # Initial greeting
@@ -186,6 +195,11 @@ def take_query():
 
     # Loop to continuously listen for user commands
     while True:
+        # Check internet connectivity
+        if not check_internet():
+            print("Sam: Sir, it seems there is no internet connection. Please connect to the internet and try again.")
+            continue
+
         if not sleeping:
             # Listen for user command
             query = takeCommand()
