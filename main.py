@@ -1,12 +1,12 @@
 import pyttsx3
 import speech_recognition as sr
-import subprocess
 import webbrowser
 import wikipedia
 from ctypes import cast, POINTER
 from comtypes import CLSCTX_ALL
-from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
-import screen_brightness_control as sbc
+from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume    #https://pypi.org/project/pycaw/
+import screen_brightness_control as sbc     #https://pypi.org/project/screen-brightness-control/
+from AppOpener import open, close           #https://pypi.org/project/appopener/
 
 # Function to capture user's voice command
 def takeCommand():
@@ -47,31 +47,31 @@ def speak(audio):
 # Function to open applications
 def open_application(app_name):
     try:
-        process = subprocess.Popen([app_name], shell=True)
-        process.communicate()  # Wait for the process to finish
-        if process.returncode != 0:
-            print(f"Sam: Sorry, I couldn't open {app_name}. Please make sure the application is installed on your system.")
-            speak(f"Sorry, I couldn't open {app_name}. Please make sure the application is installed on your system.")
-        else:
-            speak(f"Opening {app_name} sir")
+        open(app_name, throw_error=True, match_closest=True)
+        print(f"Sam: Opening {app_name} sir.")
+        speak(f"Opening {app_name} sir.")
     except Exception as e:
-        print(e)
-        print(f"Sam: Sorry, I encountered an error while trying to open {app_name} sir")
-        speak(f"Sorry, I encountered an error while trying to open {app_name} sir")
+        if "is not running" in str(e):
+            print(f"Sam: Sorry, I couldn't find an application named {app_name}.")
+            speak(f"Sorry, I couldn't find an application named {app_name}.")
+        else:
+            print(e)
+            print(f"Sam: Sorry, there was an error while opening {app_name}.")
+            speak(f"Sorry, there was an error while opening {app_name}.")
 
-# Function to close applications
 def close_application(app_name):
     try:
-        process = subprocess.Popen(["TASKKILL", "/F", "/IM", f"{app_name}.exe"], shell=True)
-        process.communicate()  # Wait for the process to finish
-        if process.returncode != 0:
-            print(f"Sorry, I couldn't close {app_name}. Please make sure the application is running.")
-            speak(f"Sorry, I couldn't close {app_name} sir. Please make sure the application is running.")
-        else:
-            speak(f"Closing {app_name} sir")
+        close(app_name, throw_error=True, match_closest=True)
+        print(f"Sam: Closing {app_name} sir")
+        speak(f"Closing {app_name} sir")
     except Exception as e:
-        print(e)
-        speak(f"Sorry, I encountered an error while trying to close {app_name} sir")
+        if "is not running" in str(e):
+            print(f"Sam: Sorry, I couldn't find an application named {app_name}.")
+            speak(f"Sorry, I couldn't find an application named {app_name}.")
+        else:
+            print(e)
+            print(f"Sam: Sorry, {app_name} is not installed on your system.")
+            speak(f"Sorry, {app_name} is not installed on your system.")
 
 # Function to increase volume
 def volume_up(step):
@@ -192,19 +192,23 @@ def take_query():
 
             # Check if the user wants to wake up the assistant
             if "hey sam" in query:
+                print("Yes sir, I'm awake.")
                 speak("Yes sir, I'm awake.")
                 continue
 
             # Check if the user wants the assistant to sleep
             elif "sleep" in query or "stop" in query:
+                print("Going to sleep.")
                 speak("Going to sleep.")
                 sleeping = True
                 continue
 
         else:
             # Listen for wake-up phrase
+            print("Say, hey Sam or wake up")
             wake_up_phrase = takeCommand()
-            if "hey sam" or "sam" in wake_up_phrase:
+            if "hey sam" in wake_up_phrase or "wake up" in wake_up_phrase:
+                print("Yes sir, I'm awake.")
                 speak("Yes sir, I'm awake.")
                 sleeping = False
                 continue
@@ -217,6 +221,7 @@ def take_query():
         # Exit the program
         elif "exit" in query:
             speak("Exiting sir")
+            print("Sam: Exiting sir")
             exit()
 
         # Launching the application
