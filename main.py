@@ -1,34 +1,11 @@
-import requests  # Import requests module for checking internet connectivity
-import speech_recognition as sr
+import requests
 import webbrowser
 import wikipedia
-from sam_functions import speak, open_application, close_application, volume_up, volume_down, mute_volume, \
-    unmute_volume, increase_brightness, decrease_brightness
-
-
-# Function to capture user's voice command
-def takeCommand():
-    r = sr.Recognizer()
-
-    with sr.Microphone() as source:
-        print('Listening...')
-        # Set energy threshold for ambient noise levels
-        r.energy_threshold = 4000
-        # Set the pause threshold to determine the end of a phrase
-        # r.pause_threshold = 0.7
-
-        try:
-            audio = r.listen(source)
-            print("Recognizing...")
-            # Recognize speech using Google Speech Recognition
-            query = r.recognize_google(audio, language='en-in')
-            print(f"Me: {query}")
-            return query
-        except KeyboardInterrupt:
-            print("Exiting...")
-            exit()
-        except Exception:
-            return "None"
+from sam_functions import takeCommand, speak
+from app_functions import open_application, close_application, close_window
+from volume_functions import volume_up, volume_down, mute_volume, unmute_volume
+from brightness_functions import increase_brightness, decrease_brightness
+from actioncenter_functions import show_or_hide_action_center, turn_on_or_off_bluetooth
 
 
 # Function to check internet connectivity
@@ -40,6 +17,13 @@ def check_internet():
         return False
 
 
+# Function to turn off Wi-Fi
+def turn_off_internet():
+    # Display warning message
+    print("Sam: Warning! You cannot turn off Internet or Wi-Fi. This assistant requires an internet connection to function properly.")
+    speak("Warning! You cannot turn off Internet or Wi-Fi. This assistant requires an internet connection to function properly.")
+
+
 # Function to interact with the user and perform actions based on their commands
 def take_query():
     # Initial greeting
@@ -49,12 +33,23 @@ def take_query():
     # Initialize the sleeping state
     sleeping = False
 
+    # Flag to track if the internet connection message has been displayed
+    internet_connection_message_displayed = False
+
     # Loop to continuously listen for user commands
     while True:
         # Check internet connectivity
         if not check_internet():
-            print("Sam: Sir, it seems there is no internet connection. Please connect to the internet and try again.")
+            # Check if the message has already been displayed
+            if not internet_connection_message_displayed:
+                print(
+                    "Sam: Sir, it seems there is no internet connection. Please connect to the internet and try again.")
+                speak("Sir, it seems there is no internet connection. Please connect to the internet and try again.")
+                internet_connection_message_displayed = True  # Set the flag to True to indicate that the message has been displayed
             continue
+        else:
+            # Reset the flag when internet connection is available
+            internet_connection_message_displayed = False
 
         if not sleeping:
             # Listen for user command
@@ -91,27 +86,26 @@ def take_query():
 
         # Exit the program
         elif "exit" in query:
-            speak("Exiting sir")
             print("Sam: Exiting sir")
+            speak("Exiting sir")
             exit()
 
-        # Launching the application
+        # Check if the user wants to turn off Wi-Fi
+        elif "turn off internet" in query or "turn off wi-fi" in query:
+            turn_off_internet()
+            continue
+
+        # Open application
         elif "open" in query:
-            try:
-                app = query.split("open ")[1]
-                open_application(app)
-            except IndexError:
-                print("Sam: Please specify the application to open sir.")
-                speak("Please specify the application to open sir.")
+            open_application(query)
 
         # Close current application
+        elif "close current window" in query:
+            close_window()
+
+        # Close application
         elif "close" in query:
-            try:
-                app_to_close = query.split("close ")[1]
-                close_application(app_to_close)
-            except IndexError:
-                print("Sam: Please specify the application to close sir.")
-                speak("Please specify the application to close sir.")
+            close_application(query)
 
         # Search the web
         elif "search" in query:
@@ -157,6 +151,13 @@ def take_query():
         # Decrease screen brightness
         elif "decrease brightness" in query:
             decrease_brightness(10)
+
+        # To show or hide action center
+        elif "open action centre" in query or "close action centre" in query:
+            show_or_hide_action_center(query)
+
+        elif "on bluetooth" in query or "off bluetooth" in query:
+            turn_on_or_off_bluetooth(query)
 
 
 # Main function to initiate the assistant
