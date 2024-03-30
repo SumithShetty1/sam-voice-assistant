@@ -10,13 +10,13 @@ def increase_brightness(step):
     new_brightness = min(current_brightness + step, max_brightness)
     # Check if the brightness is already at its maximum
     if new_brightness == current_brightness:
-        print("Sam: Brightness is already at its maximum.")
-        speak("Brightness is already at its maximum.")
+        print("Sam: Brightness is already at its maximum, sir")
+        speak("Brightness is already at its maximum sir")
     else:
         # Set the new brightness level
         sbc.set_brightness(new_brightness)
-        print("Sam: Brightness increased.")
-        speak("Brightness increased.")
+        print("Sam: Brightness increased, sir")
+        speak("Brightness increased sir")
 
 
 # Function to decrease brightness
@@ -27,10 +27,10 @@ def decrease_brightness(step):
     new_brightness = max(current_brightness - step, min_brightness)
     # Check if the brightness is already at its minimum
     if new_brightness == current_brightness:
-        print("Sam: Brightness is already at its minimum.")
-        speak("Brightness is already at its minimum.")
+        print("Sam: Brightness is already at its minimum, sir")
+        speak("Brightness is already at its minimum sir")
     else:
         # Set the new brightness level
         sbc.set_brightness(new_brightness)
-        print("Sam: Brightness decreased.")
-        speak("Brightness decreased.")
+        print("Sam: Brightness decreased, sir")
+        speak("Brightness decreased sir")

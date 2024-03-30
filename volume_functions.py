@@ -15,13 +15,13 @@ def volume_up(step):
     # Check if the new volume is equal to the current volume
     if new_volume == current_volume:
         # Print and speak a message indicating that the volume is already at its maximum
-        print("Sam: Volume is already at its maximum.")
-        speak("Volume is already at its maximum.")
+        print("Sam: Volume is already at its maximum, sir")
+        speak("Volume is already at its maximum sir")
     else:
         # Set the master volume level to the new volume
         volume.SetMasterVolumeLevel(new_volume, None)
-        print("Sam: Volume increased.")
-        speak("Volume increased.")
+        print("Sam: Volume increased, sir")
+        speak("Volume increased sir")
 
 
 # Function to decrease volume
@@ -34,12 +34,12 @@ def volume_down(step):
     new_volume = max(current_volume - step, min_volume)
     # Check if the absolute difference between the new volume and the current volume is very small
     if abs(new_volume - current_volume) < 0.01:  # Using a tolerance threshold for comparison
-        print('Sam: Volume is already at its minimum.')
+        print('Sam: Volume is already at its minimum, sir')
     else:
         # Set the master volume level to the new volume
         volume.SetMasterVolumeLevel(new_volume, None)
-        print("Sam: Volume decreased.")
-        speak("Volume decreased.")
+        print("Sam: Volume decreased, sir")
+        speak("Volume decreased sir")
 
 
 # Function to mute volume
@@ -53,11 +53,11 @@ def mute_volume():
     if not is_muted:
         # Mute volume
         volume.SetMute(1, None)
-        print("Sam: Volume muted.")
-        speak("Volume muted.")
+        print("Sam: Volume muted, sir")
+        speak("Volume muted sir")
     else:
-        print("Sam: Volume is already muted.")
-        speak("Volume is already muted.")
+        print("Sam: Volume is already muted, sir")
+        speak("Volume is already muted sir")
 
 
 # Function to unmute volume
@@ -71,8 +71,8 @@ def unmute_volume():
     if is_muted:
         # Unmute volume
         volume.SetMute(0, None)
-        print("Sam: Volume unmuted.")
-        speak("Volume unmuted.")
+        print("Sam: Volume unmuted, sir")
+        speak("Volume unmuted sir")
     else:
-        print("Sam: Volume is already unmuted.")
-        speak("Volume is already unmuted.")
+        print("Sam: Volume is already unmuted, sir")
+        speak("Volume is already unmuted sir")
