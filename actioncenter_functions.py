@@ -56,47 +56,47 @@ def turn_on_or_off_bluetooth(query):
         time.sleep(1)
 
         if "on bluetooth" in query and is_bluetooth_on():
-            print("Sam: Bluetooth is already on, sir.")
+            print("Sam: Bluetooth is already on, sir")
             speak("Bluetooth is already on sir")
             return
 
         if "off bluetooth" in query and not is_bluetooth_on():
-            print("Sam: Bluetooth is already off, sir.")
+            print("Sam: Bluetooth is already off, sir")
             speak("Bluetooth is already off sir")
             return
 
         if "on bluetooth" in query:
             # Click on the Bluetooth icon to turn it on
             # Adjust the coordinates based on the location of the Bluetooth icon on your screen
-            bluetooth_icon_location = pyautogui.locateCenterOnScreen("images/bluetooth_on.png", confidence=0.9, grayscale=True)
-            if bluetooth_icon_location is not None:
+            try:
+                bluetooth_icon_location = pyautogui.locateCenterOnScreen("images/bluetooth_off.png", confidence=0.9, grayscale=True)
                 pyautogui.click(bluetooth_icon_location)
-                print("Sam: Bluetooth is turned on, sir.")
+                print("Sam: Bluetooth is turned on, sir")
                 speak("Bluetooth is turned on sir")
-            else:
-                print("Sam: Bluetooth icon not found, sir.")
+            except pyautogui.ImageNotFoundException:
+                print("Sam: Bluetooth icon not found, sir")
                 speak("Bluetooth icon not found sir")
         else:
             # Click on the Bluetooth icon to turn it off
             # Adjust the coordinates based on the location of the Bluetooth icon on your screen
-            bluetooth_icon_location = pyautogui.locateCenterOnScreen("images/bluetooth_on.png", confidence=0.9, grayscale=True)
-            if bluetooth_icon_location is not None:
+            try:
+                bluetooth_icon_location = pyautogui.locateCenterOnScreen("images/bluetooth_on.png", confidence=0.9, grayscale=True)
                 pyautogui.click(bluetooth_icon_location)
-                print("Sam: Bluetooth is turned off, sir.")
+                print("Sam: Bluetooth is turned off, sir")
                 speak("Bluetooth is turned off sir")
-            else:
-                print("Sam: Bluetooth icon not found, sir.")
+            except pyautogui.ImageNotFoundException:
+                print("Sam: Bluetooth icon not found, sir")
                 speak("Bluetooth icon not found sir")
 
     except Exception as e:
         # Handle any errors that may occur
         print(f"Sam: Error changing Bluetooth status: {e}")
         if "on bluetooth" in query:
-            print("Sam: Sorry, I couldn't turned on Bluetooth, sir.")
-            speak("Sorry, I couldn't turned on Bluetooth, sir.")
+            print("Sam: Sorry, I couldn't turned on Bluetooth, sir")
+            speak("Sorry, I couldn't turned on Bluetooth sir")
         else:
-            print("Sam: Sorry, I couldn't turned off Bluetooth, sir.")
-            speak("Sorry, I couldn't turned off Bluetooth.")
+            print("Sam: Sorry, I couldn't turned off Bluetooth, sir")
+            speak("Sorry, I couldn't turned off Bluetooth sir")
 
 
 # Function show Bluetooth devices

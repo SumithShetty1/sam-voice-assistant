@@ -55,7 +55,7 @@ def take_query():
         if not sleeping:
             # Listen for user command
             # query = takeCommand()
-            query = "off bluetooth quickly"
+            query = "on bluetooth quickly"
 
             # Check if the user wants to wake up the assistant
             if "hey sam" in query:
