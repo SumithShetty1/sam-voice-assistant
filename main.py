@@ -54,7 +54,8 @@ def take_query():
 
         if not sleeping:
             # Listen for user command
-            query = takeCommand()
+            # query = takeCommand()
+            query = "off bluetooth quickly"
 
             # Check if the user wants to wake up the assistant
             if "hey sam" in query:
@@ -159,7 +160,7 @@ def take_query():
 
         # Quickly toggle Bluetooth
         elif "on bluetooth quickly" in query or "off bluetooth quickly" in query:
-            turn_on_or_off_bluetooth()
+            turn_on_or_off_bluetooth(query)
 
         # Quickly show Bluetooth devices
         elif "show bluetooth devices quickly" in query:
