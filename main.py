@@ -49,7 +49,7 @@ def take_query():
         if not sleeping:
             # Listen for user command
             # query = takeCommand()
-            query = "off bluetooth on action center"
+            query = "off battery saver on action center"
 
             # Check if the user wants to wake up the assistant
             if "hey sam" in query:
@@ -166,7 +166,7 @@ def take_query():
 
         # On action center toggle battery saver
         elif "on battery saver on action center" in query or "off battery saver on action center" in query:
-            toggle_battery_saver()
+            toggle_battery_saver(query)
 
         # On action center toggle night light mode
         elif "on night light on action center" in query or "off night light on action center" in query:
