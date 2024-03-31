@@ -1,29 +1,22 @@
-import requests
 import webbrowser
 import wikipedia
+from check_functions import check_internet
 from sam_functions import takeCommand, speak
 from app_functions import open_application, close_application, close_window
 from volume_functions import volume_up, volume_down, mute_volume, unmute_volume
 from brightness_functions import increase_brightness, decrease_brightness
-from actioncenter_functions import show_or_hide_action_center, turn_on_or_off_bluetooth, show_bluetooth_devices, \
-    turn_on_or_off_airplane_mode, turn_on_or_off_battery_saver, turn_on_or_off_night_light, \
-    turn_on_or_off_nearby_sharing
+from actioncenter_functions import show_or_hide_action_center, toggle_bluetooth, action_center_show_bluetooth_devices, \
+    toggle_airplane_mode, toggle_battery_saver, toggle_night_light, toggle_nearby_sharing
 from windows_search_functions import search_in_windows
-
-# Function to check internet connectivity
-def check_internet():
-    try:
-        requests.get('http://www.google.com', timeout=3)  # Attempt to make a request to Google
-        return True
-    except requests.ConnectionError:
-        return False
 
 
 # Function to turn off Wi-Fi
 def turn_off_internet():
     # Display warning message
-    print("Sam: Warning! You cannot turn off Internet or Wi-Fi. This assistant requires an internet connection to function properly, sir")
-    speak("Warning! You cannot turn off Internet or Wi-Fi. This assistant requires an internet connection to function properly sir")
+    print(
+        "Sam: Warning! You cannot turn off Internet or Wi-Fi. This assistant requires an internet connection to function properly, sir")
+    speak(
+        "Warning! You cannot turn off Internet or Wi-Fi. This assistant requires an internet connection to function properly sir")
 
 
 # Function to interact with the user and perform actions based on their commands
@@ -44,7 +37,8 @@ def take_query():
         if not check_internet():
             # Check if the message has already been displayed
             if not internet_connection_message_displayed:
-                print("Sam: Sir, it seems there is no internet connection. Please connect to the internet and try again")
+                print(
+                    "Sam: Sir, it seems there is no internet connection. Please connect to the internet and try again")
                 speak("Sir, it seems there is no internet connection. Please connect to the internet and try again")
                 internet_connection_message_displayed = True  # Set the flag to True to indicate that the message has been displayed
             continue
@@ -55,7 +49,7 @@ def take_query():
         if not sleeping:
             # Listen for user command
             # query = takeCommand()
-            query = "on bluetooth quickly"
+            query = "off bluetooth on action center"
 
             # Check if the user wants to wake up the assistant
             if "hey sam" in query:
@@ -158,35 +152,39 @@ def take_query():
         elif "show action centre" in query or "hide action centre" in query:
             show_or_hide_action_center(query)
 
-        # Quickly toggle Bluetooth
-        elif "on bluetooth quickly" in query or "off bluetooth quickly" in query:
-            turn_on_or_off_bluetooth(query)
+        # On action center toggle Bluetooth
+        elif "on bluetooth on action center" in query or "off bluetooth on action center" in query:
+            toggle_bluetooth(query)
 
-        # Quickly show Bluetooth devices
-        elif "show bluetooth devices quickly" in query:
-            show_bluetooth_devices()
+        # On action center show Bluetooth devices
+        elif "show bluetooth devices on action center" in query:
+            action_center_show_bluetooth_devices()
 
-        # Quickly toggle airplane mode
-        elif "on airplane mode quickly" in query or "off airplane mode quickly" in query:
-            turn_on_or_off_airplane_mode(query)
+        # On action center toggle airplane mode
+        elif "on airplane mode on action center" in query or "off airplane mode on action center" in query:
+            toggle_airplane_mode(query)
 
-        # Quickly toggle battery saver
-        elif "on battery saver quickly" in query or "off battery saver quickly" in query:
-            turn_on_or_off_battery_saver()
+        # On action center toggle battery saver
+        elif "on battery saver on action center" in query or "off battery saver on action center" in query:
+            toggle_battery_saver()
 
-        # Quickly toggle night light mode
-        elif "on night light quickly" in query or "off night light quickly" in query:
-            turn_on_or_off_night_light()
+        # On action center toggle night light mode
+        elif "on night light on action center" in query or "off night light on action center" in query:
+            toggle_night_light()
 
-        # Quickly toggle nearby sharing
-        elif "on nearby share quickly" in query or "on nearby share quickly" in query:
-            turn_on_or_off_nearby_sharing()
+        # On action center toggle nearby sharing
+        elif "on nearby share on action center" in query or "on nearby share on action center" in query:
+            toggle_nearby_sharing()
 
-    # Search in Windows
+        # Search in Windows
         elif "windows search" in query:
             search_in_windows(query)
 
 
 # Main function to initiate the assistant
 if __name__ == '__main__':
-    take_query()
+    try:
+        take_query()
+    except Exception as e:
+        print(e)
+        print("Exiting")

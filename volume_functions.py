@@ -1,7 +1,7 @@
 from sam_functions import speak
 from ctypes import cast, POINTER
 from comtypes import CLSCTX_ALL
-from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume  # https://pypi.org/project/pycaw/
+from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 
 
 # Function to increase volume

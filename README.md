@@ -40,3 +40,7 @@
 - [opencv-python](https://pypi.org/project/opencv-python/): A library for computer vision tasks.
   ```bash
   pip install opencv-python
+
+- [darkdetect](https://pypi.org/project/darkdetect/): A package to detect system dark mode on macOS, Windows, and Linux with a dark GTK theme.
+  ```bash
+  pip install darkdetect

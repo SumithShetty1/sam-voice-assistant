@@ -1,5 +1,5 @@
 import time
-import pyautogui  # https://pypi.org/project/PyAutoGUI/
+import pyautogui
 from sam_functions import speak
 
 

@@ -1,6 +1,7 @@
 import time
-import pyautogui  # https://pypi.org/project/PyAutoGUI/
+import pyautogui
 from sam_functions import speak
+from check_functions import check_dark_mode
 
 
 # Function to show or hide the Action Center
@@ -34,19 +35,19 @@ def show_or_hide_action_center(query):
 def is_bluetooth_on():
     try:
         # Check if the Bluetooth icon is present in the screenshot
-        bluetooth_icon_location = pyautogui.locateOnScreen("images/bluetooth_on.png", confidence=0.9)
-        if bluetooth_icon_location is not None:
-            return True
-        return False
+        if not check_dark_mode():
+            pyautogui.locateOnScreen("images/light_mode/bluetooth_on.png", confidence=0.9)
+        else:
+            pyautogui.locateOnScreen("images/dark_mode/bluetooth_on.png", confidence=0.9)
+        return True
     except pyautogui.ImageNotFoundException:
-        # Image not found exception
         return False
     except Exception as e:
         print("Sam: An error occurred:", e)
 
 
 # Function to turn on or off Bluetooth
-def turn_on_or_off_bluetooth(query):
+def toggle_bluetooth(query):
     try:
         # Press the Esc key
         pyautogui.press('esc')
@@ -69,7 +70,10 @@ def turn_on_or_off_bluetooth(query):
             # Click on the Bluetooth icon to turn it on
             # Adjust the coordinates based on the location of the Bluetooth icon on your screen
             try:
-                bluetooth_icon_location = pyautogui.locateCenterOnScreen("images/bluetooth_off.png", confidence=0.9, grayscale=True)
+                if not check_dark_mode():
+                    bluetooth_icon_location = pyautogui.locateCenterOnScreen("images/light_mode/bluetooth_off.png", confidence=0.9, grayscale=True)
+                else:
+                    bluetooth_icon_location = pyautogui.locateCenterOnScreen("images/dark_mode/bluetooth_off.png", confidence=0.9, grayscale=True)
                 pyautogui.click(bluetooth_icon_location)
                 print("Sam: Bluetooth is turned on, sir")
                 speak("Bluetooth is turned on sir")
@@ -80,7 +84,10 @@ def turn_on_or_off_bluetooth(query):
             # Click on the Bluetooth icon to turn it off
             # Adjust the coordinates based on the location of the Bluetooth icon on your screen
             try:
-                bluetooth_icon_location = pyautogui.locateCenterOnScreen("images/bluetooth_on.png", confidence=0.9, grayscale=True)
+                if not check_dark_mode():
+                    bluetooth_icon_location = pyautogui.locateCenterOnScreen("images/light_mode/bluetooth_on.png", confidence=0.9, grayscale=True)
+                else:
+                    bluetooth_icon_location = pyautogui.locateCenterOnScreen("images/dark_mode/bluetooth_on.png", confidence=0.9, grayscale=True)
                 pyautogui.click(bluetooth_icon_location)
                 print("Sam: Bluetooth is turned off, sir")
                 speak("Bluetooth is turned off sir")
@@ -100,7 +107,7 @@ def turn_on_or_off_bluetooth(query):
 
 
 # Function show Bluetooth devices
-def show_bluetooth_devices():
+def action_center_show_bluetooth_devices():
     try:
         # Press the Esc key
         pyautogui.press('esc')
@@ -126,7 +133,7 @@ def show_bluetooth_devices():
 
 
 # Function to turn on or off airplane mode
-def turn_on_or_off_airplane_mode(query):
+def toggle_airplane_mode(query):
     try:
         # Warning message for enabling airplane mode
         if "on airplane mode" in query:
@@ -159,7 +166,7 @@ def turn_on_or_off_airplane_mode(query):
 
 
 # Function to turn on or off Battery Saver
-def turn_on_or_off_battery_saver():
+def toggle_battery_saver():
     try:
         # Press the Esc key
         pyautogui.press('esc')
@@ -185,7 +192,7 @@ def turn_on_or_off_battery_saver():
 
 
 # Function to turn on or off Night light
-def turn_on_or_off_night_light():
+def toggle_night_light():
     try:
         # Press the Esc key
         pyautogui.press('esc')
@@ -213,7 +220,7 @@ def turn_on_or_off_night_light():
 
 
 # Function to turn on or off Nearby Sharing
-def turn_on_or_off_nearby_sharing():
+def toggle_nearby_sharing():
     try:
         # Press the Esc key
         pyautogui.press('esc')

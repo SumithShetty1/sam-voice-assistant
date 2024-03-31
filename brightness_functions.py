@@ -1,5 +1,5 @@
 from sam_functions import speak
-import screen_brightness_control as sbc  # https://pypi.org/project/screen-brightness-control/
+import screen_brightness_control as sbc
 
 
 # Function to increase brightness

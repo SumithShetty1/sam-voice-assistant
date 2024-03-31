@@ -1,6 +1,6 @@
 from sam_functions import speak
-from AppOpener import open, close  # https://pypi.org/project/appopener/
-import pyautogui  # https://pypi.org/project/PyAutoGUI/
+from AppOpener import open, close
+import pyautogui
 
 
 # Function to open applications
