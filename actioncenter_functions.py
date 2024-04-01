@@ -60,12 +60,16 @@ def toggle_bluetooth(query):
         if "on bluetooth" in query and is_bluetooth_on():
             print("Sam: Bluetooth is already on, sir")
             speak("Bluetooth is already on sir")
+            # Press the Esc key
+            pyautogui.press('esc')
             return
 
         # Check if bluetooth is already off
         if "off bluetooth" in query and not is_bluetooth_on():
             print("Sam: Bluetooth is already off, sir")
             speak("Bluetooth is already off sir")
+            # Press the Esc key
+            pyautogui.press('esc')
             return
 
         if "on bluetooth" in query:
@@ -96,6 +100,8 @@ def toggle_bluetooth(query):
             except pyautogui.ImageNotFoundException:
                 print("Sam: Bluetooth icon not found, sir")
                 speak("Bluetooth icon not found sir")
+        # Press the Esc key
+        pyautogui.press('esc')
 
     except Exception as e:
         # Handle any errors that may occur
@@ -106,6 +112,8 @@ def toggle_bluetooth(query):
         else:
             print("Sam: Sorry, I couldn't turned off Bluetooth, sir")
             speak("Sorry, I couldn't turned off Bluetooth sir")
+        # Press the Esc key
+        pyautogui.press('esc')
 
 
 # Function show Bluetooth devices
@@ -174,12 +182,16 @@ def toggle_airplane_mode(query):
         if "on airplane mode" in query and is_airplane_mode_on():
             print("Sam: Airplane mode is already on, sir")
             speak("Airplane mode is already on sir")
+            # Press the Esc key
+            pyautogui.press('esc')
             return
 
         # Check if airplane mode is already off
         if "off airplane mode" in query and not is_airplane_mode_on():
             print("Sam: Airplane mode is already off, sir")
             speak("Airplane mode is already off sir")
+            # Press the Esc key
+            pyautogui.press('esc')
             return
 
         if "on airplane mode" in query:
@@ -210,6 +222,8 @@ def toggle_airplane_mode(query):
             except pyautogui.ImageNotFoundException:
                 print("Sam: Airplane mode icon not found, sir")
                 speak("Airplane mode icon not found sir")
+        # Press the Esc key
+        pyautogui.press('esc')
 
     except Exception as e:
         # Handle any errors that may occur
@@ -266,18 +280,24 @@ def toggle_battery_saver(query):
         if is_battery_charging():
             print("Sam: Battery is charging, Battery Saver can not be turn on or off, sir")
             speak("Battery is charging, Battery Saver can not be turn on or off sir")
+            # Press the Esc key
+            pyautogui.press('esc')
             return
 
         # Check if Battery Saver is already off
         if "on battery saver" in query and is_battery_saver_on():
             print("Sam: Battery Saver is already on, sir")
             speak("Battery Saver is already on sir")
+            # Press the Esc key
+            pyautogui.press('esc')
             return
 
         # Check if Battery Saver is already off
         if "off battery saver" in query and not is_battery_saver_on():
             print("Sam: Battery Saver is already off, sir")
             speak("Battery Saver is already off sir")
+            # Press the Esc key
+            pyautogui.press('esc')
             return
 
         if "on battery saver" in query:
@@ -308,6 +328,8 @@ def toggle_battery_saver(query):
             except pyautogui.ImageNotFoundException:
                 print("Sam: Battery Saver icon not found, sir")
                 speak("Battery Saver icon not found sir")
+        # Press the Esc key
+        pyautogui.press('esc')
 
     except Exception as e:
         # Handle any errors that may occur
@@ -349,12 +371,16 @@ def toggle_night_light(query):
         if "on night light" in query and is_night_light_on():
             print("Sam: Night light is already on, sir")
             speak("Night light is already on sir")
+            # Press the Esc key
+            pyautogui.press('esc')
             return
 
         # Check if night light is already off
         if "off night light" in query and not is_night_light_on():
             print("Sam: Night light is already off, sir")
             speak("Night light is already off sir")
+            # Press the Esc key
+            pyautogui.press('esc')
             return
 
         if "on night light" in query:
@@ -385,6 +411,8 @@ def toggle_night_light(query):
             except pyautogui.ImageNotFoundException:
                 print("Sam: Night light icon not found, sir")
                 speak("Night light icon not found sir")
+        # Press the Esc key
+        pyautogui.press('esc')
 
     except Exception as e:
         # Handle any errors that may occur
@@ -426,12 +454,16 @@ def toggle_nearby_sharing(query):
         if "on nearby sharing" in query and is_nearby_sharing_on():
             print("Sam: Nearby sharing is already on, sir")
             speak("Nearby sharing is already on sir")
+            # Press the Esc key
+            pyautogui.press('esc')
             return
 
         # Check if nearby sharing is already off
         if "off nearby sharing" in query and not is_nearby_sharing_on():
             print("Sam: Nearby sharing is already off, sir")
             speak("Nearby sharing is already off sir")
+            # Press the Esc key
+            pyautogui.press('esc')
             return
 
         if "on nearby sharing" in query:
@@ -466,6 +498,8 @@ def toggle_nearby_sharing(query):
             except pyautogui.ImageNotFoundException:
                 print("Sam: Nearby sharing icon not found, sir")
                 speak("Nearby sharing icon not found sir")
+        # Press the Esc key
+        pyautogui.press('esc')
 
     except Exception as e:
         # Handle any errors that may occur
