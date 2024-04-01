@@ -48,8 +48,8 @@ def take_query():
 
         if not sleeping:
             # Listen for user command
-            # query = takeCommand()
-            query = "off battery saver on action center"
+            query = takeCommand()
+            # query = "off battery saver in action center"
 
             # Check if the user wants to wake up the assistant
             if "hey sam" in query:
@@ -153,28 +153,28 @@ def take_query():
             show_or_hide_action_center(query)
 
         # On action center toggle Bluetooth
-        elif "on bluetooth on action center" in query or "off bluetooth on action center" in query:
+        elif "on bluetooth in action center" in query or "off bluetooth in action center" in query:
             toggle_bluetooth(query)
 
         # On action center show Bluetooth devices
-        elif "show bluetooth devices on action center" in query:
+        elif "show bluetooth devices in action center" in query:
             action_center_show_bluetooth_devices()
 
         # On action center toggle airplane mode
-        elif "on airplane mode on action center" in query or "off airplane mode on action center" in query:
+        elif "on airplane mode in action center" in query or "off airplane mode in action center" in query:
             toggle_airplane_mode(query)
 
         # On action center toggle battery saver
-        elif "on battery saver on action center" in query or "off battery saver on action center" in query:
+        elif "on battery saver in action center" in query or "off battery saver in action center" in query:
             toggle_battery_saver(query)
 
         # On action center toggle night light mode
-        elif "on night light on action center" in query or "off night light on action center" in query:
-            toggle_night_light()
+        elif "on night light in action center" in query or "off night light in action center" in query:
+            toggle_night_light(query)
 
         # On action center toggle nearby sharing
-        elif "on nearby share on action center" in query or "on nearby share on action center" in query:
-            toggle_nearby_sharing()
+        elif "on nearby sharing in action center" in query or "on nearby share in action center" in query:
+            toggle_nearby_sharing(query)
 
         # Search in Windows
         elif "windows search" in query:
