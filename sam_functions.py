@@ -28,7 +28,7 @@ def takeCommand():
             print("Exiting...")
             exit()
         except Exception:
-            return "None"
+            return None
 
 
 # Function to convert text to speech

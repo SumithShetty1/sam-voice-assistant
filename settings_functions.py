@@ -1,7 +1,7 @@
 import time
 import pyautogui
-from sam_functions import speak
-from check_functions import check_dark_mode
+from sam_functions import speak, takeCommand
+from check_functions import check_dark_mode, check_settings_opening
 
 q = "on bluetooth"
 
@@ -27,10 +27,42 @@ def enable_or_disable_bluetooth(query):
         # Press keys to open Action Center
         pyautogui.hotkey('win')
         pyautogui.typewrite('Bluetooth')
-        time.sleep(0.5)
+        time.sleep(0.2)
         pyautogui.press('enter')
-        # Wait for the Bluetooth settings window to open
-        pyautogui.sleep(2)
+        time.sleep(2)
+
+        # Check for the settings app continuously for 10 seconds
+        if check_settings_opening():
+            # Settings opening found, proceed with the operation
+            pass
+        else:
+            # Settings app not found within 10 seconds, ask the user whether to continue waiting or exit
+            print("Sam: The settings app is taking longer than usual to open. Do you want to continue waiting, sir?")
+            speak("The settings app is taking longer than usual to open. Do you want to continue waiting sir?")
+
+            while True:
+                confirm = takeCommand()
+                if confirm is None:
+                    continue
+                if confirm == 'yes':
+                    if not check_settings_opening():
+                        if "on bluetooth" in query:
+                            print(
+                                "Sam: The settings app is still taking time to open. Please manually turn on Bluetooth")
+                            speak("The settings app is still taking time to open. Please manually turn on Bluetooth")
+                            return
+                        else:
+                            print(
+                                "Sam: The settings app is still taking time to open. Please manually turn off Bluetooth")
+                            speak(
+                                "The settings app is still taking time to open. Please manually turn off Bluetooth")
+                            return
+
+                else:
+                    print("Sam: Closing settings, sir")
+                    speak("Closing settings sir")
+                    pyautogui.hotkey('alt', 'f4')
+                    return
 
         # Check if bluetooth is already on
         if "on bluetooth" in query and is_bluetooth_on():
@@ -59,9 +91,11 @@ def enable_or_disable_bluetooth(query):
                 pyautogui.click(bluetooth_icon_location)
                 print("Sam: Bluetooth is turned on, sir")
                 speak("Bluetooth is turned on sir")
+                pyautogui.hotkey('alt', 'f4')
             except pyautogui.ImageNotFoundException:
                 print("Sam: Bluetooth icon not found, sir")
                 speak("Bluetooth icon not found sir")
+                pyautogui.hotkey('alt', 'f4')
         else:
             # Click on the Bluetooth icon to turn it off
             # Adjust the coordinates based on the location of the Bluetooth icon on your screen
@@ -75,22 +109,23 @@ def enable_or_disable_bluetooth(query):
                 pyautogui.click(bluetooth_icon_location)
                 print("Sam: Bluetooth is turned off, sir")
                 speak("Bluetooth is turned off sir")
+                pyautogui.hotkey('alt', 'f4')
             except pyautogui.ImageNotFoundException:
                 print("Sam: Bluetooth icon not found, sir")
                 speak("Bluetooth icon not found sir")
-        time.sleep(1)
-        pyautogui.hotkey('alt', 'f4')
+                pyautogui.hotkey('alt', 'f4')
+
     except Exception as e:
         # Handle any errors that may occur
         print(f"Sam: Error changing Bluetooth status: {e}")
         if "on bluetooth" in query:
-            print("Sam: Sorry, I couldn't turned on Bluetooth, sir")
-            speak("Sorry, I couldn't turned on Bluetooth sir")
+            print("Sam: Sorry, I couldn't turn on Bluetooth, sir")
+            speak("Sorry, I couldn't turn on Bluetooth sir")
+            pyautogui.hotkey('alt', 'f4')
         else:
-            print("Sam: Sorry, I couldn't turned off Bluetooth, sir")
-            speak("Sorry, I couldn't turned off Bluetooth sir")
-        time.sleep(1)
-        pyautogui.hotkey('alt', 'f4')
+            print("Sam: Sorry, I couldn't turn off Bluetooth, sir")
+            speak("Sorry, I couldn't turn off Bluetooth sir")
+            pyautogui.hotkey('alt', 'f4')
 
 
 enable_or_disable_bluetooth(q)
