@@ -1,4 +1,4 @@
-from sam_functions import speak
+from sam_functions.speak import speak
 from AppOpener import open, close
 import pyautogui
 

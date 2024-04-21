@@ -1,6 +1,6 @@
 import time
 import pyautogui
-from sam_functions import speak
+from sam_functions.speak import speak
 
 
 def search_in_windows(query):

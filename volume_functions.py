@@ -1,4 +1,4 @@
-from sam_functions import speak
+from sam_functions.speak import speak
 from ctypes import cast, POINTER
 from comtypes import CLSCTX_ALL
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
