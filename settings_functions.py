@@ -2,7 +2,7 @@ import time
 import pyautogui
 from sam_functions.speak import speak
 from sam_functions.listen import listen
-from check_functions import check_dark_mode, check_settings_opening, check_window_maximized
+from check_functions import check_internet, check_dark_mode, check_settings_opening, check_window_maximized
 
 
 # Bluetooth
@@ -306,6 +306,13 @@ def enable_or_disable_airplane_mode(query):
             pyautogui.hotkey('win', 'up')
             time.sleep(0.2)
 
+        # Check if Airplane Mode is already on
+        if "on airplane mode" in query and is_airplane_mode_on():
+            print("Sam: Airplane Mode is already on, sir")
+            speak("Airplane Mode is already on sir")
+            pyautogui.hotkey('alt', 'f4')
+            return
+
         # Warning message for enabling airplane mode
         if "on airplane mode" in query and not is_airplane_mode_on():
             print(
@@ -323,13 +330,6 @@ def enable_or_disable_airplane_mode(query):
                     speak("Airplane mode not enabled, sir.")
                     pyautogui.hotkey('alt', 'f4')
                     return
-
-        # Check if Airplane Mode is already on
-        if "on airplane mode" in query and is_airplane_mode_on():
-            print("Sam: Airplane Mode is already on, sir")
-            speak("Airplane Mode is already on sir")
-            pyautogui.hotkey('alt', 'f4')
-            return
 
         # Check if Airplane Mode is already off
         if "off airplane mode" in query and not is_airplane_mode_on():
@@ -678,7 +678,7 @@ def enable_or_disable_nearby_share(query):
                     continue
                 if "yes" in confirm:
                     if not check_settings_opening():
-                        if "on nearby share" in query:
+                        if "on nearby share" in query or "on nearby sharing" in query:
                             print(
                                 "Sam: The settings app is still taking time to open. Please manually turn on Nearby Share mode")
                             speak(
@@ -701,20 +701,20 @@ def enable_or_disable_nearby_share(query):
             time.sleep(0.2)
 
         # Check if Nearby Share mode is already on
-        if "on nearby share" in query and is_nearby_share_on():
+        if ("on nearby share" in query or "on nearby sharing" in query) and is_nearby_share_on():
             print("Sam: Nearby Share mode is already on, sir")
             speak("Nearby Share mode is already on sir")
             pyautogui.hotkey('alt', 'f4')
             return
 
         # Check if Nearby Share mode is already off
-        if "off nearby share" in query and not is_nearby_share_on():
+        if ("off nearby share" in query or "off nearby sharing" in query) and not is_nearby_share_on():
             print("Sam: Nearby Share mode is already off, sir")
             speak("Nearby Share mode is already off sir")
             pyautogui.hotkey('alt', 'f4')
             return
 
-        if "on nearby share" in query:
+        if "on nearby share" in query or "on nearby sharing" in query:
             # Click on the Nearby Share toggle to turn it on
             # Adjust the coordinates based on the location of the Nearby Share toggle on your screen
             try:
@@ -752,7 +752,7 @@ def enable_or_disable_nearby_share(query):
     except Exception as e:
         # Handle any errors that may occur
         print(f"Sam: Error changing Nearby Share mode status: {e}")
-        if "on nearby share" in query:
+        if "on nearby share" in query or "on nearby sharing" in query:
             print("Sam: Sorry, I couldn't turn on Nearby Share mode, sir")
             speak("Sorry, I couldn't turn on Nearby Share mode sir")
         else:
@@ -775,6 +775,132 @@ def is_wifi_on():
         return False
     except Exception as e:
         print("Sam: An error occurred:", e)
+
+
+# Function to turn on or off Wi-Fi
+def enable_or_disable_wifi(query):
+    try:
+        pyautogui.hotkey('win')
+        time.sleep(0.2)
+        pyautogui.typewrite('WiFi')
+        time.sleep(0.2)
+        pyautogui.press('enter')
+        time.sleep(2)
+
+        # Check for the settings app continuously for 10 seconds
+        if check_settings_opening():
+            # Settings opening found, proceed with the operation
+            pass
+        else:
+            # Settings app not found within 10 seconds, ask the user whether to continue waiting or exit
+            print("Sam: The settings app is taking longer than usual to open. Do you want to continue waiting, sir?")
+            speak("The settings app is taking longer than usual to open. Do you want to continue waiting sir?")
+
+            while True:
+                confirm = listen()
+                if confirm == "":
+                    continue
+                if "yes" in confirm:
+                    if not check_settings_opening():
+                        if "on Wi-Fi mode" in query:
+                            print(
+                                "Sam: The settings app is still taking time to open. Please manually turn on Wi-Fi")
+                            speak(
+                                "The settings app is still taking time to open. Please manually turn on Wi-Fi")
+                            return
+                        else:
+                            print(
+                                "Sam: The settings app is still taking time to open. Please manually turn off Wi-Fi")
+                            speak(
+                                "The settings app is still taking time to open. Please manually turn off Wi-Fi")
+                            return
+                else:
+                    print("Sam: Closing settings, sir")
+                    speak("Closing settings sir")
+                    pyautogui.hotkey('alt', 'f4')
+                    return
+
+        if not check_window_maximized():
+            pyautogui.hotkey('win', 'up')
+            time.sleep(0.2)
+
+        # Check if Wi-Fi is already on
+        if "on wi-fi" in query and is_wifi_on():
+            print("Sam: Wi-Fi is already on, sir")
+            speak("Wi-Fi is already on sir")
+            pyautogui.hotkey('alt', 'f4')
+            return
+
+        # Warning message for enabling Wi-Fi
+        if "on wi-fi" in query and not is_wifi_on() and check_internet():
+            print(
+                "Sam: Warning! Enabling Wi-Fi will turn off your current internet connection. Do you want to continue, sir?")
+            speak(
+                "Warning! Enabling Wi-Fi will turn off your current internet connection. Do you want to continue sir?")
+            while True:
+                confirm = listen()
+                if confirm == "":
+                    continue
+                if "yes" in confirm:
+                    break
+                else:
+                    print("Sam: Wi-Fi not enabled, sir.")
+                    speak("Wi-Fi not enabled, sir.")
+                    pyautogui.hotkey('alt', 'f4')
+                    return
+
+        # Check if Wi-Fi is already off
+        if "off wi-fi" in query and not is_wifi_on():
+            print("Sam: Wi-Fi is already off, sir")
+            speak("Wi-Fi is already off sir")
+            pyautogui.hotkey('alt', 'f4')
+            return
+
+        if "on wi-fi" in query:
+            # Click on the Wi-Fi toggle to turn it on
+            # Adjust the coordinates based on the location of the Wi-Fi toggle on your screen
+            try:
+                if not check_dark_mode():
+                    wifi_toggle_location = pyautogui.locateCenterOnScreen(
+                        "images/light_mode/settings/toggle_off.png", confidence=0.9, grayscale=True)
+                else:
+                    wifi_toggle_location = pyautogui.locateCenterOnScreen(
+                        "images/dark_mode/settings/toggle_off.png", confidence=0.9, grayscale=True)
+                pyautogui.click(wifi_toggle_location)
+                print("Sam: Wi-Fi is turned on, sir")
+                speak("Wi-Fi is turned on sir")
+            except pyautogui.ImageNotFoundException:
+                print("Sam: Wi-Fi toggle not found, sir")
+                speak("Wi-Fi toggle not found sir")
+            pyautogui.hotkey('alt', 'f4')
+        else:
+            # Click on the Wi-Fi toggle to turn it off
+            # Adjust the coordinates based on the location of the Wi-Fi toggle on your screen
+            try:
+                if not check_dark_mode():
+                    wifi_toggle_location = pyautogui.locateCenterOnScreen(
+                        "images/light_mode/settings/toggle_on.png", confidence=0.9, grayscale=True)
+                else:
+                    wifi_toggle_location = pyautogui.locateCenterOnScreen(
+                        "images/dark_mode/settings/toggle_on.png", confidence=0.9, grayscale=True)
+                pyautogui.click(wifi_toggle_location)
+                print("Sam: Wi-Fi is turned off, sir")
+                speak("Wi-Fi is turned off sir")
+            except pyautogui.ImageNotFoundException:
+                print("Sam: Wi-Fi toggle not found, sir")
+                speak("Wi-Fi toggle not found sir")
+            pyautogui.hotkey('alt', 'f4')
+
+    except Exception as e:
+        # Handle any errors that may occur
+        print(f"Sam: Error changing Wi-Fi status: {e}")
+        if "on wi-fi" in query:
+            print("Sam: Sorry, I couldn't turn on Wi-Fi, sir")
+            speak("Sorry, I couldn't turn on Wi-Fi sir")
+        else:
+            print("Sam: Sorry, I couldn't turn off Wi-Fi, sir")
+            speak("Sorry, I couldn't turn off Wi-Fi sir")
+        pyautogui.hotkey('alt', 'f4')
 
 
 # Function to show available Wi-Fi networks
@@ -954,7 +1080,7 @@ def enable_or_disable_hotspot(query):
             pyautogui.hotkey('alt', 'f4')
             return
 
-        time.sleep(0.8)
+        time.sleep(1)
 
         # Check if Hotspot is already off
         if "off hotspot" in query and not is_hotspot_on():
@@ -1027,6 +1153,7 @@ def show_hotspot_details():
         print("Sam: Sorry, I couldn't display Hotspot details, sir")
         speak("Sorry, I couldn't display Hotspot details sir")
         pyautogui.hotkey('alt', 'f4')
+
 
 # Light or Dark mode
 # Function to turn on or off Light Mode
@@ -1118,5 +1245,3 @@ def enable_or_disable_light_or_dark_mode(query):
             print("Sam: Sorry, I couldn't turn on Dark Mode, sir")
             speak("Sorry, I couldn't turn on Dark Mode sir")
         pyautogui.hotkey('alt', 'f4')
-
-

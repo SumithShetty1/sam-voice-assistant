@@ -6,18 +6,12 @@ from sam_functions.listen import listen
 from app_functions import open_application, close_application, close_window
 from volume_functions import volume_up, volume_down, mute_volume, unmute_volume
 from brightness_functions import increase_brightness, decrease_brightness, set_brightness
-from actioncenter_functions import show_or_hide_action_center, action_center_show_wifi_networks, toggle_bluetooth, action_center_show_bluetooth_devices, toggle_airplane_mode, toggle_battery_saver, toggle_night_light, toggle_nearby_sharing
-from windows_search_functions import search_in_windows
-from settings_functions import enable_or_disable_bluetooth, settings_show_bluetooth_devices,settings_show_wifi_networks, enable_or_disable_airplane_mode, enable_or_disable_night_light, enable_or_disable_do_not_disturb, enable_or_disable_nearby_share, enable_or_disable_hotspot, show_hotspot_details, enable_or_disable_light_or_dark_mode
-
-
-# Function to turn off Wi-Fi
-def turn_off_internet():
-    # Display warning message
-    print(
-        "Sam: I'm sorry, sir, but I must warn you. You can't turn off the internet or Wi-Fi. My functions rely on an active internet connection to assist you effectively.")
-    speak(
-        "Sam: I'm sorry sir but I must warn you. You can't turn off the internet or Wi-Fi. My functions rely on an active internet connection to assist you effectively.")
+from actioncenter_functions import show_or_hide_action_center, toggle_wifi, action_center_show_wifi_networks, toggle_bluetooth, action_center_show_bluetooth_devices, toggle_airplane_mode, toggle_battery_saver, toggle_night_light, toggle_nearby_sharing
+from settings_functions import enable_or_disable_bluetooth, settings_show_bluetooth_devices, enable_or_disable_wifi, settings_show_wifi_networks, enable_or_disable_airplane_mode, enable_or_disable_night_light, enable_or_disable_do_not_disturb, enable_or_disable_nearby_share, enable_or_disable_hotspot, enable_or_disable_light_or_dark_mode
+from actioncenter_or_settings_functions import turn_on_or_off_bluetooth, show_bluetooth_devices, turn_on_or_off_airplane_mode, turn_on_or_off_night_light, turn_on_or_off_nearby_sharing, turn_on_or_off_wifi, show_wifi_networks
+from windows_functions.search import search_in_windows
+from windows_functions.open_settings import open_settings
+from windows_functions.take_photo import take_photo
 
 
 # Function to interact with the user and perform actions based on their commands
@@ -87,16 +81,24 @@ def take_query():
             speak("Exiting sir")
             exit()
 
-        # Check if the user wants to turn off Wi-Fi
-        elif "turn on internet" in query or "turn on wi-fi" in query:
-            print("Sam: Sir, the internet or Wi-Fi is already on.")
-            speak("Sam: Sir the internet or Wi-Fi is already on")
+        # Check if the user wants to turn on internet
+        elif "on internet" in query and check_internet():
+            print("Sam: Sir, the internet is already on.")
+            speak("Sir the internet is already on")
             continue
 
-        # Check if the user wants to turn off Wi-Fi
-        elif "turn off internet" in query or "turn off wi-fi" in query:
-            turn_off_internet()
+        # Check if the user wants to turn off internet
+        elif "off internet" in query and check_internet():
+            # Display warning message
+            print(
+                "Sam: I'm sorry, sir, but I must warn you. You can't turn off the internet. My functions rely on an active internet connection to assist you effectively.")
+            speak(
+                "I'm sorry sir but I must warn you. You can't turn off the internet. My functions rely on an active internet connection to assist you effectively")
             continue
+
+        # Open settings
+        elif "open settings" in query or "open setting" in query:
+            open_settings(query)
 
         # Open application
         elif "open" in query:
@@ -171,9 +173,14 @@ def take_query():
                 print("Sam: Sir, please provide a valid brightness level.")
                 speak("Sir please provide a valid brightness level.")
 
+        # Action Center
         # To show or hide action center
         elif "show action centre" in query or "hide action centre" in query:
             show_or_hide_action_center(query)
+
+        # On action center toggle wi-fi
+        elif "on wi-fi in action centre" in query or "off wi-fi in action centre" in query:
+            toggle_wifi(query)
 
         # On action center show Bluetooth devices
         elif "show wifi networks in action centre" in query:
@@ -192,7 +199,7 @@ def take_query():
             toggle_airplane_mode(query)
 
         # On action center toggle battery saver
-        elif "on battery saver in action centre" in query or "off battery saver in action centre" in query:
+        elif "on battery saver" in query or "off battery saver" in query:
             toggle_battery_saver(query)
 
         # On action center toggle night light mode
@@ -203,10 +210,7 @@ def take_query():
         elif "on nearby sharing in action centre" in query or "on nearby share in action centre" in query:
             toggle_nearby_sharing(query)
 
-        # Search in Windows
-        elif "windows search" in query:
-            search_in_windows(query)
-
+        # Settings
         # Enable or disable Bluetooth in settings
         elif "on bluetooth in settings" in query or "off bluetooth in settings" in query:
             enable_or_disable_bluetooth(query)
@@ -231,6 +235,10 @@ def take_query():
         elif "on nearby share in settings" in query or "off nearby share in settings" in query:
             enable_or_disable_nearby_share(query)
 
+        # Enable or disable Wi-Fi in settings
+        elif "on wi-fi in settings" in query or "off wi-fi in settings" in query:
+            enable_or_disable_wifi(query)
+
         # Show available Wi-Fi networks in settings
         elif "show available wi-fi networks in settings" in query:
             settings_show_wifi_networks()
@@ -242,6 +250,47 @@ def take_query():
         # Enable or disable Light or Dark Mode in settings
         elif "on light mode" in query or "off light mode" in query or "on dark mode" in query or "off dark mode" in query:
             enable_or_disable_light_or_dark_mode(query)
+
+        # Turn on or off Bluetooth
+        elif "on bluetooth" in query or "off bluetooth" in query:
+            turn_on_or_off_bluetooth(query)
+
+        # Show Bluetooth devices
+        elif "show bluetooth devices" in query:
+            show_bluetooth_devices()
+
+        # Turn on or off airplane mode
+        elif "on airplane mode" in query or "off airplane mode" in query:
+            turn_on_or_off_airplane_mode(query)
+
+        # Turn on or off night light mode
+        elif "on night light" in query or "off night light" in query:
+            turn_on_or_off_night_light(query)
+
+        # Turn on or off nearby sharing
+        elif "on nearby sharing" in query or "on nearby share" in query:
+            turn_on_or_off_nearby_sharing(query)
+
+        # Turn on or off Wi-Fi
+        elif "on wi-fi" in query or "off wi-fi" in query:
+            enable_or_disable_wifi(query)
+
+        # Show available Wi-Fi networks
+        elif "show available wi-fi networks" in query:
+            show_wifi_networks()
+
+        # Camera
+        # Take a photo from camera
+        elif "take a photo in camera" in query:
+            take_photo(query)
+
+        # Take a photo
+        elif "take a photo" in query:
+            take_photo(query)
+
+        # Search in Windows
+        elif "windows search" in query:
+            search_in_windows(query)
 
 
 # Main function to initiate the assistant

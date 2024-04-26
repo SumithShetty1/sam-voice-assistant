@@ -14,7 +14,7 @@ def open_application(query):
             print(f"Sam: Opening {app}, sir")
             speak(f"Opening {app} sir")
         except Exception as e:
-            print(e)
+            print(f"Error: {e}")
             print(f"Sam: Sorry, I couldn't find an application named {app}, sir")
             speak(f"Sorry, I couldn't find an application named {app} sir")
     except IndexError:
