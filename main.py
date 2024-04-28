@@ -57,13 +57,16 @@ def take_query():
         if not sleeping:
             # Listen for user command
             query = listen()
-            # query = "off battery saver in action centre"
 
             # Check if the user wants to wake up the assistant
             if "hey sam" in query:
                 print("Sam: Yes sir, I'm awake")
                 speak("Yes sir, I'm awake")
                 continue
+
+            # System controls
+            elif "system lock" in query or "system sleep" in query or "system sign out" in query or "system restart" in query or "system shutdown" in query:
+                system_control(query)
 
             # Check if the user wants the assistant to sleep
             elif "sleep" in query or "stop" in query:
@@ -108,10 +111,6 @@ def take_query():
             speak(
                 "I'm sorry sir but I must warn you. You can't turn off the internet. My functions rely on an active internet connection to assist you effectively")
             continue
-
-        # System controls
-        elif "lock" in query or "sleep" in query or "sign out" in query or "restart" in query or "shutdown" in query:
-            system_control(query)
 
         # Open settings
         elif "open settings" in query or "open setting" in query:

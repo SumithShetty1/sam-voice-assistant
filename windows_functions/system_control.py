@@ -62,4 +62,3 @@ def system_control(query):
         print(f"An error occurred: {e}")
         print("Oops! Something went wrong while performing the system control command, sir.")
         speak("Oops! Something went wrong while performing the system control command sir")
-
