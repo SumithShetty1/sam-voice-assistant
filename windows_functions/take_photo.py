@@ -1,19 +1,92 @@
 import time
+import pyautogui
 import cv2
 import os
 from sam_functions.speak import speak
+from sam_functions.listen import listen
+from check_functions import check_camera_opening
 
 
+# Function to create a directory if it doesn't exist
 def create_directory(directory):
     if not os.path.exists(directory):
         os.makedirs(directory)
 
 
+# Function to take a photo using the camera app
+def take_photo_in_camera():
+    try:
+        pyautogui.hotkey('win')
+        time.sleep(0.2)
+        pyautogui.typewrite('Camera')
+        time.sleep(0.2)
+        pyautogui.press('enter')
+        time.sleep(3)
+
+        if check_camera_opening():
+            # Camera app opening found, proceed with the operation
+            pass
+        else:
+            # Camera app not found within 10 seconds, ask the user whether to continue waiting or exit
+            print("Sam: The camera app is taking longer than usual to open. Do you want to continue waiting, sir?")
+            speak("The camera app is taking longer than usual to open. Do you want to continue waiting sir?")
+
+            while True:
+                confirm = listen()
+                if confirm == "":
+                    continue
+                if "yes" in confirm:
+                    if not check_camera_opening():
+                        print("Sam: The camera app is still taking time to open. Please manually open the camera app.")
+                        speak("The camera app is still taking time to open. Please manually open the camera app.")
+                        return
+                else:
+                    print("Sam: Closing camera app, sir")
+                    speak("Closing camera app sir")
+                    pyautogui.hotkey('alt', 'f4')
+                    return
+
+        # Attempt to locate the video icon
+        try:
+            pyautogui.locateCenterOnScreen("images/light_mode/camera/video.png", confidence=0.9, grayscale=True)
+            pyautogui.press('down')
+            time.sleep(0.2)
+        except pyautogui.ImageNotFoundException:
+            pass
+
+        # Attempt to locate the barcode icon
+        try:
+            pyautogui.locateCenterOnScreen("images/light_mode/camera/barcode.png", confidence=0.9,
+                                           grayscale=True)
+            pyautogui.press('up')
+            time.sleep(0.2)
+        except pyautogui.ImageNotFoundException:
+            pass
+
+        # Attempt to locate the photo icon
+        pyautogui.locateCenterOnScreen("images/light_mode/camera/photo.png", confidence=0.9, grayscale=True)
+
+        # Prompt user that photo will be taken after 3 seconds
+        print("Sam: I'll capture a photo in 3 seconds, sir.")
+        speak("I'll capture a photo in 3 seconds sir")
+        time.sleep(3)
+        pyautogui.press('enter')
+        time.sleep(1)
+        print(f"Sam: Photo has been taken, sir.")
+        speak(f"Photo has been taken sir")
+    except Exception as e:
+        print(f"Sam: An error occurred: {e}")
+        print("Sam: Oops! Something went wrong while trying to capture the photo, sir.")
+        speak("Oops! Something went wrong while trying to capture the photo sir.")
+        pyautogui.hotkey('alt', 'f4')
+
+
+# Function to take a photo using the webcam
 def take_photo(query):
     try:
         if "in camera" in query:
-            # Call a function here to take a photo in cameras app
-            pass
+            take_photo_in_camera()
+            return
 
         # Extract file name from query if mentioned
         file_name = "photo.jpg"

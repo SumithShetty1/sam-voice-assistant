@@ -42,6 +42,24 @@ def check_settings_opening():
     return False
 
 
+# Function to check for the presence of the camera icon within a specified duration
+def check_camera_opening():
+    duration = 10
+    start_time = time.time()
+    while time.time() - start_time < duration:
+        # Check if the camera app is opening
+        try:
+            if pyautogui.locateOnScreen("images/light_mode/camera/camera_icon.png", confidence=0.9):
+                pass
+        except pyautogui.ImageNotFoundException:
+            return True
+        except Exception as e:
+            print("Sam: An error occurred:", e)
+
+    # If camera app is not found within the specified duration, return False
+    return False
+
+
 # Function to check if the current window is maximized
 def check_window_maximized():
     try:

@@ -6,12 +6,25 @@ from sam_functions.listen import listen
 from app_functions import open_application, close_application, close_window
 from volume_functions import volume_up, volume_down, mute_volume, unmute_volume
 from brightness_functions import increase_brightness, decrease_brightness, set_brightness
-from actioncenter_functions import show_or_hide_action_center, toggle_wifi, action_center_show_wifi_networks, toggle_bluetooth, action_center_show_bluetooth_devices, toggle_airplane_mode, toggle_battery_saver, toggle_night_light, toggle_nearby_sharing
-from settings_functions import enable_or_disable_bluetooth, settings_show_bluetooth_devices, enable_or_disable_wifi, settings_show_wifi_networks, enable_or_disable_airplane_mode, enable_or_disable_night_light, enable_or_disable_do_not_disturb, enable_or_disable_nearby_share, enable_or_disable_hotspot, enable_or_disable_light_or_dark_mode
-from actioncenter_or_settings_functions import turn_on_or_off_bluetooth, show_bluetooth_devices, turn_on_or_off_airplane_mode, turn_on_or_off_night_light, turn_on_or_off_nearby_sharing, turn_on_or_off_wifi, show_wifi_networks
+from actioncenter_functions import show_or_hide_action_center, toggle_wifi, action_center_show_wifi_networks, \
+    toggle_bluetooth, action_center_show_bluetooth_devices, toggle_airplane_mode, toggle_battery_saver, \
+    toggle_night_light, toggle_nearby_sharing
+from settings_functions import enable_or_disable_bluetooth, settings_show_bluetooth_devices, enable_or_disable_wifi, \
+    settings_show_wifi_networks, enable_or_disable_airplane_mode, enable_or_disable_night_light, \
+    enable_or_disable_do_not_disturb, enable_or_disable_nearby_share, enable_or_disable_hotspot, \
+    enable_or_disable_light_or_dark_mode
+from actioncenter_or_settings_functions import turn_on_or_off_bluetooth, show_bluetooth_devices, \
+    turn_on_or_off_airplane_mode, turn_on_or_off_night_light, turn_on_or_off_nearby_sharing, turn_on_or_off_wifi, \
+    show_wifi_networks
 from windows_functions.search import search_in_windows
 from windows_functions.open_settings import open_settings
 from windows_functions.take_photo import take_photo
+from windows_functions.start_video import start_video
+from windows_functions.scan_barcode import scan_barcode
+from windows_functions.screenshot import screenshot
+from windows_functions.screenrecord import screenrecord
+from windows_functions.shortcut_functions import shortcut_functions
+from windows_functions.system_control import system_control
 
 
 # Function to interact with the user and perform actions based on their commands
@@ -96,9 +109,22 @@ def take_query():
                 "I'm sorry sir but I must warn you. You can't turn off the internet. My functions rely on an active internet connection to assist you effectively")
             continue
 
+        # System controls
+        elif "lock" in query or "sleep" in query or "sign out" in query or "restart" in query or "shutdown" in query:
+            system_control(query)
+
         # Open settings
         elif "open settings" in query or "open setting" in query:
             open_settings(query)
+
+        # Shortcuts
+        elif any(shortcut in query for shortcut in
+                 ["copy", "cut", "paste", "undo", "redo", "select all", "find", "save", "print", "new", "task view",
+                  "switch apps", "minimize all", "show desktop", "snap window left", "snap window right",
+                  "maximize window", "minimize window", "bold", "italic", "underline", "align left", "align center",
+                  "align right", "open start menu", "open run dialog", "open power user menu",
+                  "open system properties"]):
+            shortcut_functions(query)
 
         # Open application
         elif "open" in query:
@@ -280,13 +306,29 @@ def take_query():
             show_wifi_networks()
 
         # Camera
-        # Take a photo from camera
-        elif "take a photo in camera" in query:
-            take_photo(query)
-
         # Take a photo
         elif "take a photo" in query:
             take_photo(query)
+
+        # Start a video
+        elif "start a video" in query:
+            start_video()
+
+        # Scan barcode
+        elif "scan the barcode" in query:
+            scan_barcode()
+
+        # Screenshot
+        elif "take a screenshot" in query:
+            screenshot(query)
+
+        # Screenrecord
+        elif "record the screen" in query:
+            screenrecord(query)
+
+        # Screenrecord
+        elif "record the screen" in query:
+            screenrecord(query)
 
         # Search in Windows
         elif "windows search" in query:
