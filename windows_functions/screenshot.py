@@ -30,6 +30,14 @@ def capture_full_screen(query):
         # Construct the full file path
         file_path = os.path.join(base_directory, file_name)
 
+        # Check if the file already exists
+        count = 1
+        while os.path.exists(file_path):
+            # Append a number to the filename
+            file_name = f"screenshot ({count}).png"
+            file_path = os.path.join(base_directory, file_name)
+            count += 1
+
         # Capture the screenshot of the entire screen
         screen_capture = pyautogui.screenshot()
         screen_capture.save(file_path)

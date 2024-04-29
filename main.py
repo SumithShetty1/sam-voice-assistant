@@ -23,8 +23,12 @@ from windows_functions.start_video import start_video
 from windows_functions.scan_barcode import scan_barcode
 from windows_functions.screenshot import screenshot
 from windows_functions.screenrecord import screenrecord
+from windows_functions.record_audio import record_audio
+from windows_functions.keyboard_keys import keyboard_keys
 from windows_functions.shortcut_functions import shortcut_functions
 from windows_functions.system_control import system_control
+from windows_functions.create_file import create_file
+from windows_functions.time_and_date import tell_time_and_date
 
 
 # Function to interact with the user and perform actions based on their commands
@@ -97,6 +101,10 @@ def take_query():
             speak("Exiting sir")
             exit()
 
+        # Date and Time
+        elif "date" in query or "time" in query or "day" in query or "month" in query or "year" in query or "hour" in query:
+            tell_time_and_date(query)
+
         # Check if the user wants to turn on internet
         elif "on internet" in query and check_internet():
             print("Sam: Sir, the internet is already on.")
@@ -115,6 +123,10 @@ def take_query():
         # Open settings
         elif "open settings" in query or "open setting" in query:
             open_settings(query)
+
+        # Keyboard keys
+        elif "press" in query:
+            keyboard_keys(query)
 
         # Shortcuts
         elif any(shortcut in query for shortcut in
@@ -325,9 +337,13 @@ def take_query():
         elif "record the screen" in query:
             screenrecord(query)
 
-        # Screenrecord
-        elif "record the screen" in query:
-            screenrecord(query)
+        # Record audio
+        elif "record the audio" in query:
+            record_audio()
+
+        # Create a file
+        elif "create" in query:
+            create_file(query)
 
         # Search in Windows
         elif "windows search" in query:

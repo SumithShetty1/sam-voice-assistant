@@ -104,6 +104,14 @@ def take_photo(query):
         # Construct the full file path
         file_path = os.path.join(base_directory, file_name)
 
+        # Check if the file already exists
+        count = 1
+        while os.path.exists(file_path):
+            # Append a number to the filename
+            file_name = f"photo ({count}).jpg"
+            file_path = os.path.join(base_directory, file_name)
+            count += 1
+
         camera_index = 0
 
         # Open the camera
