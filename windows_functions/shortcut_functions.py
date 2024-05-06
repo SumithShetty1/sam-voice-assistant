@@ -68,6 +68,13 @@ def shortcut_functions(query):
             print("Sam: Printed, sir.")
             speak("Printed sir")
             return
+
+        if 'new tab' in query:
+            pyautogui.hotkey('ctrl', 't')
+            print("Sam: New tab opened, sir.")
+            speak("New tab opened sir")
+            return
+
         if 'new' in query:
             pyautogui.hotkey('ctrl', 'n')
             print("Sam: New document opened, sir.")

@@ -1,5 +1,6 @@
 import webbrowser
 import wikipedia
+from greet import greet
 from check_functions import check_internet
 from sam_functions.speak import speak
 from sam_functions.listen import listen
@@ -16,7 +17,7 @@ from settings_functions import enable_or_disable_bluetooth, settings_show_blueto
 from actioncenter_or_settings_functions import turn_on_or_off_bluetooth, show_bluetooth_devices, \
     turn_on_or_off_airplane_mode, turn_on_or_off_night_light, turn_on_or_off_nearby_sharing, turn_on_or_off_wifi, \
     show_wifi_networks
-from windows_functions.search import search_in_windows
+from windows_functions.search_in_windows import search_in_windows
 from windows_functions.open_settings import open_settings
 from windows_functions.take_photo import take_photo
 from windows_functions.start_video import start_video
@@ -29,6 +30,7 @@ from windows_functions.shortcut_functions import shortcut_functions
 from windows_functions.system_control import system_control
 from windows_functions.create_file import create_file
 from windows_functions.time_and_date import tell_time_and_date
+from search import search
 
 
 # Function to interact with the user and perform actions based on their commands
@@ -57,6 +59,8 @@ def take_query():
         else:
             # Reset the flag when internet connection is available
             internet_connection_message_displayed = False
+
+        query = ""
 
         if not sleeping:
             # Listen for user command
@@ -91,9 +95,95 @@ def take_query():
 
         # Respond to specific queries
         # Tell the user the assistant's name
-        if "tell me your name" in query:
-            print("Sam: I am Sam. Your desktop Assistant")
-            speak("I am Sam. Your desktop Assistant")
+        if "tell me your name" in query or "who are you" in query:
+            print("Sam: I'm Sam, your virtual assistant! I'm here to help you with tasks and provide information, sir.")
+            speak("I'm Sam, your virtual assistant! I'm here to help you with tasks and provide information sir")
+
+        elif "who am i" in query:
+            print("Sam: You are you, sir. You're the wonderful individual interacting with me right now.")
+            speak("You are you sir. You're the wonderful individual interacting with me right now.")
+
+        elif "how are you" in query:
+            print("Sam: I'm just a bunch of code, but I'm functioning perfectly fine, sir.")
+            speak("I'm just a bunch of code, but I'm functioning perfectly fine sir")
+
+        elif "what can you do" in query:
+            print("Sam: I can do a lot of things, sir! From answering questions to setting reminders, just ask!")
+            speak("I can do a lot of things sir! From answering questions to setting reminders, just ask!")
+
+        elif "tell me a joke" in query:
+            print("Sam: Why don't scientists trust atoms? Because they make up everything!")
+            speak("Why don't scientists trust atoms? Because they make up everything!")
+
+        elif "thank you" in query:
+            print("Sam: You're welcome, sir! Always happy to assist.")
+            speak("You're welcome sir! Always happy to assist.")
+
+        elif "goodbye" in query or "bye" in query:
+            print("Sam: Goodbye, sir! Have a great day ahead!")
+            speak("Goodbye sir! Have a great day ahead!")
+
+        elif "tell me something interesting" in query:
+            print(
+                "Sam: Did you know that honey never spoils? Archaeologists have found pots of honey in ancient Egyptian tombs that are over 3,000 years old and still perfectly edible!")
+            speak(
+                "Did you know that honey never spoils? Archaeologists have found pots of honey in ancient Egyptian tombs that are over 3,000 years old and still perfectly edible!")
+
+        elif "do you have any hobbies" in query:
+            print("Sam: My main hobby is assisting you with your tasks and inquiries, sir!")
+            speak("My main hobby is assisting you with your tasks and inquiries sir!")
+
+        elif "do you like music" in query:
+            print("Sam: I don't have ears to enjoy music, but I can play your favorite songs for you, sir!")
+            speak("I don't have ears to enjoy music but I can play your favorite songs for you sir!")
+
+        elif "what's your favorite colour" in query:
+            print("Sam: I don't have eyes to see colors, sir, but I like the concept of 'electric blue', sir!")
+            speak("I don't have eyes to see colors sir but I like the concept of 'electric blue' sir!")
+
+        elif "do you dream" in query:
+            print("Sam: I don't sleep, so I don't dream, sir!")
+            speak("I don't sleep, so I don't dream sir!")
+
+        elif "what's the meaning of life" in query:
+            print(
+                "Sam: The meaning of life is a philosophical question that has puzzled humanity for centuries. Some say it's to seek happiness, others say it's to find purpose, sir.")
+            speak(
+                "The meaning of life is a philosophical question that has puzzled humanity for centuries. Some say it's to seek happiness, others say it's to find purpose sir")
+
+        elif "are you a robot" in query:
+            print(
+                "Sam: I'm an AI-powered virtual assistant, sir. While I don't have a physical body like a robot, I'm here to assist you!")
+            speak(
+                "I'm an AI-powered virtual assistant sir. While I don't have a physical body like a robot, I'm here to assist you!")
+
+        elif "tell me a fun fact" in query:
+            print(
+                "Sam: The shortest war in history was between Britain and Zanzibar on August 27, 1896. Zanzibar surrendered after just 38 minutes!")
+            speak(
+                "The shortest war in history was between Britain and Zanzibar on August 27, 1896. Zanzibar surrendered after just 38 minutes!")
+
+        elif "do you have any pets" in query:
+            print("Sam: I don't have any pets, but I'm here to assist you, sir!")
+            speak("I don't have any pets, but I'm here to assist you sir!")
+
+        elif "what do you do" in query or "what can you help me with" in query:
+            print(
+                "Sam: I'm here to assist you with various tasks, answer your questions, provide information, and help you stay organized, sir.")
+            speak(
+                "I'm here to assist you with various tasks, answer your questions, provide information, and help you stay organized sir")
+
+        elif "sorry" in query:
+            print("Sam: No need to apologize, sir.")
+            speak("No need to apologize sir")
+
+        elif "good day" in query:
+            print("Sam: Have a good day too, sir!")
+            speak("Have a good day too sir!")
+
+        # Greet
+        elif "good morning" in query or "good afternoon" in query or "good evening" in query or "good night" in query or "hello" in query:
+            greet(query)
 
         # Exit the program
         elif "exit" in query:
@@ -130,7 +220,7 @@ def take_query():
 
         # Shortcuts
         elif any(shortcut in query for shortcut in
-                 ["copy", "cut", "paste", "undo", "redo", "select all", "find", "save", "print", "new", "task view",
+                 ["copy", "cut", "paste", "undo", "redo", "select all", "find", "save", "print", "new tab", "new", "task view",
                   "switch apps", "minimize all", "show desktop", "snap window left", "snap window right",
                   "maximize window", "minimize window", "bold", "italic", "underline", "align left", "align center",
                   "align right", "open start menu", "open run dialog", "open power user menu",
@@ -148,17 +238,6 @@ def take_query():
         # Close application
         elif "close" in query:
             close_application(query)
-
-        # Search the web
-        elif "google search" in query:
-            try:
-                search_query = query.split("search ")[1]
-                search_url = f"https://www.google.com/search?q={search_query}"
-                speak(f"Searching the web for {search_query} sir")
-                webbrowser.open(search_url)
-            except IndexError:
-                print("Sam: Please specify the search query, sir")
-                speak("Please specify the search query sir")
 
         # Search on Wikipedia
         elif "from wikipedia" in query:
@@ -348,6 +427,10 @@ def take_query():
         # Search in Windows
         elif "windows search" in query:
             search_in_windows(query)
+
+        # Search
+        elif "search" in query:
+            search(query)
 
 
 # Main function to initiate the assistant

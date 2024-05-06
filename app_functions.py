@@ -13,6 +13,7 @@ def open_application(query):
             open(app, throw_error=True, match_closest=True)
             print(f"Sam: Opening {app}, sir")
             speak(f"Opening {app} sir")
+
         except Exception as e:
             print(f"Error: {e}")
             print(f"Sam: Sorry, I couldn't find an application named {app}, sir")
