@@ -1,4 +1,7 @@
 # Installed Packages
+- [Setuptools](https://pypi.org/project/setuptools/): A package development library for Python, enhancing the functionality of the built-in `distutils`. It simplifies the process of packaging and distributing Python projects.
+  ```bash
+  pip install setuptools
 
 - [speech_recognition](https://pypi.org/project/SpeechRecognition/): A library for performing speech recognition with support for several engines and APIs.
   ```bash

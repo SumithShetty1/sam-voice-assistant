@@ -60,6 +60,42 @@ def check_camera_opening():
     return False
 
 
+def check_spotify_opening():
+    duration = 10  # Duration in seconds to check for the spotify search icon
+    start_time = time.time()
+    while time.time() - start_time < duration:
+        # Check if the spotify search icon is present on the screen
+        try:
+            if pyautogui.locateOnScreen("../images/dark_mode/spotify/search_icon.png", confidence=0.9):
+                return True
+        except pyautogui.ImageNotFoundException:
+            pass
+        except Exception as e:
+            print("Sam: An error occurred:", e)
+    # If spotify search icon is not found within the specified duration, return False
+    return False
+
+
+def check_youtube_opening():
+    duration = 10  # Duration in seconds to check for the YouTube search icon
+    start_time = time.time()
+    while time.time() - start_time < duration:
+        # Check if the YouTube search icon is present on the screen
+        try:
+            if not check_dark_mode():
+                if pyautogui.locateOnScreen("../images/light_mode/youtube/search_icon.png", confidence=0.9):
+                    return True
+            else:
+                if pyautogui.locateOnScreen("../images/dark_mode/youtube/search_icon.png", confidence=0.9):
+                    return True
+        except pyautogui.ImageNotFoundException:
+            pass
+        except Exception as e:
+            print("An error occurred:", e)
+    # If the YouTube search icon is not found within the specified duration, return False
+    return False
+
+
 # Function to check if the current window is maximized
 def check_window_maximized():
     try:
