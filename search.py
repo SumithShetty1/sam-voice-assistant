@@ -3,6 +3,7 @@ from windows_functions.search_in_windows import search_in_windows
 import webbrowser
 import pyautogui
 from search_bar import search_bar
+import time
 
 
 def search(query):
@@ -102,6 +103,25 @@ def search(query):
             # Display assistant's message
             print(f"Sam: Searching Bing for {search_query}, sir")
             speak(f"Searching Bing for {search_query} sir")
+
+        elif "file explorer" in query:
+            pyautogui.hotkey("win", 'e')
+            time.sleep(2)
+
+            # Type the Bing search URL in the address bar
+            search_query = query.split("search ")[1]
+
+            # Press Ctrl + F to focus on the search
+            pyautogui.hotkey("ctrl", "f")
+            time.sleep(1)  # Add a short delay to ensure the search box opens
+
+            # Type the search query
+            pyautogui.write(search_query)
+            pyautogui.press("enter")
+
+            # Display assistant's message
+            print(f"Sam: Searching for {search_query}, sir")
+            speak(f"Searching for {search_query} sir")
 
         elif "windows" in query:
             search_in_windows(query)
