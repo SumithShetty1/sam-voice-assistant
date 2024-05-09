@@ -47,3 +47,7 @@
 - [darkdetect](https://pypi.org/project/darkdetect/): A package to detect system dark mode on macOS, Windows, and Linux with a dark GTK theme.
   ```bash
   pip install darkdetect
+
+- [beautifulsoup4](https://pypi.org/project/beautifulsoup4/): A Python library for pulling data out of HTML and XML files.
+  ```bash
+  pip install beautifulsoup4

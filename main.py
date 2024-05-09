@@ -31,6 +31,8 @@ from windows_functions.system_control import system_control
 from windows_functions.create_file import create_file
 from windows_functions.time_and_date import tell_time_and_date
 from search import search
+from media_functions.play_functions import play_functions
+from temperature_and_weather_functions import temperature, weather
 
 
 # Function to interact with the user and perform actions based on their commands
@@ -123,12 +125,6 @@ def take_query():
             print("Sam: Goodbye, sir! Have a great day ahead!")
             speak("Goodbye sir! Have a great day ahead!")
 
-        elif "tell me something interesting" in query:
-            print(
-                "Sam: Did you know that honey never spoils? Archaeologists have found pots of honey in ancient Egyptian tombs that are over 3,000 years old and still perfectly edible!")
-            speak(
-                "Did you know that honey never spoils? Archaeologists have found pots of honey in ancient Egyptian tombs that are over 3,000 years old and still perfectly edible!")
-
         elif "do you have any hobbies" in query:
             print("Sam: My main hobby is assisting you with your tasks and inquiries, sir!")
             speak("My main hobby is assisting you with your tasks and inquiries sir!")
@@ -157,12 +153,6 @@ def take_query():
             speak(
                 "I'm an AI-powered virtual assistant sir. While I don't have a physical body like a robot, I'm here to assist you!")
 
-        elif "tell me a fun fact" in query:
-            print(
-                "Sam: The shortest war in history was between Britain and Zanzibar on August 27, 1896. Zanzibar surrendered after just 38 minutes!")
-            speak(
-                "The shortest war in history was between Britain and Zanzibar on August 27, 1896. Zanzibar surrendered after just 38 minutes!")
-
         elif "do you have any pets" in query:
             print("Sam: I don't have any pets, but I'm here to assist you, sir!")
             speak("I don't have any pets, but I'm here to assist you sir!")
@@ -182,7 +172,7 @@ def take_query():
             speak("Have a good day too sir!")
 
         # Greet
-        elif "good morning" in query or "good afternoon" in query or "good evening" in query or "good night" in query or "hello" in query:
+        elif "good morning" in query or "good afternoon" in query or "good evening" in query or "good night" in query or "hello" in query or "greet me" in query:
             greet(query)
 
         # Exit the program
@@ -194,6 +184,14 @@ def take_query():
         # Date and Time
         elif "date" in query or "time" in query or "day" in query or "month" in query or "year" in query or "hour" in query:
             tell_time_and_date(query)
+
+        # Temperature
+        elif "temperature" in query:
+            temperature(query)
+
+        # Weather
+        elif "weather" in query:
+            weather(query)
 
         # Check if the user wants to turn on internet
         elif "on internet" in query and check_internet():
@@ -431,6 +429,10 @@ def take_query():
         # Search
         elif "search" in query:
             search(query)
+
+        # Play music or video
+        elif "play" in query:
+            play_functions(query)
 
 
 # Main function to initiate the assistant

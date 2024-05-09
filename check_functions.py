@@ -66,7 +66,7 @@ def check_spotify_opening():
     while time.time() - start_time < duration:
         # Check if the spotify search icon is present on the screen
         try:
-            if pyautogui.locateOnScreen("../images/dark_mode/spotify/search_icon.png", confidence=0.9):
+            if pyautogui.locateOnScreen("images/dark_mode/spotify/search_icon.png", confidence=0.9):
                 return True
         except pyautogui.ImageNotFoundException:
             pass
@@ -83,10 +83,10 @@ def check_youtube_opening():
         # Check if the YouTube search icon is present on the screen
         try:
             if not check_dark_mode():
-                if pyautogui.locateOnScreen("../images/light_mode/youtube/search_icon.png", confidence=0.9):
+                if pyautogui.locateOnScreen("images/light_mode/youtube/search_icon.png", confidence=0.9):
                     return True
             else:
-                if pyautogui.locateOnScreen("../images/dark_mode/youtube/search_icon.png", confidence=0.9):
+                if pyautogui.locateOnScreen("images/dark_mode/youtube/search_icon.png", confidence=0.9):
                     return True
         except pyautogui.ImageNotFoundException:
             pass
