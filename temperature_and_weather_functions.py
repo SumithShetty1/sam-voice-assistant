@@ -8,14 +8,24 @@ def temperature(query):
         # Extracting the location from the query string
         location = query.split("temperature in ")[1]
 
-        # Constructing the search URL
-        url = f"https://www.google.com/search?q=temperature+in+{location}"
-        r = requests.get(url)
-        data = BeautifulSoup(r.text, "html.parser")
-        temp = data.find("div", class_="BNeawe").text
+        if location:
+            # Constructing the search URL with the specified location
+            url = f"https://www.google.com/search?q=temperature+{location}"
 
-        print(f"Current temperature in {location} is {temp}, sir")
-        speak(f"Current temperature in {location} is {temp} sir")
+            r = requests.get(url)
+            data = BeautifulSoup(r.text, "html.parser")
+            temp = data.find("div", class_="BNeawe").text
+
+            if "°C" in temp:
+                print(f"Current temperature in {location} is {temp}, sir")
+                speak(f"Current temperature in {location} is {temp} sir")
+            else:
+                print("Sam: Please specify a location, sir.")
+                speak("Please specify a location sir")
+        else:
+            print("Sam: Please specify a location, sir.")
+            speak("Please specify a location sir")
+
     except Exception as e:
         print("Sam: Sorry, I couldn't fetch the temperature information at the moment.")
         speak("Sorry I couldn't fetch the temperature information at the moment.")
@@ -26,17 +36,29 @@ def weather(query):
         # Extracting the location from the query string
         location = query.split("weather in ")[1]
 
-        # Constructing the search URL
-        url = f"https://www.google.com/search?q=weather+in+{location}"
-        r = requests.get(url)
-        data = BeautifulSoup(r.text, "html.parser")
-        weather_condition = data.find("div", class_="BNeawe tAd8D AP7Wnd").text
+        if location:
+            # Constructing the search URL
+            url = f"https://www.google.com/search?q=weather+{location}"
 
-        # Remove time information from weather_condition
-        weather_condition = weather_condition.split("\n")[1]
+            r = requests.get(url)
+            data = BeautifulSoup(r.text, "html.parser")
 
-        print(f"Current weather in {location} is {weather_condition}, sir")
-        speak(f"Current weather in {location} is {weather_condition} sir")
+            try:
+                weather_condition = data.find("div", class_="BNeawe tAd8D AP7Wnd").text
+            except Exception as e:
+                print("Sam: Please specify a location, sir.")
+                speak("Please specify a location sir")
+                return
+
+            # Remove time information from weather_condition
+            weather_condition = weather_condition.split("\n")[1]
+
+            print(f"Current weather in {location} is {weather_condition}, sir")
+            speak(f"Current weather in {location} is {weather_condition} sir")
+        else:
+            print("Sam: Please specify a location, sir.")
+            speak("Please specify a location sir")
+
     except Exception as e:
         print("Sam: Sorry, I couldn't fetch the weather information at the moment.")
         speak("Sorry I couldn't fetch the weather information at the moment.")

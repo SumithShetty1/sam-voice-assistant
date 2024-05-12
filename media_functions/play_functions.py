@@ -36,8 +36,8 @@ def play_track_in_spotify(track_name):
                             speak(f"Spotify is still taking time to open. Please manually play {track_name}")
                             return
                     else:
-                        print("Sam: Closing Spotify settings, sir")
-                        speak("Closing Spotify settings sir")
+                        print("Sam: Closing Spotify, sir")
+                        speak("Closing Spotify sir")
                         pyautogui.hotkey('alt', 'f4')
                         return
 
@@ -76,8 +76,8 @@ def play_track_in_spotify(track_name):
                             speak(f"Spotify is still taking time to open. Please manually play {track_name}")
                             return
                     else:
-                        print("Sam: Closing Spotify settings, sir")
-                        speak("Closing Spotify settings sir")
+                        print("Sam: Closing Spotify, sir")
+                        speak("Closing Spotify sir")
                         pyautogui.hotkey('alt', 'f4')
                         return
 

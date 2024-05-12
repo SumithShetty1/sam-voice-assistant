@@ -51,3 +51,7 @@
 - [beautifulsoup4](https://pypi.org/project/beautifulsoup4/): A Python library for pulling data out of HTML and XML files.
   ```bash
   pip install beautifulsoup4
+
+- [eel](https://pypi.org/project/eel/): A Python library for creating simple Electron-like desktop apps with Flask-like Python functions.
+  ```bash
+  pip install eel

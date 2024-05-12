@@ -69,7 +69,11 @@ def check_spotify_opening():
             if pyautogui.locateOnScreen("images/dark_mode/spotify/search_icon.png", confidence=0.9):
                 return True
         except pyautogui.ImageNotFoundException:
-            pass
+            try:
+                if pyautogui.locateOnScreen("images/dark_mode/spotify/search_icon_focused.png", confidence=0.9):
+                    return True
+            except pyautogui.ImageNotFoundException:
+                pass
         except Exception as e:
             print("Sam: An error occurred:", e)
     # If spotify search icon is not found within the specified duration, return False
