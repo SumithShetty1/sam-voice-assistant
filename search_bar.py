@@ -17,7 +17,7 @@ def is_file_explorer_open():
     except pyautogui.ImageNotFoundException:
         return False
     except Exception as e:
-        print("Sam: An error occurred:", e)
+        speak("An error occurred")
 
 
 def search_bar(query):
@@ -33,8 +33,7 @@ def search_bar(query):
             pyautogui.write(search_query)
 
             # Display assistant's message
-            print(f"Sam: Searching for '{search_query}', sir")
-            speak(f"Searching for '{search_query}' sir")
+            speak(f"Searching for '{search_query}', boss")
             return
 
         # Take a screenshot before pressing Ctrl+L
@@ -55,8 +54,7 @@ def search_bar(query):
             pyautogui.press('enter')
 
             # Display assistant's message
-            print(f"Sam: Searching for '{search_query}', sir")
-            speak(f"Searching for '{search_query}' sir")
+            speak(f"Searching for '{search_query}', boss")
         else:
             # Press Windows key + S to open the search box
             pyautogui.hotkey('win', 's')
@@ -66,14 +64,11 @@ def search_bar(query):
             pyautogui.write(search_query)
 
             # Display assistant's message
-            print(f"Sam: Searching for '{search_query}', sir")
-            speak(f"Searching for '{search_query}' sir")
+            speak(f"Searching for '{search_query}', boss")
 
     except IndexError:
-        print("Sam: Please specify the search query, sir")
-        speak("Please specify the search query sir")
+        speak("Please specify the search query, boss")
 
     except Exception as e:
-        print(f"Sam: Error performing search: {e}")
-        print("Sam: Sorry, I couldn't perform the search, sir")
-        speak("Sorry I couldn't perform the search sir")
+        speak("Error performing search")
+        speak("Sorry, I couldn't perform the search, boss")

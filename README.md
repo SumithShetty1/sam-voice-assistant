@@ -55,3 +55,22 @@
 - [eel](https://pypi.org/project/eel/): A Python library for creating simple Electron-like desktop apps with Flask-like Python functions.
   ```bash
   pip install eel
+
+# Error
+- import eel
+  \Lib\site-packages\eel\__init__.py", line 16, in <module>
+- import bottle.ext.websocket as wbs
+  ModuleNotFoundError: No module named 'bottle.ext.websocket'
+
+- If you ever get the above error then,
+Fortunately, bottle-websocket can be used and should work the same.
+I got mine working using Python 3.12.
+You just have to change an import in __init__.py in the eel module.
+
+- Find this import line:
+  ```bash
+  import bottle.ext.websocket as wbs
+
+- and replace it with the one below:
+  ```bash
+  import bottle_websocket as wbs

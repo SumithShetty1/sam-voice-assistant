@@ -15,13 +15,11 @@ def volume_up(step):
     # Check if the new volume is equal to the current volume
     if new_volume == current_volume:
         # Print and speak a message indicating that the volume is already at its maximum
-        print("Sam: Volume is already at its maximum, sir")
-        speak("Volume is already at its maximum sir")
+        speak("Volume is already at its maximum, boss")
     else:
         # Set the master volume level to the new volume
         volume.SetMasterVolumeLevel(new_volume, None)
-        print("Sam: Volume increased, sir")
-        speak("Volume increased sir")
+        speak("Volume increased, boss")
 
 
 # Function to decrease volume
@@ -34,12 +32,11 @@ def volume_down(step):
     new_volume = max(current_volume - step, min_volume)
     # Check if the absolute difference between the new volume and the current volume is very small
     if abs(new_volume - current_volume) < 0.01:  # Using a tolerance threshold for comparison
-        print('Sam: Volume is already at its minimum, sir')
+        speak('Volume is already at its minimum, boss')
     else:
         # Set the master volume level to the new volume
         volume.SetMasterVolumeLevel(new_volume, None)
-        print("Sam: Volume decreased, sir")
-        speak("Volume decreased sir")
+        speak("Volume decreased, boss")
 
 
 # Function to mute volume
@@ -53,11 +50,9 @@ def mute_volume():
     if not is_muted:
         # Mute volume
         volume.SetMute(1, None)
-        print("Sam: Volume muted, sir")
-        speak("Volume muted sir")
+        speak("Volume muted, boss")
     else:
-        print("Sam: Volume is already muted, sir")
-        speak("Volume is already muted sir")
+        speak("Volume is already muted, boss")
 
 
 # Function to unmute volume
@@ -71,8 +66,6 @@ def unmute_volume():
     if is_muted:
         # Unmute volume
         volume.SetMute(0, None)
-        print("Sam: Volume unmuted, sir")
-        speak("Volume unmuted sir")
+        speak("Volume unmuted, boss")
     else:
-        print("Sam: Volume is already unmuted, sir")
-        speak("Volume is already unmuted sir")
+        speak("Volume is already unmuted, boss")

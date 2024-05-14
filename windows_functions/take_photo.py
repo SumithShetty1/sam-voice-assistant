@@ -148,7 +148,7 @@ def take_photo(query):
         ret, frame = cap.read()
 
         if ret:
-            # Save the captured frame as an image
+            # Save the captured frame as an img
             cv2.imwrite(file_path, frame)
             print(f"Sam: Photo has been taken and saved as {file_name}, sir.")
             speak(f"Photo has been taken and saved as {file_name} sir")
