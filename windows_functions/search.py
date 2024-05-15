@@ -16,12 +16,9 @@ def search_in_windows(query):
         pyautogui.press('enter')
 
         # Display assistant's message
-        print(f"Sam: Searching for '{query}', sir")
-        speak(f"Searching for '{query}' sir")
+        speak(f"Searching for '{query}', boss")
     except IndexError:
-        print("Sam: Please specify the search query, sir")
-        speak("Please specify the search query sir")
+        speak("Please specify the search query, boss")
     except Exception as e:
-        print(f"Sam: Error performing search: {e}")
-        print("Sam: Sorry, I couldn't perform search, sir")
-        speak("Sorry, I couldn't perform search sir")
+        speak("Error performing search")
+        speak("Sorry, I couldn't perform search, boss")

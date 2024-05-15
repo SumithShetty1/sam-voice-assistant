@@ -11,16 +11,13 @@ def open_application(query):
         try:
             # Attempting to open the specified application
             open(app, throw_error=True, match_closest=True)
-            print(f"Sam: Opening {app}, sir")
-            speak(f"Opening {app} sir")
+            speak(f"Opening {app}, boss")
 
         except Exception as e:
-            print(f"Error: {e}")
-            print(f"Sam: Sorry, I couldn't find an application named {app}, sir")
-            speak(f"Sorry, I couldn't find an application named {app} sir")
+            speak("Error")
+            speak(f"Sorry, I couldn't find an application named {app}, boss")
     except IndexError:
-        print("Sam: Please specify the application to open, sir")
-        speak("Please specify the application to open sir")
+        speak("Please specify the application to open, boss")
 
 
 # Function to close applications
@@ -31,15 +28,12 @@ def close_application(query):
         try:
             # Attempting to close the specified application
             close(app, throw_error=True, match_closest=False)
-            print(f"Sam: {app} closed, sir")
-            speak(f"{app} closed sir")
+            speak(f"{app} closed, boss")
         except Exception as e:
-            print(e)
-            print(f"Sam: Sorry, I couldn't close an application named {app}, sir")
-            speak(f"Sorry, I couldn't close an application named {app} sir")
+            speak("Error")
+            speak(f"Sorry, I couldn't close an application named {app}, boss")
     except IndexError:
-        print("Sam: Please specify the application to close,, sir")
-        speak("Please specify the application to close sir")
+        speak("Please specify the application to close,, boss")
 
 
 # Function to close the current window
@@ -47,9 +41,7 @@ def close_window():
     try:
         # Simulating Alt + F4 key press to close the current window
         pyautogui.hotkey('alt', 'f4')
-        print(f"Sam: Current window close, sir")
-        speak(f"Current window close sir")
+        speak(f"Current window close, boss")
     except Exception as e:
-        print(e)
-        print(f"Sam: Sorry, I couldn't find or close the current window, sir")
-        speak(f"Sorry, I couldn't close the current window sir")
+        speak("Error")
+        speak(f"Sorry, I couldn't find or close the current window, boss")

@@ -2,6 +2,7 @@ import time
 import requests
 import darkdetect
 import pyautogui
+from sam_functions.speak import speak
 
 
 # Function to check internet connectivity
@@ -54,7 +55,7 @@ def check_camera_opening():
         except pyautogui.ImageNotFoundException:
             return True
         except Exception as e:
-            print("Sam: An error occurred:", e)
+            speak("An error occurred")
 
     # If camera app is not found within the specified duration, return False
     return False
@@ -75,7 +76,7 @@ def check_spotify_opening():
             except pyautogui.ImageNotFoundException:
                 pass
         except Exception as e:
-            print("Sam: An error occurred:", e)
+            speak("An error occurred")
     # If spotify search icon is not found within the specified duration, return False
     return False
 
@@ -95,7 +96,7 @@ def check_youtube_opening():
         except pyautogui.ImageNotFoundException:
             pass
         except Exception as e:
-            print("An error occurred:", e)
+            speak("An error occurred")
     # If the YouTube search icon is not found within the specified duration, return False
     return False
 
@@ -112,4 +113,4 @@ def check_window_maximized():
     except pyautogui.ImageNotFoundException:
         return False
     except Exception as e:
-        print("Sam: An error occurred:", e)
+        speak("An error occurred")

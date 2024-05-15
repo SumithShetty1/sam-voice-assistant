@@ -6,14 +6,12 @@ from sam_functions.speak import speak
 def system_control(query):
     try:
         if 'lock' in query:
-            print("Sam: Locking the system, sir.")
-            speak("Locking the system sir")
+            speak("Locking the system, boss.")
             pyautogui.hotkey('win', 'l')
             exit()
 
         if 'sleep' in query:
-            print("Sam: Putting the system to sleep, sir.")
-            speak("Putting the system to sleep sir")
+            speak("Putting the system to sleep, boss.")
             pyautogui.hotkey('win', 'd')  # Show desktop
             time.sleep(1)
             pyautogui.hotkey('alt', 'f4')
@@ -24,8 +22,7 @@ def system_control(query):
             exit()
 
         if 'sign out' in query:
-            print("Sam: Signing out, sir.")
-            speak("Signing out sir")
+            speak("Signing out, boss.")
             pyautogui.hotkey('win', 'd')  # Show desktop
             time.sleep(1)
             pyautogui.hotkey('alt', 'f4')
@@ -38,8 +35,7 @@ def system_control(query):
             exit()
 
         if 'restart' in query:
-            print("Sam: Restarting the system, sir.")
-            speak("Restarting the system sir")
+            speak("Restarting the system, boss.")
             pyautogui.hotkey('win', 'd')  # Show desktop
             time.sleep(1)
             pyautogui.hotkey('alt', 'f4')
@@ -50,8 +46,7 @@ def system_control(query):
             exit()
 
         if 'shutdown' in query:
-            print("Sam: Shutting down the system, sir.")
-            speak("Shutting down the system sir")
+            speak("Shutting down the system, boss.")
             pyautogui.hotkey('win', 'd')  # Show desktop
             time.sleep(1)
             pyautogui.hotkey('alt', 'f4')
@@ -59,6 +54,5 @@ def system_control(query):
             pyautogui.press('enter')
             exit()
     except Exception as e:
-        print(f"An error occurred: {e}")
-        print("Oops! Something went wrong while performing the system control command, sir.")
-        speak("Oops! Something went wrong while performing the system control command sir")
+        speak(f"An error occurred")
+        speak("Oops! Something went wrong while performing the system control command, boss.")

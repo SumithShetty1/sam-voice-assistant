@@ -20,10 +20,8 @@ def play_track_in_spotify(track_name):
                 pass
             else:
                 # Spotify not found within 10 seconds, ask the user whether to continue waiting or exit
-                print(
-                    "Sam: Spotify is taking longer than usual to open. Do you want to continue waiting, sir?")
                 speak(
-                    "Spotify is taking longer than usual to open. Do you want to continue waiting sir?")
+                    "Spotify is taking longer than usual to open. Do you want to continue waiting, boss?")
 
                 while True:
                     confirm = listen()
@@ -32,12 +30,10 @@ def play_track_in_spotify(track_name):
                     if "yes" in confirm:
                         if not check_spotify_opening():
                             # Handle the case if Spotify still not found
-                            print(f"Sam: Spotify is still taking time to open. Please manually play {track_name}")
                             speak(f"Spotify is still taking time to open. Please manually play {track_name}")
                             return
                     else:
-                        print("Sam: Closing Spotify, sir")
-                        speak("Closing Spotify sir")
+                        speak("Closing Spotify, boss")
                         pyautogui.hotkey('alt', 'f4')
                         return
 
@@ -60,10 +56,8 @@ def play_track_in_spotify(track_name):
                 pass
             else:
                 # Spotify not found within 10 seconds, ask the user whether to continue waiting or exit
-                print(
-                    "Sam: Spotify is taking longer than usual to open. Do you want to continue waiting, sir?")
                 speak(
-                    "Spotify is taking longer than usual to open. Do you want to continue waiting sir?")
+                    "Spotify is taking longer than usual to open. Do you want to continue waiting, boss?")
 
                 while True:
                     confirm = listen()
@@ -72,12 +66,10 @@ def play_track_in_spotify(track_name):
                     if "yes" in confirm:
                         if not check_spotify_opening():
                             # Handle the case if Spotify still not found
-                            print(f"Sam: Spotify is still taking time to open. Please manually play {track_name}")
                             speak(f"Spotify is still taking time to open. Please manually play {track_name}")
                             return
                     else:
-                        print("Sam: Closing Spotify, sir")
-                        speak("Closing Spotify sir")
+                        speak("Closing Spotify, boss")
                         pyautogui.hotkey('alt', 'f4')
                         return
 
@@ -95,15 +87,13 @@ def play_track_in_spotify(track_name):
         pyautogui.press('enter')
         time.sleep(1)
         # Speak confirmation message
-        print(f"Sam: Playing {track_name} on Spotify, sir.")
-        speak(f"Playing {track_name} on Spotify sir")
+        speak(f"Playing {track_name} on Spotify, boss.")
         time.sleep(0.6)
         pyautogui.press('enter')
 
     except Exception as e:
         # Handle errors
-        print("Sam: Sorry, I couldn't play the track on Spotify, sir.")
-        speak("Sorry, I couldn't play the track on Spotify sir")
+        speak("Sorry, I couldn't play the track on Spotify, boss.")
 
 
 def play_video_on_youtube(video_name):
@@ -118,10 +108,8 @@ def play_video_on_youtube(video_name):
             pass
         else:
             # YouTube not found within 10 seconds, ask the user whether to continue waiting or exit
-            print(
-                "Sam: YouTube is taking longer than usual to open. Do you want to continue waiting, sir?")
             speak(
-                "YouTube is taking longer than usual to open. Do you want to continue waiting sir?")
+                "YouTube is taking longer than usual to open. Do you want to continue waiting, boss?")
 
             while True:
                 confirm = listen()
@@ -130,12 +118,10 @@ def play_video_on_youtube(video_name):
                 if "yes" in confirm:
                     if not check_youtube_opening():
                         # Handle the case if YouTube still not found
-                        print(f"Sam: YouTube is still taking time to open. Please manually play {video_name}")
                         speak(f"YouTube is still taking time to open. Please manually play {video_name}")
                         return
                 else:
-                    print("Sam: Closing YouTube, sir")
-                    speak("Closing YouTube sir")
+                    speak("Closing YouTube, boss")
                     pyautogui.hotkey('alt', 'f4')
                     return
 
@@ -166,16 +152,13 @@ def play_video_on_youtube(video_name):
         if first_video_position:
             pyautogui.click(first_video_position)
             # Speak confirmation message
-            print(f"Sam: Playing {video_name} on YouTube, sir.")
-            speak(f"Playing {video_name} on YouTube sir")
+            speak(f"Playing {video_name} on YouTube, boss.")
         else:
-            print("Sam: Please pick a video from the list of videos manually, sir.")
-            speak("Please pick a video from the list of videos manually sir")
+            speak("Please pick a video from the list of videos manually, boss.")
 
     except Exception as e:
         # Handle errors
-        print("Sam: Sorry, I couldn't play the video on YouTube, sir.")
-        speak("Sorry, I couldn't play the video on YouTube sir")
+        speak("Sorry, I couldn't play the video on YouTube, boss.")
 
 
 # Function to play music or video

@@ -20,8 +20,7 @@ def start_video():
             pass
         else:
             # Camera app not found within 10 seconds, ask the user whether to continue waiting or exit
-            print("Sam: The camera app is taking longer than usual to open. Do you want to continue waiting, sir?")
-            speak("The camera app is taking longer than usual to open. Do you want to continue waiting sir?")
+            speak("The camera app is taking longer than usual to open. Do you want to continue waiting, boss?")
 
             while True:
                 confirm = listen()
@@ -29,12 +28,10 @@ def start_video():
                     continue
                 if "yes" in confirm:
                     if not check_camera_opening():
-                        print("Sam: The camera app is still taking time to open. Please manually open the camera app.")
                         speak("The camera app is still taking time to open. Please manually open the camera app.")
                         return
                 else:
-                    print("Sam: Closing camera app, sir")
-                    speak("Closing camera app sir")
+                    speak("Closing camera app, boss")
                     pyautogui.hotkey('alt', 'f4')
                     return
 
@@ -60,14 +57,12 @@ def start_video():
         pyautogui.locateCenterOnScreen("images/light_mode/camera/video.png", confidence=0.9, grayscale=True)
 
         # Prompt user that video recording will start in 3 seconds
-        print("Sam: Video recording will start in 3 seconds, sir.")
-        speak("Video recording will start in 3 seconds sir")
+        speak("Video recording will start in 3 seconds, boss.")
         time.sleep(3)
         pyautogui.press('enter')
         time.sleep(1)
 
     except Exception as e:
-        print(f"Sam: An error occurred: {e}")
-        print("Sam: Oops! Something went wrong while trying to start the video, sir.")
-        speak("Oops! Something went wrong while trying to start the video sir.")
+        speak("An error occurred")
+        speak("Oops! Something went wrong while trying to start the video, boss.")
         pyautogui.hotkey('alt', 'f4')

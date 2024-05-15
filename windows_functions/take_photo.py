@@ -28,8 +28,7 @@ def take_photo_in_camera():
             pass
         else:
             # Camera app not found within 10 seconds, ask the user whether to continue waiting or exit
-            print("Sam: The camera app is taking longer than usual to open. Do you want to continue waiting, sir?")
-            speak("The camera app is taking longer than usual to open. Do you want to continue waiting sir?")
+            speak("The camera app is taking longer than usual to open. Do you want to continue waiting, boss?")
 
             while True:
                 confirm = listen()
@@ -37,12 +36,10 @@ def take_photo_in_camera():
                     continue
                 if "yes" in confirm:
                     if not check_camera_opening():
-                        print("Sam: The camera app is still taking time to open. Please manually open the camera app.")
                         speak("The camera app is still taking time to open. Please manually open the camera app.")
                         return
                 else:
-                    print("Sam: Closing camera app, sir")
-                    speak("Closing camera app sir")
+                    speak("Closing camera app, boss")
                     pyautogui.hotkey('alt', 'f4')
                     return
 
@@ -67,17 +64,14 @@ def take_photo_in_camera():
         pyautogui.locateCenterOnScreen("images/light_mode/camera/photo.png", confidence=0.9, grayscale=True)
 
         # Prompt user that photo will be taken after 3 seconds
-        print("Sam: I'll capture a photo in 3 seconds, sir.")
-        speak("I'll capture a photo in 3 seconds sir")
+        speak("I'll capture a photo in 3 seconds, boss.")
         time.sleep(3)
         pyautogui.press('enter')
         time.sleep(1)
-        print(f"Sam: Photo has been taken, sir.")
-        speak(f"Photo has been taken sir")
+        speak(f"Photo has been taken, boss.")
     except Exception as e:
-        print(f"Sam: An error occurred: {e}")
-        print("Sam: Oops! Something went wrong while trying to capture the photo, sir.")
-        speak("Oops! Something went wrong while trying to capture the photo sir.")
+        speak("An error occurred")
+        speak("Oops! Something went wrong while trying to capture the photo, boss.")
         pyautogui.hotkey('alt', 'f4')
 
 
@@ -119,13 +113,11 @@ def take_photo(query):
 
         # Check if the camera is opened successfully
         if not cap.isOpened():
-            print("Sam: Sorry, I couldn't open the camera, sir.")
-            speak("Sorry I couldn't open the camera sir")
+            speak("Sorry, I couldn't open the camera, boss.")
             return
 
         # Prompt user that photo will be taken after 3 seconds
-        print("Sam: I'll capture a photo in 3 seconds, sir.")
-        speak("I'll capture a photo in 3 seconds sir")
+        speak("I'll capture a photo in 3 seconds, boss.")
 
         # Create a window to display the live feed from the webcam
         cv2.namedWindow("Live Feed", cv2.WINDOW_NORMAL)
@@ -150,14 +142,12 @@ def take_photo(query):
         if ret:
             # Save the captured frame as an img
             cv2.imwrite(file_path, frame)
-            print(f"Sam: Photo has been taken and saved as {file_name}, sir.")
-            speak(f"Photo has been taken and saved as {file_name} sir")
+            speak(f"Photo has been taken and saved as {file_name}, boss.")
 
         # Release the camera
         cap.release()
         cv2.destroyAllWindows()
 
     except Exception as e:
-        print(f"Sam: An error occurred: {e}")
-        print("Sam: Oops! Something went wrong while trying to capture the photo, sir.")
-        speak("Oops! Something went wrong while trying to capture the photo sir.")
+        speak("An error occurred")
+        speak("Oops! Something went wrong while trying to capture the photo, boss.")

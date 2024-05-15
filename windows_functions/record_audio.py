@@ -15,14 +15,12 @@ def record_audio():
         time.sleep(2)  # Wait for Sound Recorder to open
 
         # Say "Recording audio in 3 seconds"
-        print("Sam: Audio recording will start in 3 seconds, sir.")
-        speak("Audio recording will start in 3 seconds sir")
+        speak("Audio recording will start in 3 seconds, boss.")
         time.sleep(3)
 
         # Press Ctrl+R to start recording
         pyautogui.hotkey('ctrl', 'r')
 
     except Exception as e:
-        print(f"An error occurred: {e}")
-        print("Oops! Something went wrong while trying to record audio.")
-        speak("Oops! Something went wrong while trying to record audio")
+        speak("An error occurred")
+        speak("Oops! Something went wrong while trying to record audio.")

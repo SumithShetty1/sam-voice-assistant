@@ -20,8 +20,7 @@ def scan_barcode():
             pass
         else:
             # Camera app not found within 10 seconds, ask the user whether to continue waiting or exit
-            print("Sam: The camera app is taking longer than usual to open. Do you want to continue waiting, sir?")
-            speak("The camera app is taking longer than usual to open. Do you want to continue waiting sir?")
+            speak("The camera app is taking longer than usual to open. Do you want to continue waiting, boss?")
 
             while True:
                 confirm = listen()
@@ -29,13 +28,11 @@ def scan_barcode():
                     continue
                 if "yes" in confirm:
                     if not check_camera_opening():
-                        print(
-                            "Sam: The camera app is still taking time to open. Please manually open the camera app.")
-                        speak("The camera app is still taking time to open. Please manually open the camera app.")
+                        speak(
+                            "The camera app is still taking time to open. Please manually open the camera app.")
                         return
                 else:
-                    print("Sam: Closing camera app, sir")
-                    speak("Closing camera app sir")
+                    speak("Closing camera app, boss")
                     pyautogui.hotkey('alt', 'f4')
                     return
 
@@ -62,11 +59,9 @@ def scan_barcode():
         # Attempt to locate the barcode icon
         pyautogui.locateCenterOnScreen("images/light_mode/camera/barcode.png", confidence=0.9, grayscale=True)
 
-        print("Sam: Please show the barcode in front of the camera, sir.")
-        speak("Please show the barcode in front of the camera sir.")
+        speak("Please show the barcode in front of the camera, boss.")
 
     except Exception as e:
-        print(f"Sam: An error occurred: {e}")
-        print("Sam: Oops! Something went wrong while trying to scan the barcode, sir.")
-        speak("Oops! Something went wrong while trying to scan the barcode sir")
+        speak("An error occurred")
+        speak("Oops! Something went wrong while trying to scan the barcode, boss.")
         pyautogui.hotkey('alt', 'f4')

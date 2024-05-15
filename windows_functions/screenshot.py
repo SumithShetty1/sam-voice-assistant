@@ -1,6 +1,5 @@
 import os
 import pyautogui
-import time
 from sam_functions.speak import speak
 
 
@@ -43,12 +42,10 @@ def capture_full_screen(query):
         screen_capture.save(file_path)
 
         # Inform the user about successful screenshot capture
-        print(f"Sam: I've captured a screenshot of the entire screen and saved it as {file_name}, sir.")
-        speak(f"I've captured a screenshot of the entire screen and saved it as {file_name} sir")
+        speak(f"I've captured a screenshot of the entire screen and saved it as {file_name}, boss.")
     except Exception as e:
-        print(f"Sam: An error occurred: {e}")
-        print("Sam: Oops! Something went wrong while trying to capture the screenshot, sir.")
-        speak("Oops! Something went wrong while trying to capture the screenshot sir")
+        speak(f"An error occurred")
+        speak("Oops! Something went wrong while trying to capture the screenshot, boss.")
 
 
 # Function to capture a screenshot using the Snipping Tool
@@ -58,12 +55,10 @@ def capture_snipping():
         pyautogui.hotkey('win', 'shift', 's')
 
         # Instruct the user to use the Snipping Tool to select the area to capture
-        print("Sam: Please use the Snipping tool to select the area you'd like to capture, sir.")
-        speak("Please use the Snipping tool to select the area you'd like to capture sir.")
+        speak("Please use the Snipping tool to select the area you'd like to capture, boss.")
     except Exception as e:
-        print(f"Sam: An error occurred: {e}")
-        print("Sam: Oops! Something went wrong while trying to capture the screenshot, sir.")
-        speak("Oops! Something went wrong while trying to capture the screenshot sir")
+        speak("An error occurred")
+        speak("Oops! Something went wrong while trying to capture the screenshot, boss.")
 
 
 # Function to handle screenshot requests

@@ -1,7 +1,6 @@
 import time
 import pyautogui
 from sam_functions.speak import speak
-from sam_functions.listen import listen
 from app_functions import open_application
 
 
@@ -43,16 +42,13 @@ def open_settings(query):
                 time.sleep(2)
 
                 # Inform the user that the settings are being opened
-                print(f"Sam: Opening the {settings_query} settings, sir.")
-                speak(f"Opening the {settings_query} settings sir")
+                speak(f"Opening the {settings_query} settings, boss.")
 
             except Exception as e:
-                print(f"Sam: Error: {e}")
-                print(f"Sam: Sorry, sir. I encountered an issue while opening the {settings_query} settings.")
-                speak(f"Sorry sir. I encountered an issue while opening the {settings_query} settings")
+                speak(f"Error")
+                speak(f"Sorry, boss. I encountered an issue while opening the {settings_query} settings.")
         else:
-            print(f"Sam: Sorry, I couldn't find any settings named {settings_query}, sir.")
-            speak(f"Sorry I couldn't find any settings named {settings_query} sir")
+            speak(f"Sorry, I couldn't find any settings named {settings_query}, boss.")
 
     except IndexError:
         # If there is no additional text after "open settings", open the Settings app directly
