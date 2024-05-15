@@ -15,7 +15,7 @@ def record_audio():
         time.sleep(2)  # Wait for Sound Recorder to open
 
         # Say "Recording audio in 3 seconds"
-        speak("Audio recording will start in 3 seconds, boss.")
+        speak("Audio recording will start in 3 seconds boss.")
         time.sleep(3)
 
         # Press Ctrl+R to start recording

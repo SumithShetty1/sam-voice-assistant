@@ -42,13 +42,13 @@ def open_settings(query):
                 time.sleep(2)
 
                 # Inform the user that the settings are being opened
-                speak(f"Opening the {settings_query} settings, boss.")
+                speak(f"Opening the {settings_query} settings boss.")
 
             except Exception as e:
                 speak(f"Error")
-                speak(f"Sorry, boss. I encountered an issue while opening the {settings_query} settings.")
+                speak(f"Sorry boss. I encountered an issue while opening the {settings_query} settings.")
         else:
-            speak(f"Sorry, I couldn't find any settings named {settings_query}, boss.")
+            speak(f"Sorry, I couldn't find any settings named {settings_query} boss.")
 
     except IndexError:
         # If there is no additional text after "open settings", open the Settings app directly

@@ -6,12 +6,12 @@ from sam_functions.speak import speak
 def system_control(query):
     try:
         if 'lock' in query:
-            speak("Locking the system, boss.")
+            speak("Locking the system boss.")
             pyautogui.hotkey('win', 'l')
             exit()
 
         if 'sleep' in query:
-            speak("Putting the system to sleep, boss.")
+            speak("Putting the system to sleep boss.")
             pyautogui.hotkey('win', 'd')  # Show desktop
             time.sleep(1)
             pyautogui.hotkey('alt', 'f4')
@@ -22,7 +22,7 @@ def system_control(query):
             exit()
 
         if 'sign out' in query:
-            speak("Signing out, boss.")
+            speak("Signing out boss.")
             pyautogui.hotkey('win', 'd')  # Show desktop
             time.sleep(1)
             pyautogui.hotkey('alt', 'f4')
@@ -35,7 +35,7 @@ def system_control(query):
             exit()
 
         if 'restart' in query:
-            speak("Restarting the system, boss.")
+            speak("Restarting the system boss.")
             pyautogui.hotkey('win', 'd')  # Show desktop
             time.sleep(1)
             pyautogui.hotkey('alt', 'f4')
@@ -46,7 +46,7 @@ def system_control(query):
             exit()
 
         if 'shutdown' in query:
-            speak("Shutting down the system, boss.")
+            speak("Shutting down the system boss.")
             pyautogui.hotkey('win', 'd')  # Show desktop
             time.sleep(1)
             pyautogui.hotkey('alt', 'f4')
@@ -55,4 +55,4 @@ def system_control(query):
             exit()
     except Exception as e:
         speak(f"An error occurred")
-        speak("Oops! Something went wrong while performing the system control command, boss.")
+        speak("Oops! Something went wrong while performing the system control command boss.")

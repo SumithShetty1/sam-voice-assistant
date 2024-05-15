@@ -20,7 +20,7 @@ def start_video():
             pass
         else:
             # Camera app not found within 10 seconds, ask the user whether to continue waiting or exit
-            speak("The camera app is taking longer than usual to open. Do you want to continue waiting, boss?")
+            speak("The camera app is taking longer than usual to open. Do you want to continue waiting boss?")
 
             while True:
                 confirm = listen()
@@ -31,7 +31,7 @@ def start_video():
                         speak("The camera app is still taking time to open. Please manually open the camera app.")
                         return
                 else:
-                    speak("Closing camera app, boss")
+                    speak("Closing camera app boss")
                     pyautogui.hotkey('alt', 'f4')
                     return
 
@@ -57,12 +57,12 @@ def start_video():
         pyautogui.locateCenterOnScreen("images/light_mode/camera/video.png", confidence=0.9, grayscale=True)
 
         # Prompt user that video recording will start in 3 seconds
-        speak("Video recording will start in 3 seconds, boss.")
+        speak("Video recording will start in 3 seconds boss.")
         time.sleep(3)
         pyautogui.press('enter')
         time.sleep(1)
 
     except Exception as e:
         speak("An error occurred")
-        speak("Oops! Something went wrong while trying to start the video, boss.")
+        speak("Oops! Something went wrong while trying to start the video boss.")
         pyautogui.hotkey('alt', 'f4')

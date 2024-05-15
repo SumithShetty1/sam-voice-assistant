@@ -63,18 +63,18 @@ def keyboard_keys(query):
                 time.sleep(0.2)
 
                 # Inform the user that the key has been pressed
-                speak(f"{key} key pressed, boss.")
+                speak(f"{key} key pressed boss.")
 
             except Exception as e:
                 speak("Error")
-                speak(f"Sorry, boss. I encountered an issue while pressing the {key} key, boss.")
+                speak(f"Sorry boss. I encountered an issue while pressing the {key} key boss.")
         else:
-            speak(f"Sorry, {key} is not a valid key, boss.")
+            speak(f"Sorry, {key} is not a valid key boss.")
 
     except IndexError:
         # Handle the case where the query is not properly formatted
-        speak("Please provide a valid query to press a keyboard key, boss.")
+        speak("Please provide a valid query to press a keyboard key boss.")
     except Exception as e:
         # Handle any other errors that might occur
         speak("An error occurred")
-        speak("Oops! Something went wrong while pressing the keyboard key, boss.")
+        speak("Oops! Something went wrong while pressing the keyboard key boss.")

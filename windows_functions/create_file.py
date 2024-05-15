@@ -85,10 +85,10 @@ def create_file(query):
 
             updated_file_name = f"{file_name} ({count - 1}){file_type}" if count > 1 else f"{file_name}{file_type}"
 
-            speak(f"{updated_file_name} has been created, boss.")
+            speak(f"{updated_file_name} has been created boss.")
 
         else:
-            speak("Sorry, I couldn't determine the file type from the query, boss.")
+            speak("Sorry, I couldn't determine the file type from the query boss.")
     except Exception as e:
         speak("An error occurred")
-        speak("Oops! Something went wrong while trying to create the file, boss.")
+        speak("Oops! Something went wrong while trying to create the file boss.")

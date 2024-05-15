@@ -16,19 +16,19 @@ def show_or_hide_action_center(query):
             pyautogui.hotkey('win', 'a')
             # Add a slight delay to ensure the keys are pressed in sequence
             time.sleep(1)
-            speak("Action Center opened, boss")
+            speak("Action Center opened boss")
         else:
             # Press the Esc key
             pyautogui.press('esc')
             time.sleep(1)
-            speak("Action Center closed, boss")
+            speak("Action Center closed boss")
     except Exception as e:
         if "show action centre" in query:
             speak("Error opening Action Center")
-            speak("Sorry, I couldn't open the Action Center, boss")
+            speak("Sorry, I couldn't open the Action Center boss")
         else:
             speak("Error closing Action Center")
-            speak("Sorry, I couldn't close the Action Center, boss")
+            speak("Sorry, I couldn't close the Action Center boss")
             pyautogui.press('esc')
 
 
@@ -60,7 +60,7 @@ def toggle_wifi(query):
 
         # Check if Wi-Fi is already on
         if "on wi-fi" in query and is_wifi_on():
-            speak("Wi-Fi is already on, boss")
+            speak("Wi-Fi is already on boss")
             # Press the Esc key
             pyautogui.press('esc')
             return
@@ -68,7 +68,7 @@ def toggle_wifi(query):
         # Warning message for enabling Wi-Fi
         if "on wi-fi" in query and not is_wifi_on() and check_internet():
             speak(
-                "Warning! Enabling Wi-Fi will turn off your current internet connection. Do you want to continue, boss?")
+                "Warning! Enabling Wi-Fi will turn off your current internet connection. Do you want to continue boss?")
 
             while True:
                 confirm = listen()
@@ -77,13 +77,13 @@ def toggle_wifi(query):
                 if "yes" in confirm:
                     break
                 else:
-                    speak("Wi-Fi not enabled, boss.")
+                    speak("Wi-Fi not enabled boss.")
                     pyautogui.press('esc')
                     return
 
         # Check if Wi-Fi is already off
         if "off wi-fi" in query and not is_wifi_on():
-            speak("Wi-Fi is already off, boss")
+            speak("Wi-Fi is already off boss")
             # Press the Esc key
             pyautogui.press('esc')
             return
@@ -99,9 +99,9 @@ def toggle_wifi(query):
                     wifi_icon_location = pyautogui.locateCenterOnScreen(
                         "images/dark_mode/action_center/wifi_off.png", confidence=0.9, grayscale=True)
                 pyautogui.click(wifi_icon_location)
-                speak("Wi-Fi is turned on, boss")
+                speak("Wi-Fi is turned on boss")
             except pyautogui.ImageNotFoundException:
-                speak("Wi-Fi icon not found, boss")
+                speak("Wi-Fi icon not found boss")
         else:
             # Click on the Wi-Fi icon to turn it off
             # Adjust the coordinates based on the location of the Wi-Fi icon on your screen
@@ -113,9 +113,9 @@ def toggle_wifi(query):
                     wifi_icon_location = pyautogui.locateCenterOnScreen(
                         "images/dark_mode/action_center/wifi_on.png", confidence=0.9, grayscale=True)
                 pyautogui.click(wifi_icon_location)
-                speak("Wi-Fi is turned off, boss")
+                speak("Wi-Fi is turned off boss")
             except pyautogui.ImageNotFoundException:
-                speak("Wi-Fi icon not found, boss")
+                speak("Wi-Fi icon not found boss")
         # Press the Esc key
         pyautogui.press('esc')
 
@@ -123,9 +123,9 @@ def toggle_wifi(query):
         # Handle any errors that may occur
         speak("Error toggling Wi-Fi mode")
         if "on wi-fi" in query:
-            speak("Sorry, I couldn't turn on Wi-Fi, boss")
+            speak("Sorry, I couldn't turn on Wi-Fi boss")
         else:
-            speak("Sorry, I couldn't turn off Wi-Fi, boss")
+            speak("Sorry, I couldn't turn off Wi-Fi boss")
         pyautogui.press('esc')
 
 
@@ -141,12 +141,12 @@ def action_center_show_wifi_networks():
 
         # Check if Wi-Fi is off
         if not is_wifi_on():
-            speak("Wi-Fi is off, boss")
+            speak("Wi-Fi is off boss")
 
             speak("Please note that available Wi-Fi networks won't be visible until Wi-Fi is turned on.")
 
             # Ask the user whether to turn on Wi-Fi
-            speak("Would you like me to turn on Wi-Fi, boss?")
+            speak("Would you like me to turn on Wi-Fi boss?")
 
             while True:
                 confirm = listen()
@@ -154,10 +154,10 @@ def action_center_show_wifi_networks():
                     continue
                 if "yes" in confirm:
                     pyautogui.press('enter')
-                    speak("Wi-Fi is turned on, boss")
+                    speak("Wi-Fi is turned on boss")
                     break
                 else:
-                    speak("Got it, boss. I'll leave Wi-Fi as it is.")
+                    speak("Got it boss. I'll leave Wi-Fi as it is.")
                     return
 
         # Navigate to Wi-Fi networks
@@ -166,12 +166,12 @@ def action_center_show_wifi_networks():
         pyautogui.press('enter')
         time.sleep(1)
 
-        speak("Available Wi-Fi networks displayed, boss")
+        speak("Available Wi-Fi networks displayed boss")
 
     except Exception as e:
         # Handle any errors that may occur
         speak("Error displaying Wi-Fi networks")
-        speak("Sorry, I couldn't display available Wi-Fi networks, boss")
+        speak("Sorry, I couldn't display available Wi-Fi networks boss")
         pyautogui.press('esc')
 
 
@@ -203,14 +203,14 @@ def toggle_bluetooth(query):
 
         # Check if bluetooth is already on
         if "on bluetooth" in query and is_bluetooth_on():
-            speak("Bluetooth is already on, boss")
+            speak("Bluetooth is already on boss")
             # Press the Esc key
             pyautogui.press('esc')
             return
 
         # Check if bluetooth is already off
         if "off bluetooth" in query and not is_bluetooth_on():
-            speak("Bluetooth is already off, boss")
+            speak("Bluetooth is already off boss")
             # Press the Esc key
             pyautogui.press('esc')
             return
@@ -226,9 +226,9 @@ def toggle_bluetooth(query):
                     bluetooth_icon_location = pyautogui.locateCenterOnScreen(
                         "images/dark_mode/action_center/bluetooth_off.png", confidence=0.9, grayscale=True)
                 pyautogui.click(bluetooth_icon_location)
-                speak("Bluetooth is turned on, boss")
+                speak("Bluetooth is turned on boss")
             except pyautogui.ImageNotFoundException:
-                speak("Bluetooth icon not found, boss")
+                speak("Bluetooth icon not found boss")
         else:
             # Click on the Bluetooth icon to turn it off
             # Adjust the coordinates based on the location of the Bluetooth icon on your screen
@@ -240,9 +240,9 @@ def toggle_bluetooth(query):
                     bluetooth_icon_location = pyautogui.locateCenterOnScreen(
                         "images/dark_mode/action_center/bluetooth_on.png", confidence=0.9, grayscale=True)
                 pyautogui.click(bluetooth_icon_location)
-                speak("Bluetooth is turned off, boss")
+                speak("Bluetooth is turned off boss")
             except pyautogui.ImageNotFoundException:
-                speak("Bluetooth icon not found, boss")
+                speak("Bluetooth icon not found boss")
         # Press the Esc key
         pyautogui.press('esc')
 
@@ -250,9 +250,9 @@ def toggle_bluetooth(query):
         # Handle any errors that may occur
         speak("Error changing Bluetooth status")
         if "on bluetooth" in query:
-            speak("Sorry, I couldn't turned on Bluetooth, boss")
+            speak("Sorry, I couldn't turned on Bluetooth boss")
         else:
-            speak("Sorry, I couldn't turned off Bluetooth, boss")
+            speak("Sorry, I couldn't turned off Bluetooth boss")
         # Press the Esc key
         pyautogui.press('esc')
 
@@ -270,12 +270,12 @@ def action_center_show_bluetooth_devices():
         time.sleep(1)
         # Check if bluetooth is off
         if not is_bluetooth_on():
-            speak("Bluetooth is off, boss")
+            speak("Bluetooth is off boss")
 
             speak("Please note that Bluetooth devices won't be visible until Bluetooth is turned on.")
 
             # Ask the user whether to turn on Bluetooth
-            speak("Would you like me to turn on Bluetooth, boss?")
+            speak("Would you like me to turn on Bluetooth boss?")
 
             while True:
                 confirm = listen()
@@ -283,10 +283,10 @@ def action_center_show_bluetooth_devices():
                     continue
                 if "yes" in confirm:
                     pyautogui.press('enter')
-                    speak("Bluetooth is turned on, boss")
+                    speak("Bluetooth is turned on boss")
                     break
                 else:
-                    speak("Got it, boss. I'll leave Bluetooth as it is.")
+                    speak("Got it boss. I'll leave Bluetooth as it is.")
                     return
 
         pyautogui.press('tab')
@@ -294,12 +294,12 @@ def action_center_show_bluetooth_devices():
         pyautogui.press('enter')
         time.sleep(1)
 
-        speak("Bluetooth devices list displayed, boss")
+        speak("Bluetooth devices list displayed boss")
 
     except Exception as e:
         # Handle any errors that may occur
         speak("Error displaying Bluetooth devices")
-        speak("Sorry, I couldn't display Bluetooth devices, boss")
+        speak("Sorry, I couldn't display Bluetooth devices boss")
         pyautogui.press('esc')
 
 
@@ -331,7 +331,7 @@ def toggle_airplane_mode(query):
 
         # Check if airplane mode is already on
         if "on airplane mode" in query and is_airplane_mode_on():
-            speak("Airplane mode is already on, boss")
+            speak("Airplane mode is already on boss")
             # Press the Esc key
             pyautogui.press('esc')
             return
@@ -339,7 +339,7 @@ def toggle_airplane_mode(query):
         # Warning message for enabling airplane mode
         if "on airplane mode" in query and not is_airplane_mode_on():
             speak(
-                "Warning! Enabling airplane mode will turn off your current internet connection. Do you want to continue, boss?")
+                "Warning! Enabling airplane mode will turn off your current internet connection. Do you want to continue boss?")
             while True:
                 confirm = listen()
                 if confirm == "":
@@ -347,13 +347,13 @@ def toggle_airplane_mode(query):
                 if "yes" in confirm:
                     break
                 else:
-                    speak("Airplane mode not enabled, boss.")
+                    speak("Airplane mode not enabled boss.")
                     pyautogui.press('esc')
                     return
 
         # Check if airplane mode is already off
         if "off airplane mode" in query and not is_airplane_mode_on():
-            speak("Airplane mode is already off, boss")
+            speak("Airplane mode is already off boss")
             # Press the Esc key
             pyautogui.press('esc')
             return
@@ -369,9 +369,9 @@ def toggle_airplane_mode(query):
                     airplane_icon_location = pyautogui.locateCenterOnScreen(
                         "images/dark_mode/action_center/airplane_mode_off.png", confidence=0.9, grayscale=True)
                 pyautogui.click(airplane_icon_location)
-                speak("Airplane mode is turned on, boss")
+                speak("Airplane mode is turned on boss")
             except pyautogui.ImageNotFoundException:
-                speak("Airplane mode icon not found, boss")
+                speak("Airplane mode icon not found boss")
         else:
             # Click on the Airplane mode icon to turn it off
             # Adjust the coordinates based on the location of the Airplane mode icon on your screen
@@ -383,9 +383,9 @@ def toggle_airplane_mode(query):
                     airplane_icon_location = pyautogui.locateCenterOnScreen(
                         "images/dark_mode/action_center/airplane_mode_on.png", confidence=0.9, grayscale=True)
                 pyautogui.click(airplane_icon_location)
-                speak("Airplane mode is turned off, boss")
+                speak("Airplane mode is turned off boss")
             except pyautogui.ImageNotFoundException:
-                speak("Airplane mode icon not found, boss")
+                speak("Airplane mode icon not found boss")
         # Press the Esc key
         pyautogui.press('esc')
 
@@ -393,9 +393,9 @@ def toggle_airplane_mode(query):
         # Handle any errors that may occur
         speak("Error toggling Airplane mode")
         if "on airplane mode" in query:
-            speak("Sorry, I couldn't turn on Airplane mode, boss")
+            speak("Sorry, I couldn't turn on Airplane mode boss")
         else:
-            speak("Sorry, I couldn't turn off Airplane mode, boss")
+            speak("Sorry, I couldn't turn off Airplane mode boss")
         pyautogui.press('esc')
 
 
@@ -442,21 +442,21 @@ def toggle_battery_saver(query):
 
         # Check if Battery Saver is already on
         if is_battery_charging():
-            speak("Battery is charging, Battery Saver can not be turn on or off, boss")
+            speak("Battery is charging, Battery Saver can not be turn on or off boss")
             # Press the Esc key
             pyautogui.press('esc')
             return
 
         # Check if Battery Saver is already off
         if "on battery saver" in query and is_battery_saver_on():
-            speak("Battery Saver is already on, boss")
+            speak("Battery Saver is already on boss")
             # Press the Esc key
             pyautogui.press('esc')
             return
 
         # Check if Battery Saver is already off
         if "off battery saver" in query and not is_battery_saver_on():
-            speak("Battery Saver is already off, boss")
+            speak("Battery Saver is already off boss")
             # Press the Esc key
             pyautogui.press('esc')
             return
@@ -472,9 +472,9 @@ def toggle_battery_saver(query):
                     battery_saver_icon_location = pyautogui.locateCenterOnScreen(
                         "images/dark_mode/action_center/battery_saver_off.png", confidence=0.9, grayscale=True)
                 pyautogui.click(battery_saver_icon_location)
-                speak("Battery Saver is turned on, boss")
+                speak("Battery Saver is turned on boss")
             except pyautogui.ImageNotFoundException:
-                speak("Battery Saver icon not found, boss")
+                speak("Battery Saver icon not found boss")
         else:
             # Click on the Battery Saver icon to turn it off
             # Adjust the coordinates based on the location of the Battery Saver icon on your screen
@@ -486,9 +486,9 @@ def toggle_battery_saver(query):
                     battery_saver_icon_location = pyautogui.locateCenterOnScreen(
                         "images/dark_mode/action_center/battery_saver_on.png", confidence=0.9, grayscale=True)
                 pyautogui.click(battery_saver_icon_location)
-                speak("Battery Saver is turned off, boss")
+                speak("Battery Saver is turned off boss")
             except pyautogui.ImageNotFoundException:
-                speak("Battery Saver icon not found, boss")
+                speak("Battery Saver icon not found boss")
         # Press the Esc key
         pyautogui.press('esc')
 
@@ -496,9 +496,9 @@ def toggle_battery_saver(query):
         # Handle any errors that may occur
         speak(f"Error toggling Battery Saver")
         if "on battery saver" in query:
-            speak("Sorry, I couldn't turn on Battery Saver, boss")
+            speak("Sorry, I couldn't turn on Battery Saver boss")
         else:
-            speak("Sorry, I couldn't turn off Battery Saver, boss")
+            speak("Sorry, I couldn't turn off Battery Saver boss")
         pyautogui.press('esc')
 
 
@@ -530,14 +530,14 @@ def toggle_night_light(query):
 
         # Check if night light is already on
         if "on night light" in query and is_night_light_on():
-            speak("Night light is already on, boss")
+            speak("Night light is already on boss")
             # Press the Esc key
             pyautogui.press('esc')
             return
 
         # Check if night light is already off
         if "off night light" in query and not is_night_light_on():
-            speak("Night light is already off, boss")
+            speak("Night light is already off boss")
             # Press the Esc key
             pyautogui.press('esc')
             return
@@ -553,9 +553,9 @@ def toggle_night_light(query):
                     night_light_icon_location = pyautogui.locateCenterOnScreen(
                         "images/dark_mode/action_center/night_light_off.png", confidence=0.9, grayscale=True)
                 pyautogui.click(night_light_icon_location)
-                speak("Night light is turned on, boss")
+                speak("Night light is turned on boss")
             except pyautogui.ImageNotFoundException:
-                speak("Night light icon not found, boss")
+                speak("Night light icon not found boss")
         else:
             # Click on the Night light icon to turn it off
             # Adjust the coordinates based on the location of the Night light icon on your screen
@@ -567,9 +567,9 @@ def toggle_night_light(query):
                     night_light_icon_location = pyautogui.locateCenterOnScreen(
                         "images/dark_mode/action_center/night_light_on.png", confidence=0.9, grayscale=True)
                 pyautogui.click(night_light_icon_location)
-                speak("Night light is turned off, boss")
+                speak("Night light is turned off boss")
             except pyautogui.ImageNotFoundException:
-                speak("Night light icon not found, boss")
+                speak("Night light icon not found boss")
         # Press the Esc key
         pyautogui.press('esc')
 
@@ -577,9 +577,9 @@ def toggle_night_light(query):
         # Handle any errors that may occur
         speak("Error toggling Night light")
         if "on night light" in query:
-            speak("Sorry, I couldn't turn on Night light, boss")
+            speak("Sorry, I couldn't turn on Night light boss")
         else:
-            speak("Sorry, I couldn't turn off Night light, boss")
+            speak("Sorry, I couldn't turn off Night light boss")
         pyautogui.press('esc')
 
 
@@ -611,14 +611,14 @@ def toggle_nearby_sharing(query):
 
         # Check if nearby sharing is already on
         if ("on nearby share" in query or "on nearby sharing" in query) and is_nearby_sharing_on():
-            speak("Nearby sharing is already on, boss")
+            speak("Nearby sharing is already on boss")
             # Press the Esc key
             pyautogui.press('esc')
             return
 
         # Check if nearby sharing is already off
         if ("off nearby share" in query or "off nearby sharing" in query) and not is_nearby_sharing_on():
-            speak("Nearby sharing is already off, boss")
+            speak("Nearby sharing is already off boss")
             # Press the Esc key
             pyautogui.press('esc')
             return
@@ -636,9 +636,9 @@ def toggle_nearby_sharing(query):
                         "images/dark_mode/action_center/nearby_sharing_off.png",
                         confidence=0.9, grayscale=True)
                 pyautogui.click(nearby_sharing_icon_location)
-                speak("Nearby sharing is turned on, boss")
+                speak("Nearby sharing is turned on boss")
             except pyautogui.ImageNotFoundException:
-                speak("Nearby sharing icon not found, boss")
+                speak("Nearby sharing icon not found boss")
         else:
             # Click on the nearby sharing icon to turn it off
             # Adjust the coordinates based on the location of the nearby sharing icon on your screen
@@ -652,9 +652,9 @@ def toggle_nearby_sharing(query):
                         "images/dark_mode/action_center/nearby_sharing_on.png",
                         confidence=0.9, grayscale=True)
                 pyautogui.click(nearby_sharing_icon_location)
-                speak("Nearby sharing is turned off, boss")
+                speak("Nearby sharing is turned off boss")
             except pyautogui.ImageNotFoundException:
-                speak("Nearby sharing icon not found, boss")
+                speak("Nearby sharing icon not found boss")
         # Press the Esc key
         pyautogui.press('esc')
 
@@ -662,7 +662,7 @@ def toggle_nearby_sharing(query):
         # Handle any errors that may occur
         speak("Error toggling Nearby sharing")
         if "on nearby share" in query or "on nearby sharing" in query:
-            speak("Sorry, I couldn't turn on Nearby sharing, boss")
+            speak("Sorry, I couldn't turn on Nearby sharing boss")
         else:
-            speak("Sorry, I couldn't turn off Nearby sharing, boss")
+            speak("Sorry, I couldn't turn off Nearby sharing boss")
         pyautogui.press('esc')

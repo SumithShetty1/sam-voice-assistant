@@ -33,7 +33,7 @@ def search_bar(query):
             pyautogui.write(search_query)
 
             # Display assistant's message
-            speak(f"Searching for '{search_query}', boss")
+            speak(f"Searching for '{search_query}' boss")
             return
 
         # Take a screenshot before pressing Ctrl+L
@@ -54,7 +54,7 @@ def search_bar(query):
             pyautogui.press('enter')
 
             # Display assistant's message
-            speak(f"Searching for '{search_query}', boss")
+            speak(f"Searching for '{search_query}' boss")
         else:
             # Press Windows key + S to open the search box
             pyautogui.hotkey('win', 's')
@@ -64,11 +64,11 @@ def search_bar(query):
             pyautogui.write(search_query)
 
             # Display assistant's message
-            speak(f"Searching for '{search_query}', boss")
+            speak(f"Searching for '{search_query}' boss")
 
     except IndexError:
-        speak("Please specify the search query, boss")
+        speak("Please specify the search query boss")
 
     except Exception as e:
         speak("Error performing search")
-        speak("Sorry, I couldn't perform the search, boss")
+        speak("Sorry, I couldn't perform the search boss")

@@ -21,7 +21,7 @@ def play_track_in_spotify(track_name):
             else:
                 # Spotify not found within 10 seconds, ask the user whether to continue waiting or exit
                 speak(
-                    "Spotify is taking longer than usual to open. Do you want to continue waiting, boss?")
+                    "Spotify is taking longer than usual to open. Do you want to continue waiting boss?")
 
                 while True:
                     confirm = listen()
@@ -33,7 +33,7 @@ def play_track_in_spotify(track_name):
                             speak(f"Spotify is still taking time to open. Please manually play {track_name}")
                             return
                     else:
-                        speak("Closing Spotify, boss")
+                        speak("Closing Spotify boss")
                         pyautogui.hotkey('alt', 'f4')
                         return
 
@@ -57,7 +57,7 @@ def play_track_in_spotify(track_name):
             else:
                 # Spotify not found within 10 seconds, ask the user whether to continue waiting or exit
                 speak(
-                    "Spotify is taking longer than usual to open. Do you want to continue waiting, boss?")
+                    "Spotify is taking longer than usual to open. Do you want to continue waiting boss?")
 
                 while True:
                     confirm = listen()
@@ -69,7 +69,7 @@ def play_track_in_spotify(track_name):
                             speak(f"Spotify is still taking time to open. Please manually play {track_name}")
                             return
                     else:
-                        speak("Closing Spotify, boss")
+                        speak("Closing Spotify boss")
                         pyautogui.hotkey('alt', 'f4')
                         return
 
@@ -87,13 +87,13 @@ def play_track_in_spotify(track_name):
         pyautogui.press('enter')
         time.sleep(1)
         # Speak confirmation message
-        speak(f"Playing {track_name} on Spotify, boss.")
+        speak(f"Playing {track_name} on Spotify boss.")
         time.sleep(0.6)
         pyautogui.press('enter')
 
     except Exception as e:
         # Handle errors
-        speak("Sorry, I couldn't play the track on Spotify, boss.")
+        speak("Sorry, I couldn't play the track on Spotify boss.")
 
 
 def play_video_on_youtube(video_name):
@@ -109,7 +109,7 @@ def play_video_on_youtube(video_name):
         else:
             # YouTube not found within 10 seconds, ask the user whether to continue waiting or exit
             speak(
-                "YouTube is taking longer than usual to open. Do you want to continue waiting, boss?")
+                "YouTube is taking longer than usual to open. Do you want to continue waiting boss?")
 
             while True:
                 confirm = listen()
@@ -121,7 +121,7 @@ def play_video_on_youtube(video_name):
                         speak(f"YouTube is still taking time to open. Please manually play {video_name}")
                         return
                 else:
-                    speak("Closing YouTube, boss")
+                    speak("Closing YouTube boss")
                     pyautogui.hotkey('alt', 'f4')
                     return
 
@@ -152,13 +152,13 @@ def play_video_on_youtube(video_name):
         if first_video_position:
             pyautogui.click(first_video_position)
             # Speak confirmation message
-            speak(f"Playing {video_name} on YouTube, boss.")
+            speak(f"Playing {video_name} on YouTube boss.")
         else:
-            speak("Please pick a video from the list of videos manually, boss.")
+            speak("Please pick a video from the list of videos manually boss.")
 
     except Exception as e:
         # Handle errors
-        speak("Sorry, I couldn't play the video on YouTube, boss.")
+        speak("Sorry, I couldn't play the video on YouTube boss.")
 
 
 # Function to play music or video

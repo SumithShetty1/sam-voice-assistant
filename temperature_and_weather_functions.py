@@ -17,11 +17,11 @@ def temperature(query):
             temp = data.find("div", class_="BNeawe").text
 
             if "°C" in temp:
-                speak(f"Current temperature in {location} is {temp}, boss")
+                speak(f"Current temperature in {location} is {temp} boss")
             else:
-                speak("Sam: Please specify a location, boss.")
+                speak("Sam: Please specify a location boss.")
         else:
-            speak("Sam: Please specify a location, boss.")
+            speak("Sam: Please specify a location boss.")
 
     except Exception as e:
         speak("Sam: Sorry, I couldn't fetch the temperature information at the moment.")
@@ -42,15 +42,15 @@ def weather(query):
             try:
                 weather_condition = data.find("div", class_="BNeawe tAd8D AP7Wnd").text
             except Exception as e:
-                speak("Sam: Please specify a location, boss.")
+                speak("Sam: Please specify a location boss.")
                 return
 
             # Remove time information from weather_condition
             weather_condition = weather_condition.split("\n")[1]
 
-            speak(f"Current weather in {location} is {weather_condition}, boss")
+            speak(f"Current weather in {location} is {weather_condition} boss")
         else:
-            speak("Sam: Please specify a location, boss.")
+            speak("Sam: Please specify a location boss.")
 
     except Exception as e:
         speak("Sam: Sorry, I couldn't fetch the weather information at the moment.")

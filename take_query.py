@@ -1,5 +1,4 @@
 import time
-import wikipedia
 from greet import greet
 from check_functions import check_internet
 from sam_functions.speak import speak
@@ -33,13 +32,14 @@ from windows_functions.time_and_date import tell_time_and_date
 from search import search
 from media_functions.play_functions import play_functions
 from temperature_and_weather_functions import temperature, weather
+from wikipedia_functions import wikipedia_functions
 import eel
 
 
 @eel.expose
 # Function to interact with the user and perform actions based on their commands
 def take_query():
-    time.sleep(0.8)
+    time.sleep(0.6)
     # Initial greeting
     speak("Hello Boss, How may I help you?")
 
@@ -68,9 +68,8 @@ def take_query():
             query = listen()
 
             # Check if the user wants to wake up the assistant
-            if "hey sam" in query:
-                speak("Yes boss, I'm awake")
-                continue
+            if "hey sam" in query or "sam" in query:
+                speak("Yes boss, How may I help you?")
 
             # System controls
             elif "system lock" in query or "system sleep" in query or "system sign out" in query or "system restart" in query or "system shutdown" in query:
@@ -78,7 +77,7 @@ def take_query():
 
             # Check if the user wants the assistant to sleep
             elif "sleep" in query or "stop" in query:
-                speak("Going to sleep, boss")
+                speak("Going to sleep boss")
                 sleeping = True
                 continue
 
@@ -87,63 +86,63 @@ def take_query():
             eel.DisplayMessage("Say, hey Sam or wake up")
             wake_up_phrase = listen()
             if "hey sam" in wake_up_phrase or "wake up" in wake_up_phrase:
-                speak("Yes boss, I'm awake")
+                speak("Yes boss, How may I help you?")
                 sleeping = False
                 continue
 
         # Respond to specific queries
         # Tell the user the assistant's name
         if "tell me your name" in query or "who are you" in query:
-            speak("I'm Sam your virtual assistant! I'm here to help you with tasks and provide information, boss")
+            speak("I'm Sam your virtual assistant! I'm here to help you with tasks and provide information boss")
 
         elif "who am i" in query:
-            speak("You are you, boss. You're the wonderful individual interacting with me right now.")
+            speak("You are you boss. You're the wonderful individual interacting with me right now.")
 
         elif "how are you" in query:
-            speak("I'm just a bunch of code, but I'm functioning perfectly fine, boss")
+            speak("I'm just a bunch of code, but I'm functioning perfectly fine boss")
 
         elif "what can you do" in query:
             speak(
-                "As your assistant, boss I can handle tasks like managing settings searching the web opening apps and more")
+                "As your assistant boss I can handle tasks like managing settings searching the web opening apps and more")
 
         elif "thank you" in query:
-            speak("You're welcome, boss! Always happy to assist.")
+            speak("You're welcome boss! Always happy to assist.")
 
         elif "goodbye" in query or "bye" in query:
-            speak("Goodbye, boss! Have a great day ahead!")
+            speak("Goodbye boss! Have a great day ahead!")
 
         elif "do you have any hobbies" in query:
-            speak("My main hobby is assisting you with your tasks and inquiries, boss!")
+            speak("My main hobby is assisting you with your tasks and inquiries boss!")
 
         elif "do you like music" in query:
-            speak("I don't have ears to enjoy music but I can play your favorite songs for you, boss!")
+            speak("I don't have ears to enjoy music but I can play your favorite songs for you boss!")
 
         elif "what's your favorite colour" in query:
-            speak("I don't have eyes to see colors, boss but I like the concept of 'electric blue', boss!")
+            speak("I don't have eyes to see colors boss but I like the concept of 'electric blue' boss!")
 
         elif "do you dream" in query:
-            speak("I don't sleep, so I don't dream, boss!")
+            speak("I don't sleep, so I don't dream boss!")
 
         elif "what's the meaning of life" in query:
             speak(
-                "The meaning of life is a philosophical question that has puzzled humanity for centuries. Some say it's to seek happiness, others say it's to find purpose, boss")
+                "The meaning of life is a philosophical question that has puzzled humanity for centuries. Some say it's to seek happiness, others say it's to find purpose boss")
 
         elif "are you a robot" in query:
             speak(
-                "I'm an AI-powered virtual assistant, boss. While I don't have a physical body like a robot, I'm here to assist you!")
+                "I'm an AI-powered virtual assistant boss. While I don't have a physical body like a robot, I'm here to assist you!")
 
         elif "do you have any pets" in query:
-            speak("I don't have any pets, but I'm here to assist you, boss!")
+            speak("I don't have any pets, but I'm here to assist you boss!")
 
         elif "what do you do" in query or "what can you help me with" in query:
             speak(
-                "I'm here to assist you with various tasks, answer your questions, provide information, and help you stay organized, boss")
+                "I'm here to assist you with various tasks, answer your questions, provide information, and help you stay organized boss")
 
         elif "sorry" in query:
-            speak("No need to apologize, boss")
+            speak("No need to apologize boss")
 
         elif "good day" in query:
-            speak("Have a good day too, boss!")
+            speak("Have a good day too boss!")
 
         # Greet
         elif "good morning" in query or "good afternoon" in query or "good evening" in query or "good night" in query or "hello" in query or "greet me" in query:
@@ -170,14 +169,12 @@ def take_query():
         # Check if the user wants to turn on internet
         elif "on internet" in query and check_internet():
             speak("Boss the internet is already on")
-            continue
 
         # Check if the user wants to turn off internet
         elif "off internet" in query and check_internet():
             # Display warning message
             speak(
-                "I'm sorry, boss but I must warn you. You can't turn off the internet. My functions rely on an active internet connection to assist you effectively")
-            continue
+                "I'm sorry boss but I must warn you. You can't turn off the internet. My functions rely on an active internet connection to assist you effectively")
 
         # Open settings
         elif "open settings" in query or "open setting" in query:
@@ -210,13 +207,8 @@ def take_query():
             close_application(query)
 
         # Search on Wikipedia
-        elif "from wikipedia" in query:
-            speak("Checking the wikipedia ")
-            query = query.replace("wikipedia", "")
-
-            result = wikipedia.summary(query, sentences=4)
-            speak("According to wikipedia")
-            speak(result)
+        elif "from wikipedia" in query or "what is" in query or "explain" in query:
+            wikipedia_functions(query)
 
         # Increase system volume
         elif "increase volume" in query:

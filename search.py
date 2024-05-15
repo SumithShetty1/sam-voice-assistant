@@ -11,67 +11,67 @@ def search(query):
         if "google" in query or "chrome" in query:
             search_query = query.split("search ")[1]
             search_url = f"https://www.google.com/search?q={search_query}"
-            speak(f"Searching the web for {search_query}, boss.")
+            speak(f"Searching the web for {search_query} boss.")
             webbrowser.open(search_url)
 
         elif "youtube" in query:
             search_query = query.split("search ")[1]
             search_url = f"https://www.youtube.com/results?search_query={search_query}"
-            speak(f"Searching YouTube for {search_query}, boss.")
+            speak(f"Searching YouTube for {search_query} boss.")
             webbrowser.open(search_url)
 
         elif "spotify" in query:
             search_query = query.split("search ")[1]
             search_url = f"https://open.spotify.com/search/{search_query}"
-            speak(f"Searching Spotify for {search_query}, boss.")
+            speak(f"Searching Spotify for {search_query} boss.")
             webbrowser.open(search_url)
 
         elif "linkedin" in query:
             search_query = query.split("search ")[1]
             search_url = f"https://www.linkedin.com/search/results/all/?keywords={search_query}"
-            speak(f"Searching LinkedIn for {search_query}, boss.")
+            speak(f"Searching LinkedIn for {search_query} boss.")
             webbrowser.open(search_url)
 
         elif "amazon" in query:
             search_query = query.split("search ")[1]
             search_url = f"https://www.amazon.in/s?k={search_query}"
-            speak(f"Searching Amazon for {search_query}, boss.")
+            speak(f"Searching Amazon for {search_query} boss.")
             webbrowser.open(search_url)
 
         elif "twitter" in query:
             search_query = query.split("search ")[1]
             search_url = f"https://twitter.com/search?q={search_query}"
-            speak(f"Searching Twitter for {search_query}, boss.")
+            speak(f"Searching Twitter for {search_query} boss.")
             webbrowser.open(search_url)
 
         elif "github" in query:
             search_query = query.split("search ")[1]
             search_url = f"https://github.com/search?q={search_query}"
-            speak(f"Searching GitHub for {search_query}, boss.")
+            speak(f"Searching GitHub for {search_query} boss.")
             webbrowser.open(search_url)
 
         elif "wikipedia" in query:
             search_query = query.split("search ")[1]
             search_url = f"https://en.wikipedia.org/wiki/{search_query}"
-            speak(f"Searching Wikipedia for {search_query}, boss.")
+            speak(f"Searching Wikipedia for {search_query} boss.")
             webbrowser.open(search_url)
 
         elif "facebook" in query:
             search_query = query.split("search ")[1]
             search_url = f"https://www.facebook.com/search/top/?q={search_query}"
-            speak(f"Searching Facebook for {search_query}, boss.")
+            speak(f"Searching Facebook for {search_query} boss.")
             webbrowser.open(search_url)
 
         elif "instagram" in query:
             search_query = query.split("search ")[1]
             search_url = f"https://www.instagram.com/explore/tags/{search_query}"
-            speak(f"Searching Instagram for {search_query}, boss.")
+            speak(f"Searching Instagram for {search_query} boss.")
             webbrowser.open(search_url)
 
         elif "netflix" in query:
             search_query = query.split("search ")[1]
             search_url = f"https://www.netflix.com/search?q={search_query}"
-            speak(f"Searching Netflix for {search_query}, boss.")
+            speak(f"Searching Netflix for {search_query} boss.")
             webbrowser.open(search_url)
 
         elif "bing" in query or "edge" in query:
@@ -90,7 +90,7 @@ def search(query):
             pyautogui.press("enter")
 
             # Display assistant's message
-            speak(f"Searching Bing for {search_query}, boss")
+            speak(f"Searching Bing for {search_query} boss")
 
         elif "file explorer" in query:
             pyautogui.hotkey("win", 'e')
@@ -108,7 +108,7 @@ def search(query):
             pyautogui.press("enter")
 
             # Display assistant's message
-            speak(f"Searching for {search_query}, boss")
+            speak(f"Searching for {search_query} boss")
 
         elif "windows" in query:
             search_in_windows(query)
@@ -117,7 +117,7 @@ def search(query):
             search_bar(query)
 
     except IndexError:
-        speak("Please specify the search query, boss")
+        speak("Please specify the search query boss")
     except Exception as e:
         speak("Error performing search")
-        speak("Sorry, I couldn't perform the search, boss")
+        speak("Sorry, I couldn't perform the search boss")

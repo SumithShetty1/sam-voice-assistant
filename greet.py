@@ -19,16 +19,16 @@ def greet(query):
 
         # Check if the query matches the greeting
         if "good morning" in query and greeting != "Good morning":
-            speak(f"It's not morning anymore, but {greeting}, boss.")
+            speak(f"It's not morning anymore, but {greeting} boss.")
         elif "good afternoon" in query and greeting != "Good afternoon":
-            speak(f"It's not afternoon anymore, but {greeting}, boss.")
+            speak(f"It's not afternoon anymore, but {greeting} boss.")
         elif "good night" in query and greeting != "Good night":
-            speak(f"It's not night yet, but {greeting}, boss.")
+            speak(f"It's not night yet, but {greeting} boss.")
         elif "hello" in query:
-            speak(f"Hello, boss.")
+            speak(f"Hello boss.")
         else:
-            speak(f"{greeting}, boss.")
+            speak(f"{greeting} boss.")
 
     except Exception as e:
         speak("An error occurred")
-        speak("Oops! Something went wrong while trying to greet you, boss.")
+        speak("Oops! Something went wrong while trying to greet you boss.")

@@ -42,10 +42,10 @@ def capture_full_screen(query):
         screen_capture.save(file_path)
 
         # Inform the user about successful screenshot capture
-        speak(f"I've captured a screenshot of the entire screen and saved it as {file_name}, boss.")
+        speak(f"I've captured a screenshot of the entire screen and saved it as {file_name} boss.")
     except Exception as e:
         speak(f"An error occurred")
-        speak("Oops! Something went wrong while trying to capture the screenshot, boss.")
+        speak("Oops! Something went wrong while trying to capture the screenshot boss.")
 
 
 # Function to capture a screenshot using the Snipping Tool
@@ -55,10 +55,10 @@ def capture_snipping():
         pyautogui.hotkey('win', 'shift', 's')
 
         # Instruct the user to use the Snipping Tool to select the area to capture
-        speak("Please use the Snipping tool to select the area you'd like to capture, boss.")
+        speak("Please use the Snipping tool to select the area you'd like to capture boss.")
     except Exception as e:
         speak("An error occurred")
-        speak("Oops! Something went wrong while trying to capture the screenshot, boss.")
+        speak("Oops! Something went wrong while trying to capture the screenshot boss.")
 
 
 # Function to handle screenshot requests
