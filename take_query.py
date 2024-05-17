@@ -34,6 +34,7 @@ from media_functions.play_functions import play_functions
 from temperature_and_weather_functions import temperature, weather
 from wikipedia_functions import wikipedia_functions
 import eel
+from intent_detect.load_model import recognize_intent
 
 
 @eel.expose
@@ -63,20 +64,26 @@ def take_query():
             internet_connection_message_displayed = False
 
         query = ""
+        intent_data = ""
 
         if not sleeping:
             query = listen()
+
+            if query is None:
+                continue
+
+            intent_data = recognize_intent(query)
 
             # Check if the user wants to wake up the assistant
             if "hey sam" in query or "sam" in query:
                 speak("Yes boss, How may I help you?")
 
             # System controls
-            elif "system lock" in query or "system sleep" in query or "system sign out" in query or "system restart" in query or "system shutdown" in query:
+            elif intent_data['intents']['intent'] == "system_control":
                 system_control(query)
 
             # Check if the user wants the assistant to sleep
-            elif "sleep" in query or "stop" in query:
+            elif intent_data['intents']['intent'] == "assistant_sleep":
                 speak("Going to sleep boss")
                 sleeping = True
                 continue
@@ -85,157 +92,148 @@ def take_query():
             # Listen for wake-up phrase
             eel.DisplayMessage("Say, hey Sam or wake up")
             wake_up_phrase = listen()
-            if "hey sam" in wake_up_phrase or "wake up" in wake_up_phrase:
+
+            if "hey sam" in wake_up_phrase or "wake up" in wake_up_phrase or "sam":
                 speak("Yes boss, How may I help you?")
                 sleeping = False
                 continue
 
         # Respond to specific queries
         # Tell the user the assistant's name
-        if "tell me your name" in query or "who are you" in query:
+        if intent_data['intents']['intent'] == "assistant_name":
             speak("I'm Sam your virtual assistant! I'm here to help you with tasks and provide information boss")
 
-        elif "who am i" in query:
+        elif intent_data['intents']['intent'] == "user_identity":
             speak("You are you boss. You're the wonderful individual interacting with me right now.")
 
-        elif "how are you" in query:
+        elif intent_data['intents']['intent'] == "assistant_status":
             speak("I'm just a bunch of code, but I'm functioning perfectly fine boss")
 
-        elif "what can you do" in query:
+        elif intent_data['intents']['intent'] == "assistant_capabilities":
             speak(
                 "As your assistant boss I can handle tasks like managing settings searching the web opening apps and more")
 
-        elif "thank you" in query:
+        elif intent_data['intents']['intent'] == "thank_you":
             speak("You're welcome boss! Always happy to assist.")
 
-        elif "goodbye" in query or "bye" in query:
+        elif intent_data['intents']['intent'] == "goodbye":
             speak("Goodbye boss! Have a great day ahead!")
 
-        elif "do you have any hobbies" in query:
+        elif intent_data['intents']['intent'] == "hobbies":
             speak("My main hobby is assisting you with your tasks and inquiries boss!")
 
-        elif "do you like music" in query:
+        elif intent_data['intents']['intent'] == "like_music":
             speak("I don't have ears to enjoy music but I can play your favorite songs for you boss!")
 
-        elif "what's your favorite colour" in query:
+        elif intent_data['intents']['intent'] == "favorite_color":
             speak("I don't have eyes to see colors boss but I like the concept of 'electric blue' boss!")
 
-        elif "do you dream" in query:
+        elif intent_data['intents']['intent'] == "dream":
             speak("I don't sleep, so I don't dream boss!")
 
-        elif "what's the meaning of life" in query:
+        elif intent_data['intents']['intent'] == "meaning_of_life":
             speak(
                 "The meaning of life is a philosophical question that has puzzled humanity for centuries. Some say it's to seek happiness, others say it's to find purpose boss")
 
-        elif "are you a robot" in query:
+        elif intent_data['intents']['intent'] == "robot":
             speak(
                 "I'm an AI-powered virtual assistant boss. While I don't have a physical body like a robot, I'm here to assist you!")
 
-        elif "do you have any pets" in query:
+        elif intent_data['intents']['intent'] == "pets":
             speak("I don't have any pets, but I'm here to assist you boss!")
 
-        elif "what do you do" in query or "what can you help me with" in query:
-            speak(
-                "I'm here to assist you with various tasks, answer your questions, provide information, and help you stay organized boss")
-
-        elif "sorry" in query:
+        elif intent_data['intents']['intent'] == "apology":
             speak("No need to apologize boss")
 
-        elif "good day" in query:
+        elif intent_data['intents']['intent'] == "good_day":
             speak("Have a good day too boss!")
 
         # Greet
-        elif "good morning" in query or "good afternoon" in query or "good evening" in query or "good night" in query or "hello" in query or "greet me" in query:
-            greet(query)
+        elif intent_data['intents']['intent'] == "Greet":
+            greet(intent_data)
 
         # Exit the program
-        elif "exit" in query:
+        elif intent_data['intents']['intent'] == "exit":
             speak("Exiting Boss")
             eel.close_window()
             exit()
 
         # Date and Time
-        elif "date" in query or "time" in query or "day" in query or "month" in query or "year" in query or "hour" in query:
+        elif intent_data['intents']['intent'] == "date_time":
             tell_time_and_date(query)
 
         # Temperature
-        elif "temperature" in query:
+        elif intent_data['intents']['intent'] == "temperature":
             temperature(query)
 
         # Weather
-        elif "weather" in query:
+        elif intent_data['intents']['intent'] == "weather":
             weather(query)
 
         # Check if the user wants to turn on internet
-        elif "on internet" in query and check_internet():
+        elif intent_data['intents']['intent'] == "internet_on" and check_internet():
             speak("Boss the internet is already on")
 
         # Check if the user wants to turn off internet
-        elif "off internet" in query and check_internet():
+        elif intent_data['intents']['intent'] == "internet_off" and check_internet():
             # Display warning message
             speak(
                 "I'm sorry boss but I must warn you. You can't turn off the internet. My functions rely on an active internet connection to assist you effectively")
 
         # Open settings
-        elif "open settings" in query or "open setting" in query:
+        elif intent_data['intents']['intent'] == "open_settings":
             open_settings(query)
 
         # Keyboard keys
-        elif "press" in query:
+        elif intent_data['intents']['intent'] == "keyboard_keys":
             keyboard_keys(query)
 
         # Shortcuts
-        elif any(shortcut in query for shortcut in
-                 ["copy", "cut", "paste", "undo", "redo", "select all", "find", "save", "print", "new tab", "new",
-                  "task view",
-                  "switch apps", "minimize all", "show desktop", "snap window left", "snap window right",
-                  "maximize window", "minimize window", "bold", "italic", "underline", "align left", "align center",
-                  "align right", "open start menu", "open run dialog", "open power user menu",
-                  "open system properties"]):
+        elif intent_data['intents']['intent'] == "shortcuts":
             shortcut_functions(query)
 
         # Open application
-        elif "open" in query:
+        elif intent_data['intents']['intent'] == "open_application":
             open_application(query)
 
         # Close current application
-        elif "close current window" in query:
+        elif intent_data['intents']['intent'] == "close_current_window":
             close_window()
 
         # Close application
-        elif "close" in query:
+        elif intent_data['intents']['intent'] == "close_application":
             close_application(query)
 
         # Search on Wikipedia
-        elif "from wikipedia" in query or "what is" in query or "explain" in query:
+        elif intent_data['intents']['intent'] == "wikipedia":
             wikipedia_functions(query)
 
         # Increase system volume
-        elif "increase volume" in query:
+        elif intent_data['intents']['intent'] == "volume_up":
             volume_up(1)
 
         # Decrease system volume
-        elif "decrease volume" in query:
+        elif intent_data['intents']['intent'] == "volume_down":
             volume_down(1)
 
         # UnMute
-        elif "disable mute" in query:
+        elif intent_data['intents']['intent'] == "unmute":
             unmute_volume()
 
         # Mute
-        elif "mute" in query:
+        elif intent_data['intents']['intent'] == "mute":
             mute_volume()
 
         # Increase screen brightness
-        elif "increase brightness" in query:
+        elif intent_data['intents']['intent'] == "increase_brightness":
             increase_brightness(10)
 
         # Decrease screen brightness
-        elif "decrease brightness" in query:
+        elif intent_data['intents']['intent'] == "decrease_brightness":
             decrease_brightness(10)
 
         # Check if the query mentions setting brightness to a specific level
-        elif "set brightness" in query:
+        elif intent_data['intents']['intent'] == "set_brightness":
             # Extract the brightness level from the query
             try:
                 brightness_str = next(word for word in query.split() if word.isdigit() or "%" in word)
@@ -250,147 +248,151 @@ def take_query():
 
         # Action Center
         # To show or hide action center
-        elif "show action centre" in query or "hide action centre" in query:
+        elif intent_data['intents']['intent'] == "show_hide_action_center":
             show_or_hide_action_center(query)
 
         # On action center toggle wi-fi
-        elif "on wi-fi in action centre" in query or "off wi-fi in action centre" in query:
+        elif intent_data['intents']['intent'] == "toggle_wifi_action_center":
             toggle_wifi(query)
 
         # On action center show Bluetooth devices
-        elif "show wifi networks in action centre" in query:
+        elif intent_data['intents']['intent'] == "show_wifi_networks_action_center":
             action_center_show_wifi_networks()
 
         # On action center toggle Bluetooth
-        elif "on bluetooth in action centre" in query or "off bluetooth in action centre" in query:
+        elif intent_data['intents']['intent'] == "toggle_bluetooth_action_center":
             toggle_bluetooth(query)
 
         # On action center show Bluetooth devices
-        elif "show bluetooth devices in action centre" in query:
+        elif intent_data['intents']['intent'] == "show_bluetooth_devices_action_center":
             action_center_show_bluetooth_devices()
 
         # On action center toggle airplane mode
-        elif "on airplane mode in action centre" in query or "off airplane mode in action centre" in query:
+        elif intent_data['intents']['intent'] == "toggle_airplane_mode_action_center":
             toggle_airplane_mode(query)
 
         # On action center toggle battery saver
-        elif "on battery saver" in query or "off battery saver" in query:
+        elif intent_data['intents']['intent'] == "toggle_battery_saver":
             toggle_battery_saver(query)
 
         # On action center toggle night light mode
-        elif "on night light in action centre" in query or "off night light in action centre" in query:
+        elif intent_data['intents']['intent'] == "toggle_night_light_action_center":
             toggle_night_light(query)
 
         # On action center toggle nearby sharing
-        elif "on nearby sharing in action centre" in query or "on nearby share in action centre" in query:
+        elif intent_data['intents']['intent'] == "toggle_nearby_sharing_action_center":
             toggle_nearby_sharing(query)
 
         # Settings
         # Enable or disable Bluetooth in settings
-        elif "on bluetooth in settings" in query or "off bluetooth in settings" in query:
+        elif intent_data['intents']['intent'] == "enable_disable_bluetooth_settings":
             enable_or_disable_bluetooth(query)
 
         # On settings show Bluetooth devices
-        elif "show bluetooth devices in settings" in query:
+        elif intent_data['intents']['intent'] == "show_bluetooth_devices_settings":
             settings_show_bluetooth_devices()
 
         # Enable or disable Airplane Mode in settings
-        elif "on airplane mode in settings" in query or "off airplane mode in settings" in query:
+        elif intent_data['intents']['intent'] == "enable_disable_airplane_mode_settings":
             enable_or_disable_airplane_mode(query)
 
         # Enable or disable Night Light in settings
-        elif "on night light in settings" in query or "off night light in settings" in query:
+        elif intent_data['intents']['intent'] == "enable_disable_night_light_settings":
             enable_or_disable_night_light(query)
 
         # Enable or disable Do Not Disturb in settings
-        elif "on do not disturb" in query or "off do not disturb" in query:
+        elif intent_data['intents']['intent'] == "enable_disable_do_not_disturb":
             enable_or_disable_do_not_disturb(query)
 
         # Enable or disable Nearby Share in settings
-        elif "on nearby share in settings" in query or "off nearby share in settings" in query:
+        elif intent_data['intents']['intent'] == "enable_disable_nearby_share_settings":
             enable_or_disable_nearby_share(query)
 
         # Enable or disable Wi-Fi in settings
-        elif "on wi-fi in settings" in query or "off wi-fi in settings" in query:
+        elif intent_data['intents']['intent'] == "enable_disable_wifi_settings":
             enable_or_disable_wifi(query)
 
         # Show available Wi-Fi networks in settings
-        elif "show available wi-fi networks in settings" in query:
+        elif intent_data['intents']['intent'] == "show_wifi_networks_settings":
             settings_show_wifi_networks()
 
         # Enable or disable Hotspot in settings
-        elif "on hotspot" in query or "off hotspot" in query:
+        elif intent_data['intents']['intent'] == "enable_disable_hotspot":
             enable_or_disable_hotspot(query)
 
         # Enable or disable Light or Dark Mode in settings
-        elif "on light mode" in query or "off light mode" in query or "on dark mode" in query or "off dark mode" in query:
+        elif intent_data['intents']['intent'] == "enable_disable_light_dark_mode":
             enable_or_disable_light_or_dark_mode(query)
 
         # Turn on or off Bluetooth
-        elif "on bluetooth" in query or "off bluetooth" in query:
+        elif intent_data['intents']['intent'] == "turn_on_off_bluetooth":
             turn_on_or_off_bluetooth(query)
 
         # Show Bluetooth devices
-        elif "show bluetooth devices" in query:
+        elif intent_data['intents']['intent'] == "show_bluetooth_devices":
             show_bluetooth_devices()
 
         # Turn on or off airplane mode
-        elif "on airplane mode" in query or "off airplane mode" in query:
+        elif intent_data['intents']['intent'] == "turn_on_off_airplane_mode":
             turn_on_or_off_airplane_mode(query)
 
         # Turn on or off night light mode
-        elif "on night light" in query or "off night light" in query:
+        elif intent_data['intents']['intent'] == "turn_on_off_night_light":
             turn_on_or_off_night_light(query)
 
         # Turn on or off nearby sharing
-        elif "on nearby sharing" in query or "on nearby share" in query:
+        elif intent_data['intents']['intent'] == "turn_on_off_nearby_sharing":
             turn_on_or_off_nearby_sharing(query)
 
         # Turn on or off Wi-Fi
-        elif "on wi-fi" in query or "off wi-fi" in query:
+        elif intent_data['intents']['intent'] == "turn_on_off_wifi":
             enable_or_disable_wifi(query)
 
         # Show available Wi-Fi networks
-        elif "show available wi-fi networks" in query:
+        elif intent_data['intents']['intent'] == "show_wifi_networks":
             show_wifi_networks()
 
         # Camera
         # Take a photo
-        elif "take a photo" in query:
+        elif intent_data['intents']['intent'] == "camera_take_photo":
             take_photo(query)
 
         # Start a video
-        elif "start a video" in query:
+        elif intent_data['intents']['intent'] == "camera_start_video":
             start_video()
 
         # Scan barcode
-        elif "scan the barcode" in query:
+        elif intent_data['intents']['intent'] == "scan_barcode":
             scan_barcode()
 
         # Screenshot
-        elif "take a screenshot" in query:
+        elif intent_data['intents']['intent'] == "take_screenshot":
             screenshot(query)
 
         # Screenrecord
-        elif "record the screen" in query:
+        elif intent_data['intents']['intent'] == "screen_record":
             screenrecord(query)
 
         # Record audio
-        elif "record the audio" in query:
+        elif intent_data['intents']['intent'] == "record_audio":
             record_audio()
 
         # Create a file
-        elif "create" in query:
+        elif intent_data['intents']['intent'] == "create_file":
             create_file(query)
 
         # Search in Windows
-        elif "windows search" in query:
+        elif intent_data['intents']['intent'] == "search_windows":
             search_in_windows(query)
 
         # Search
-        elif "search" in query:
+        elif intent_data['intents']['intent'] == "search":
             search(query)
 
         # Play music or video
-        elif "play" in query:
+        elif intent_data['intents']['intent'] == "play_media":
             play_functions(query)
+
+        else:
+            speak(
+                "Sorry, I didn't quite catch that. As much as I'd like to, I have some limitations. How can I assist you within my capabilities?")

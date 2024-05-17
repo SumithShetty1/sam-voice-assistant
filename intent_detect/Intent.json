@@ -1,0 +1,100 @@
+{
+  "intents": [
+    {
+      "intent": "Greet",
+      "text": ["good morning", "good afternoon", "good evening", "good night", "hello", "hi", "hey", "greetings", "howdy", "greet me", "hey there", "hi there", "what's up", "how's it going", "hiya", "good to see you", "nice to meet you", "hey buddy", "how are you doing", "hi friend"],
+      "responses": ["Hello! How can I assist you today?", "Hi there! What can I do for you?", "Greetings! How may I help you?"],
+      "context": {
+        "in": "",
+        "out": "",
+        "clear": false
+      },
+      "entityType": "TimeOfDay",
+      "entities": ["morning", "afternoon", "evening", "night"]
+    },
+    {
+      "intent": "CheckInternet",
+      "text": ["check internet", "is internet on", "internet connection", "test connection", "check wifi", "network status", "internet availability", "connection status", "internet access", "internet status", "check connectivity", "internet check", "connectivity status", "verify internet", "internet connectivity", "internet test", "test internet connection", "network check", "check network", "check online"],
+      "responses": ["Checking your internet connection...", "Let me verify the internet status...", "I'll check the connectivity for you..."],
+      "context": {
+        "in": "",
+        "out": "",
+        "clear": false
+      },
+      "entityType": "NA",
+      "entities": []
+    },
+    {
+      "intent": "SystemControl",
+      "text": ["system lock", "system sleep", "system sign out", "system restart", "system shutdown", "lock system", "put system to sleep", "log out", "restart system", "shut down", "power off", "power down", "turn off computer", "shutdown computer", "sleep mode", "sign out", "restart computer", "log out of system", "power off computer", "power down computer"],
+      "responses": ["Executing system control command...", "Performing the requested system action..."],
+      "context": {
+        "in": "",
+        "out": "",
+        "clear": false
+      },
+      "entityType": "NA",
+      "entities": []
+    },
+    {
+      "intent": "AssistantSleep",
+      "text": ["sleep", "stop", "pause", "pause assistant", "go to sleep", "take a break", "take a nap", "rest", "hibernate", "shut down assistant", "put assistant to sleep", "turn off assistant", "assistant pause", "assistant stop", "assistant sleep mode", "pause the assistant", "pause assistant mode", "assistant nap", "assistant rest", "assistant take a break"],
+      "responses": ["Putting the assistant to sleep...", "Pausing the assistant..."],
+      "context": {
+        "in": "",
+        "out": "",
+        "clear": false
+      },
+      "entityType": "NA",
+      "entities": []
+    },
+    {
+      "intent": "AssistantName",
+      "text": ["tell me your name", "who are you", "what's your name", "your name", "introduce yourself", "identify yourself", "what should I call you", "your identity", "what's your title", "who's speaking", "who are you really", "what are you called", "who are you exactly", "your designation", "tell me who you are", "how should I address you", "what are you", "what do I call you", "what are you known as", "who's talking"],
+      "responses": ["I am your virtual assistant. How can I help you today?", "You can call me your assistant. What can I do for you?", "I am here to assist you. How may I help?"],
+      "context": {
+        "in": "",
+        "out": "",
+        "clear": false
+      },
+      "entityType": "NA",
+      "entities": []
+    },
+    {
+      "intent": "UserIdentity",
+      "text": ["who am i", "identify me", "what's my name", "who's using this", "who is this", "what's my identity", "what's my username", "who's logged in", "who is the user", "recognize me", "who's talking", "am I logged in", "do you know me", "who's speaking", "recognize my voice", "am I recognized", "who is using this device", "who's the user", "who's the speaker", "who is this person"],
+      "responses": ["You are <USER>. How can I assist you today?", "Hello <USER>, what can I do for you?", "Hi <USER>, how may I help you today?"],
+      "context": {
+        "in": "",
+        "out": "",
+        "clear": false
+      },
+      "entityType": "NA",
+      "entities": []
+    },
+    {
+      "intent": "AssistantStatus",
+      "text": ["how are you", "how are you doing", "what's up with you", "how's everything", "how are you feeling", "what's going on", "how's it going", "how's life", "what's new", "what's happening", "how do you feel", "are you okay", "what's the news", "what's the status", "how's your day", "are you well", "how's your day going", "how are things", "what's the situation", "how are you today"],
+      "responses": ["I am just a program, but I'm here to help you. How can I assist?", "I'm doing well, thank you. What can I do for you?", "I am here and ready to help. What do you need?"],
+      "context": {
+        "in": "",
+        "out": "",
+        "clear": false
+      },
+      "entityType": "NA",
+      "entities": []
+    },
+    {
+      "intent": "AssistantCapabilities",
+      "text": ["what can you do", "what do you do", "what can you help me with", "what are your abilities", "what services do you offer", "what are you capable of", "what functions do you have", "what tasks can you perform", "what are your skills", "what are your features", "what can you assist with", "what are your capabilities", "what do you specialize in", "what can you provide", "what support can you offer", "what help can you give", "what's your functionality", "what are your tasks", "what can you perform", "what's your role"],
+      "responses": ["I can assist with various tasks such as checking the internet connection, controlling the system, providing information, and more. How can I help you today?", "I am capable of performing tasks like checking your internet, controlling system functions, and answering your questions. What do you need assistance with?", "I offer a range of services including system control, internet status checks, and more. What can I do for you?"],
+      "context": {
+        "in": "",
+        "out": "",
+        "clear": false
+      },
+      "entityType": "NA",
+      "entities": []
+    }
+  ]
+}

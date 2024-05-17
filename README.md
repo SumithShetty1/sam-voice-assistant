@@ -56,6 +56,10 @@
   ```bash
   pip install eel
 
+- [TensorFlow](https://pypi.org/project/tensorflow/): TensorFlow is a popular Python library for machine learning and deep learning tasks. It can be installed using pip with the following command:
+  ```bash
+  pip install tensorflow
+
 # Error
 - import eel
   \Lib\site-packages\eel\__init__.py", line 16, in <module>

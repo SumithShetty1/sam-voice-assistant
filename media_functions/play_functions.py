@@ -163,9 +163,14 @@ def play_video_on_youtube(video_name):
 
 # Function to play music or video
 def play_functions(query):
-    if "spotify" in query:
-        track_name = query.split("play ")[1]
-        play_track_in_spotify(track_name)
-    else:
-        video_name = query.split("play ")[1]
-        play_video_on_youtube(video_name)
+    try:
+        if "spotify" in query:
+            track_name = query.split("play ")[1]
+            play_track_in_spotify(track_name)
+        else:
+            video_name = query.split("play ")[1]
+            play_video_on_youtube(video_name)
+
+    except Exception as e:
+        # Handle errors
+        speak("Please specify what to play boss")
