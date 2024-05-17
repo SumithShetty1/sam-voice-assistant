@@ -9,11 +9,11 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # Load the data
-with open('Intent.json', 'r') as f:
+with open('intent_detect/Intent.json', 'r') as f:
     data = json.load(f)
 
 # Load the tokenizer
-with open('tokenizer.json', 'r') as f:
+with open('intent_detect/tokenizer.json', 'r') as f:
     tokenizer = tf.keras.preprocessing.text.tokenizer_from_json(json.load(f))
 
 
@@ -36,7 +36,7 @@ intent_to_index = {intent: i for i, intent in enumerate(unique_intents)}
 index_to_intent = {i: intent for intent, i in intent_to_index.items()}
 
 # Load the trained model
-model = tf.keras.models.load_model('intent_model.keras')
+model = tf.keras.models.load_model('intent_detect/intent_model.keras')
 
 
 def recognize_intent(query):
@@ -47,22 +47,22 @@ def recognize_intent(query):
     pred_class = np.argmax(pred, axis=1)[0]
     intent_data = data['intents'][pred_class]
     # Entity detection
-    detected_entities = []
+    detected_entities = ""
     for entity in intent_data['entities']:
         if entity in query.lower():
-            detected_entities.append(entity)
+            detected_entities = entity
+            break
 
     # Include detected entities in the intent_data
     intent_data['detected_entities'] = detected_entities
     return intent_data
 
-
-print("Note: Enter 'quit' to break the loop.")
-while True:
-    query = input('You: ')
-    if query.lower() == 'quit':
-        break
-    intent_data = recognize_intent(query)
-    bot_response = random.choice(intent_data['responses'])
-    print(f'Bot: {bot_response} -- Intent Data: {intent_data}')
-    print()
+# print("Note: Enter 'quit' to break the loop.")
+# while True:
+#     query = input('You: ')
+#     if query.lower() == 'quit':
+#         break
+#     intent_data = recognize_intent(query)
+#     bot_response = random.choice(intent_data['responses'])
+#     print(f'Bot: {bot_response} -- Intent Data: {intent_data}')
+#     print()

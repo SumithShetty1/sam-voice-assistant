@@ -30,7 +30,7 @@ def greet(intent_data):
             speak(f"Good night boss.")
         elif detected_entity == "evening" and greeting == "Good evening":
             speak(f"{greeting} boss.")
-        if detected_entity == "morning" and greeting != "Good morning":
+        elif detected_entity == "morning" and greeting != "Good morning":
             speak(f"It's not morning anymore, but {greeting} boss.")
         elif detected_entity == "afternoon" and greeting != "Good afternoon":
             speak(f"It's not afternoon anymore, but {greeting} boss.")
