@@ -45,16 +45,11 @@ def recognize_intent(query):
     sent_tokens = pad_sequences([sent_tokens], maxlen=model.input_shape[1], padding='pre')
     pred = model.predict(sent_tokens)
     pred_class = np.argmax(pred, axis=1)[0]
-    intent_data = data['intents'][pred_class]
-    # Entity detection
-    detected_entities = ""
-    for entity in intent_data['entities']:
-        if entity in query.lower():
-            detected_entities = entity
-            break
+    try:
+        intent_data = data['intents'][pred_class]
+    except IndexError:
+        return {"intent": "Unknown", "responses": ["Sorry, I didn't understand that."]}
 
-    # Include detected entities in the intent_data
-    intent_data['detected_entities'] = detected_entities
     return intent_data
 
 # print("Note: Enter 'quit' to break the loop.")

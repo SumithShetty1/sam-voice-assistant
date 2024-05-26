@@ -3,148 +3,171 @@ from sam_functions.speak import speak
 
 
 # Function perform various keyboard shortcuts and actions based on the provided query
-def shortcut_functions(query):
+def shortcut_functions(query, intent_data):
     try:
+        # Detect the entity in the query
+        detected_entities = [entity for entity in intent_data.get('entities', []) if entity in query.lower()]
+
         # Combined actions
-        if 'select all' in query and 'copy' in query:
+        if detected_entities == ['select all', 'copy']:
             pyautogui.hotkey('ctrl', 'a')
             pyautogui.hotkey('ctrl', 'c')
-            speak("All selected and copied boss.")
+            speak("All selected and copied sir.")
             return
-        if 'select all' in query and 'cut' in query:
+        if detected_entities == ['select all', 'cut']:
             pyautogui.hotkey('ctrl', 'a')
             pyautogui.hotkey('ctrl', 'x')
-            speak("All selected and cut boss.")
+            speak("All selected and cut sir.")
             return
 
         # Keyboard shortcuts
-        if 'copy' in query:
+        if detected_entities == ['copy']:
             pyautogui.hotkey('ctrl', 'c')
-            speak("Copied boss.")
-            return
-        if 'cut' in query:
-            pyautogui.hotkey('ctrl', 'x')
-            speak("Cut boss.")
-            return
-        if 'paste' in query:
-            pyautogui.hotkey('ctrl', 'v')
-            speak("Pasted boss.")
-            return
-        if 'undo' in query:
-            pyautogui.hotkey('ctrl', 'z')
-            speak("Undone boss.")
-            return
-        if 'redo' in query:
-            pyautogui.hotkey('ctrl', 'y')
-            speak("Redone boss.")
+            speak("Copied sir.")
             return
 
-        if 'select all' in query:
+        if detected_entities == ['cut']:
+            pyautogui.hotkey('ctrl', 'x')
+            speak("Cut sir.")
+            return
+
+        if detected_entities == ['paste']:
+            pyautogui.hotkey('ctrl', 'v')
+            speak("Pasted sir.")
+            return
+
+        if detected_entities == ['undo']:
+            pyautogui.hotkey('ctrl', 'z')
+            speak("Undone sir.")
+            return
+
+        if detected_entities == ['redo']:
+            pyautogui.hotkey('ctrl', 'y')
+            speak("Redone sir.")
+            return
+
+        if detected_entities == ['select all']:
             pyautogui.hotkey('ctrl', 'a')
-            speak("All selected boss.")
+            speak("All selected sir.")
             return
 
             # Other shortcuts
-        if 'find' in query:
+        if detected_entities == ['find']:
             pyautogui.hotkey('ctrl', 'f')
-            speak("Find activated boss.")
+            speak("Find activated sir.")
             return
-        if 'save' in query:
+        if detected_entities == ['save']:
             pyautogui.hotkey('ctrl', 's')
-            speak("Saved boss.")
+            speak("Saved sir.")
             return
-        if 'print' in query:
+        if detected_entities == ['print']:
             pyautogui.hotkey('ctrl', 'p')
-            speak("Printed boss.")
+            speak("Printed sir.")
             return
 
-        if 'new tab' in query:
+        if detected_entities == ['new tab']:
             pyautogui.hotkey('ctrl', 't')
-            speak("New tab opened boss.")
+            speak("New tab opened sir.")
             return
 
-        if 'new' in query:
+        if detected_entities == ['new']:
             pyautogui.hotkey('ctrl', 'n')
-            speak("New document opened boss.")
+            speak("New document opened sir.")
             return
 
         # Window management shortcuts
-        if 'task view' in query:
+        if detected_entities == ['task view']:
             pyautogui.hotkey('win', 'tab')
-            speak("Task View activated boss.")
+            speak("Task View activated sir.")
             return
-        if 'switch apps' in query:
+
+        if detected_entities == ['switch apps']:
             pyautogui.hotkey('alt', 'tab')
-            speak("Switched apps boss.")
+            speak("Switched apps sir.")
             return
-        if 'minimize all' in query:
+
+        if detected_entities == ['minimize all']:
             pyautogui.hotkey('win', 'm')
-            speak("Minimized all windows boss.")
+            speak("Minimized all windows sir.")
             return
-        if 'show desktop' in query:
+
+        if detected_entities == ['show desktop']:
             pyautogui.hotkey('win', 'd')
-            speak("Showed desktop boss.")
+            speak("Showed desktop sir.")
             return
-        if 'snap window left' in query:
+
+        if detected_entities == ['snap window left']:
             pyautogui.hotkey('win', 'left')
-            speak("Snapped window to the left boss.")
+            speak("Snapped window to the left sir.")
             return
-        if 'snap window right' in query:
+
+        if detected_entities == ['snap window right']:
             pyautogui.hotkey('win', 'right')
-            speak("Snapped window to the right boss.")
+            speak("Snapped window to the right sir.")
             return
-        if 'maximize window' in query:
+
+        if detected_entities == ['maximize window']:
             pyautogui.hotkey('win', 'up')
-            speak("Maximized window boss.")
+            speak("Maximized window sir.")
             return
-        if 'minimize window' in query:
+
+        if detected_entities == ['minimize window']:
             pyautogui.hotkey('win', 'down')
-            speak("Minimized window boss.")
+            speak("Minimized window sir.")
             return
 
         # Formatting shortcuts
-        if 'bold' in query:
+        if detected_entities == ['bold']:
             pyautogui.hotkey('ctrl', 'b')
-            speak("Applied bold formatting boss.")
+            speak("Applied bold formatting sir.")
             return
-        if 'italic' in query:
+
+        if detected_entities == ['italic']:
             pyautogui.hotkey('ctrl', 'i')
-            speak("Applied italic formatting boss.")
+            speak("Applied italic formatting sir.")
             return
-        if 'underline' in query:
+
+        if detected_entities == ['underline']:
             pyautogui.hotkey('ctrl', 'u')
-            speak("Applied underline formatting boss.")
+            speak("Applied underline formatting sir.")
             return
-        if 'align left' in query:
+
+        if detected_entities == ['align left']:
             pyautogui.hotkey('ctrl', 'l')
-            speak("Aligned text left boss.")
+            speak("Aligned text left sir.")
             return
-        if 'align center' in query:
+
+        if detected_entities == ['align center']:
             pyautogui.hotkey('ctrl', 'e')
-            speak("Aligned text center boss.")
+            speak("Aligned text center sir.")
             return
-        if 'align right' in query:
+
+        if detected_entities == ['align right']:
             pyautogui.hotkey('ctrl', 'r')
-            speak("Aligned text right boss.")
+            speak("Aligned text right sir.")
             return
 
         # Other system shortcuts
-        if 'open start menu' in query:
+        if detected_entities == ['open start menu']:
             pyautogui.press('win')
-            speak("Opened Start menu boss.")
+            speak("Opened Start menu sir.")
             return
-        if 'open run dialog' in query:
+
+        if detected_entities == ['open run dialog']:
             pyautogui.hotkey('win', 'r')
-            speak("Opened Run dialog boss.")
+            speak("Opened Run dialog sir.")
             return
-        if 'open power user menu' in query:
+
+        if detected_entities == ['open power user menu']:
             pyautogui.hotkey('win', 'x')
-            speak("Opened Power User menu boss.")
+            speak("Opened Power User menu sir.")
             return
-        if 'open system properties' in query:
+
+        if detected_entities == ['open system properties']:
             pyautogui.hotkey('win', 'pause')
-            speak("Opened System Properties boss.")
+            speak("Opened System Properties sir.")
             return
+
     except Exception as e:
         speak("An error occurred")
-        speak("Oops! Something went wrong while performing the shortcut command boss.")
+        speak("Oops! Something went wrong while performing the shortcut command sir.")

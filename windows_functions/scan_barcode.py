@@ -20,7 +20,7 @@ def scan_barcode():
             pass
         else:
             # Camera app not found within 10 seconds, ask the user whether to continue waiting or exit
-            speak("The camera app is taking longer than usual to open. Do you want to continue waiting boss?")
+            speak("The camera app is taking longer than usual to open. Do you want to continue waiting sir?")
 
             while True:
                 confirm = listen()
@@ -32,7 +32,7 @@ def scan_barcode():
                             "The camera app is still taking time to open. Please manually open the camera app.")
                         return
                 else:
-                    speak("Closing camera app boss")
+                    speak("Closing camera app sir")
                     pyautogui.hotkey('alt', 'f4')
                     return
 
@@ -59,9 +59,9 @@ def scan_barcode():
         # Attempt to locate the barcode icon
         pyautogui.locateCenterOnScreen("images/light_mode/camera/barcode.png", confidence=0.9, grayscale=True)
 
-        speak("Please show the barcode in front of the camera boss.")
+        speak("Please show the barcode in front of the camera sir.")
 
     except Exception as e:
         speak("An error occurred")
-        speak("Oops! Something went wrong while trying to scan the barcode boss.")
+        speak("Oops! Something went wrong while trying to scan the barcode sir.")
         pyautogui.hotkey('alt', 'f4')

@@ -3,10 +3,17 @@ from bs4 import BeautifulSoup
 from sam_functions.speak import speak
 
 
-def temperature(query):
+def temperature(query, intent_data):
     try:
-        # Extracting the location from the query string
-        location = query.split("temperature in ")[1]
+        # Initialize location as None
+        location = None
+
+        # Loop through each preposition pattern
+        for prep in intent_data['text']:
+            if prep in query:
+                # Extract location from the query based on the preposition
+                location = query.split(prep)[1].strip()
+                break
 
         if location:
             # Constructing the search URL with the specified location
@@ -14,23 +21,29 @@ def temperature(query):
 
             r = requests.get(url)
             data = BeautifulSoup(r.text, "html.parser")
-            temp = data.find("div", class_="BNeawe").text
-
+            temp = data.find("div", class_="BNeawe iBp4i AP7Wnd").text
             if "°C" in temp:
-                speak(f"Current temperature in {location} is {temp} boss")
+                speak(f"Current temperature in {location} is {temp} sir")
             else:
-                speak("Sam: Please specify a location boss.")
+                speak("Please specify a location sir.")
         else:
-            speak("Sam: Please specify a location boss.")
+            speak("Please specify a location sir.")
 
     except Exception as e:
-        speak("Sam: Sorry, I couldn't fetch the temperature information at the moment.")
+        speak("Sorry, I couldn't fetch the temperature information at the moment.")
 
 
-def weather(query):
+def weather(query, intent_data):
     try:
-        # Extracting the location from the query string
-        location = query.split("weather in ")[1]
+        # Initialize location as None
+        location = None
+
+        # Loop through each preposition pattern
+        for prep in intent_data['text']:
+            if prep in query:
+                # Extract location from the query based on the preposition
+                location = query.split(prep)[1].strip()
+                break
 
         if location:
             # Constructing the search URL
@@ -42,15 +55,15 @@ def weather(query):
             try:
                 weather_condition = data.find("div", class_="BNeawe tAd8D AP7Wnd").text
             except Exception as e:
-                speak("Sam: Please specify a location boss.")
+                speak("Please specify a location sir.")
                 return
 
             # Remove time information from weather_condition
             weather_condition = weather_condition.split("\n")[1]
 
-            speak(f"Current weather in {location} is {weather_condition} boss")
+            speak(f"Current weather in {location} is {weather_condition} sir")
         else:
-            speak("Sam: Please specify a location boss.")
+            speak("Please specify a location sir.")
 
     except Exception as e:
-        speak("Sam: Sorry, I couldn't fetch the weather information at the moment.")
+        speak("Sorry, I couldn't fetch the weather information at the moment.")

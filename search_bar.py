@@ -20,9 +20,18 @@ def is_file_explorer_open():
         speak("An error occurred")
 
 
-def search_bar(query):
+def search_bar(query, intent_data):
     try:
-        search_query = query.split("search ")[1]
+        # Remove the specific phrases and clean up the query
+        search_query = ""
+
+        for prep in intent_data['text']:
+            if prep in query:
+                # Extract search query from the query based on the preposition
+                parts = query.split(prep)
+                if len(parts) > 1:
+                    search_query = parts[1].strip()
+                break
 
         if is_file_explorer_open():
             # Press Ctrl + F to focus on the search
@@ -33,7 +42,7 @@ def search_bar(query):
             pyautogui.write(search_query)
 
             # Display assistant's message
-            speak(f"Searching for '{search_query}' boss")
+            speak(f"Searching for '{search_query}' sir")
             return
 
         # Take a screenshot before pressing Ctrl+L
@@ -54,7 +63,7 @@ def search_bar(query):
             pyautogui.press('enter')
 
             # Display assistant's message
-            speak(f"Searching for '{search_query}' boss")
+            speak(f"Searching for '{search_query}' sir")
         else:
             # Press Windows key + S to open the search box
             pyautogui.hotkey('win', 's')
@@ -64,11 +73,11 @@ def search_bar(query):
             pyautogui.write(search_query)
 
             # Display assistant's message
-            speak(f"Searching for '{search_query}' boss")
+            speak(f"Searching for '{search_query}' sir")
 
     except IndexError:
-        speak("Please specify the search query boss")
+        speak("Please specify the search query sir")
 
     except Exception as e:
         speak("Error performing search")
-        speak("Sorry, I couldn't perform the search boss")
+        speak("Sorry, I couldn't perform the search sir")

@@ -3,6 +3,8 @@ import pyautogui
 from sam_functions.speak import speak
 from sam_functions.listen import listen
 from check_functions import check_internet, check_dark_mode, check_settings_opening, check_window_maximized
+import eel
+from intent_detect.load_model import recognize_intent
 
 
 # Bluetooth
@@ -22,7 +24,7 @@ def is_bluetooth_on():
 
 
 # Function to turn on or off Bluetooth
-def enable_or_disable_bluetooth(query):
+def enable_or_disable_bluetooth(intent_data):
     try:
         pyautogui.hotkey('win')
         time.sleep(0.2)
@@ -37,15 +39,22 @@ def enable_or_disable_bluetooth(query):
             pass
         else:
             # Settings app not found within 10 seconds, ask the user whether to continue waiting or exit
-            speak("The settings app is taking longer than usual to open. Do you want to continue waiting boss?")
+            speak("The settings app is taking longer than usual to open. Do you want to continue waiting sir?")
 
             while True:
-                confirm = listen()
-                if confirm == "":
+                query = listen()
+
+                if query == "":
                     continue
-                if "yes" in confirm:
+
+                confirm = recognize_intent(query)
+                if confirm['intent'] == "no" or confirm['intent'] == "assistant_sleep":
+                    speak("Closing settings sir")
+                    pyautogui.hotkey('alt', 'f4')
+                    return
+                elif confirm['intent'] == "yes":
                     if not check_settings_opening():
-                        if "on bluetooth" in query:
+                        if intent_data['intent'] == "on_bluetooth_settings":
                             speak(
                                 "The settings app is still taking time to open. Please manually turn on Bluetooth")
                             return
@@ -53,28 +62,31 @@ def enable_or_disable_bluetooth(query):
                             speak(
                                 "The settings app is still taking time to open. Please manually turn off Bluetooth")
                             return
+                elif confirm['intent'] == "exit":
+                    speak(confirm["responses"])
+                    eel.close_window()
+                    exit()
                 else:
-                    speak("Closing settings boss")
-                    pyautogui.hotkey('alt', 'f4')
-                    return
+                    speak("Sorry sir, I didn't quite catch that.")
+                    continue
 
         if not check_window_maximized():
             pyautogui.hotkey('win', 'up')
             time.sleep(0.2)
 
         # Check if bluetooth is already on
-        if "on bluetooth" in query and is_bluetooth_on():
-            speak("Bluetooth is already on boss")
+        if intent_data['intent'] == "on_bluetooth_settings" and is_bluetooth_on():
+            speak("Bluetooth is already on sir")
             pyautogui.hotkey('alt', 'f4')
             return
 
         # Check if bluetooth is already off
-        if "off bluetooth" in query and not is_bluetooth_on():
-            speak("Bluetooth is already off boss")
+        if intent_data['intent'] == "off_bluetooth_settings" and not is_bluetooth_on():
+            speak("Bluetooth is already off sir")
             pyautogui.hotkey('alt', 'f4')
             return
 
-        if "on bluetooth" in query:
+        if intent_data['intent'] == "on_bluetooth_settings":
             # Click on the Bluetooth icon to turn it on
             # Adjust the coordinates based on the location of the Bluetooth icon on your screen
             try:
@@ -85,9 +97,9 @@ def enable_or_disable_bluetooth(query):
                     bluetooth_icon_location = pyautogui.locateCenterOnScreen(
                         "images/dark_mode/settings/toggle_off.png", confidence=0.9, grayscale=True)
                 pyautogui.click(bluetooth_icon_location)
-                speak("Bluetooth is turned on boss")
+                speak("Bluetooth is turned on sir")
             except pyautogui.ImageNotFoundException:
-                speak("Bluetooth toggle not found boss")
+                speak("Bluetooth toggle not found sir")
             pyautogui.hotkey('alt', 'f4')
         else:
             # Click on the Bluetooth icon to turn it off
@@ -100,18 +112,18 @@ def enable_or_disable_bluetooth(query):
                     bluetooth_icon_location = pyautogui.locateCenterOnScreen(
                         "images/dark_mode/settings/toggle_on.png", confidence=0.9, grayscale=True)
                 pyautogui.click(bluetooth_icon_location)
-                speak("Bluetooth is turned off boss")
+                speak("Bluetooth is turned off sir")
             except pyautogui.ImageNotFoundException:
-                speak("Bluetooth toggle not found boss")
+                speak("Bluetooth toggle not found sir")
             pyautogui.hotkey('alt', 'f4')
 
     except Exception as e:
         # Handle any errors that may occur
         speak("Error changing Bluetooth status")
-        if "on bluetooth" in query:
-            speak("Sorry, I couldn't turn on Bluetooth boss")
+        if intent_data['intent'] == "on_bluetooth_settings":
+            speak("Sorry, I couldn't turn on Bluetooth sir")
         else:
-            speak("Sorry, I couldn't turn off Bluetooth boss")
+            speak("Sorry, I couldn't turn off Bluetooth sir")
         pyautogui.hotkey('alt', 'f4')
 
 
@@ -132,21 +144,31 @@ def settings_show_bluetooth_devices():
             pass
         else:
             # Settings app not found within 10 seconds, ask the user whether to continue waiting or exit
-            speak("The settings app is taking longer than usual to open. Do you want to continue waiting boss?")
+            speak("The settings app is taking longer than usual to open. Do you want to continue waiting sir?")
 
             while True:
-                confirm = listen()
-                if confirm == "":
+                query = listen()
+
+                if query == "":
                     continue
-                if "yes" in confirm:
+
+                confirm = recognize_intent(query)
+                if confirm['intent'] == "no" or confirm['intent'] == "assistant_sleep":
+                    speak("Closing settings sir")
+                    pyautogui.hotkey('alt', 'f4')
+                    return
+                elif confirm['intent'] == "yes":
                     if not check_settings_opening():
                         speak(
                             "The settings app is still taking time to open. Please manually check Bluetooth devices")
                         return
+                elif confirm['intent'] == "exit":
+                    speak(confirm["responses"])
+                    eel.close_window()
+                    exit()
                 else:
-                    speak("Closing settings boss")
-                    pyautogui.hotkey('alt', 'f4')
-                    return
+                    speak("Sorry sir, I didn't quite catch that.")
+                    continue
 
         if not check_window_maximized():
             pyautogui.hotkey('win', 'up')
@@ -154,18 +176,25 @@ def settings_show_bluetooth_devices():
 
         # Check if bluetooth is off
         if not is_bluetooth_on():
-            speak("Bluetooth is off boss")
+            speak("Bluetooth is off sir")
 
             speak("Please note that Bluetooth devices won't be visible until Bluetooth is turned on.")
 
             # Ask the user whether to turn on Bluetooth
-            speak("Would you like me to turn on Bluetooth boss?")
+            speak("Would you like me to turn on Bluetooth sir?")
 
             while True:
-                response = listen()
-                if response == "":
+                query = listen()
+
+                if query == "":
                     continue
-                if "yes" in response:
+
+                confirm = recognize_intent(query)
+                if confirm['intent'] == "no" or confirm['intent'] == "assistant_sleep":
+                    speak("Got it sir. I'll leave Bluetooth as it is.")
+                    return
+
+                elif confirm['intent'] == "yes":
                     # Click on the Bluetooth icon to turn it on
                     # Adjust the coordinates based on the location of the Bluetooth icon on your screen
                     try:
@@ -176,15 +205,19 @@ def settings_show_bluetooth_devices():
                             bluetooth_icon_location = pyautogui.locateCenterOnScreen(
                                 "images/dark_mode/settings/toggle_off.png", confidence=0.9, grayscale=True)
                         pyautogui.click(bluetooth_icon_location)
-                        speak("Bluetooth is turned on boss")
+                        speak("Bluetooth is turned on sir")
                         break
 
                     except pyautogui.ImageNotFoundException:
-                        speak("Bluetooth toggle not found boss")
+                        speak("Bluetooth toggle not found sir")
                         return
+                elif confirm['intent'] == "exit":
+                    speak(confirm["responses"])
+                    eel.close_window()
+                    exit()
                 else:
-                    speak("Got it boss. I'll leave Bluetooth as it is.")
-                    return
+                    speak("Sorry sir, I didn't quite catch that.")
+                    continue
 
         # Check for the "Add devices" button
         try:
@@ -199,16 +232,16 @@ def settings_show_bluetooth_devices():
             time.sleep(1)  # Wait for the "Add devices" page to load
             pyautogui.press('enter')
 
-            speak("Bluetooth devices list displayed boss")
+            speak("Bluetooth devices list displayed sir")
 
         except pyautogui.ImageNotFoundException:
-            speak("Add devices button not found boss")
+            speak("Add devices button not found sir")
             return
 
     except Exception as e:
         # Handle any errors that may occur
         speak("Error displaying Bluetooth devices")
-        speak("Sorry, I couldn't display Bluetooth devices boss")
+        speak("Sorry, I couldn't display Bluetooth devices sir")
 
 
 # Airplane Mode
@@ -228,7 +261,7 @@ def is_airplane_mode_on():
 
 
 # Function to turn on or off Airplane Mode
-def enable_or_disable_airplane_mode(query):
+def enable_or_disable_airplane_mode(intent_data):
     try:
         pyautogui.hotkey('win')
         time.sleep(0.2)
@@ -243,15 +276,22 @@ def enable_or_disable_airplane_mode(query):
             pass
         else:
             # Settings app not found within 10 seconds, ask the user whether to continue waiting or exit
-            speak("The settings app is taking longer than usual to open. Do you want to continue waiting boss?")
+            speak("The settings app is taking longer than usual to open. Do you want to continue waiting sir?")
 
             while True:
-                confirm = listen()
-                if confirm == "":
+                query = listen()
+
+                if query == "":
                     continue
-                if "yes" in confirm:
+
+                confirm = recognize_intent(query)
+                if confirm['intent'] == "no" or confirm['intent'] == "assistant_sleep":
+                    speak("Closing settings sir")
+                    pyautogui.hotkey('alt', 'f4')
+                    return
+                elif confirm['intent'] == "yes":
                     if not check_settings_opening():
-                        if "on airplane mode" in query:
+                        if intent_data['intent'] == "on_airplane_mode_settings":
                             speak(
                                 "The settings app is still taking time to open. Please manually turn on Airplane Mode")
                             return
@@ -259,43 +299,57 @@ def enable_or_disable_airplane_mode(query):
                             speak(
                                 "The settings app is still taking time to open. Please manually turn off Airplane Mode")
                             return
+                elif confirm['intent'] == "exit":
+                    speak(confirm["responses"])
+                    eel.close_window()
+                    exit()
                 else:
-                    speak("Closing settings boss")
-                    pyautogui.hotkey('alt', 'f4')
-                    return
+                    speak("Sorry sir, I didn't quite catch that.")
+                    continue
 
         if not check_window_maximized():
             pyautogui.hotkey('win', 'up')
             time.sleep(0.2)
 
         # Check if Airplane Mode is already on
-        if "on airplane mode" in query and is_airplane_mode_on():
-            speak("Airplane Mode is already on boss")
+        if intent_data['intent'] == "on_airplane_mode_settings" and is_airplane_mode_on():
+            speak("Airplane Mode is already on sir")
             pyautogui.hotkey('alt', 'f4')
             return
 
         # Warning message for enabling airplane mode
-        if "on airplane mode" in query and not is_airplane_mode_on():
+        if intent_data['intent'] == "on_airplane_mode_settings" and not is_airplane_mode_on():
             speak(
-                "Warning! Enabling airplane mode will turn off your current internet connection. Do you want to continue boss?")
+                "Warning! Enabling airplane mode will turn off your current internet connection. Do you want to continue sir?")
+
             while True:
-                confirm = listen()
-                if confirm == "":
+                query = listen()
+
+                if query == "":
                     continue
-                if "yes" in confirm:
-                    break
-                else:
-                    speak("Airplane mode not enabled boss.")
+
+                confirm = recognize_intent(query)
+                if confirm['intent'] == "no" or confirm['intent'] == "assistant_sleep":
+                    speak("Airplane mode not enabled sir.")
                     pyautogui.hotkey('alt', 'f4')
                     return
+                elif confirm['intent'] == "yes":
+                    break
+                elif confirm['intent'] == "exit":
+                    speak(confirm["responses"])
+                    eel.close_window()
+                    exit()
+                else:
+                    speak("Sorry sir, I didn't quite catch that.")
+                    continue
 
         # Check if Airplane Mode is already off
-        if "off airplane mode" in query and not is_airplane_mode_on():
-            speak("Airplane Mode is already off boss")
+        if intent_data['intent'] == "off_airplane_mode_settings" and not is_airplane_mode_on():
+            speak("Airplane Mode is already off sir")
             pyautogui.hotkey('alt', 'f4')
             return
 
-        if "on airplane mode" in query:
+        if intent_data['intent'] == "on_airplane_mode_settings":
             # Click on the Airplane Mode toggle to turn it on
             # Adjust the coordinates based on the location of the Airplane Mode toggle on your screen
             try:
@@ -306,9 +360,9 @@ def enable_or_disable_airplane_mode(query):
                     airplane_mode_toggle_location = pyautogui.locateCenterOnScreen(
                         "images/dark_mode/settings/focused_toggle_off.png", confidence=0.9, grayscale=True)
                 pyautogui.click(airplane_mode_toggle_location)
-                speak("Airplane Mode is turned on boss")
+                speak("Airplane Mode is turned on sir")
             except pyautogui.ImageNotFoundException:
-                speak("Airplane Mode toggle not found boss")
+                speak("Airplane Mode toggle not found sir")
             pyautogui.hotkey('alt', 'f4')
         else:
             # Click on the Airplane Mode toggle to turn it off
@@ -321,18 +375,18 @@ def enable_or_disable_airplane_mode(query):
                     airplane_mode_toggle_location = pyautogui.locateCenterOnScreen(
                         "images/dark_mode/settings/focused_toggle_on.png", confidence=0.9, grayscale=True)
                 pyautogui.click(airplane_mode_toggle_location)
-                speak("Airplane Mode is turned off boss")
+                speak("Airplane Mode is turned off sir")
             except pyautogui.ImageNotFoundException:
-                speak("Airplane Mode toggle not found boss")
+                speak("Airplane Mode toggle not found sir")
             pyautogui.hotkey('alt', 'f4')
 
     except Exception as e:
         # Handle any errors that may occur
         speak("Error changing Airplane Mode status")
-        if "on airplane mode" in query:
-            speak("Sorry, I couldn't turn on Airplane Mode boss")
+        if intent_data['intent'] == "on_airplane_mode_settings":
+            speak("Sorry, I couldn't turn on Airplane Mode sir")
         else:
-            speak("Sorry, I couldn't turn off Airplane Mode boss")
+            speak("Sorry, I couldn't turn off Airplane Mode sir")
         pyautogui.hotkey('alt', 'f4')
 
 
@@ -353,7 +407,7 @@ def is_night_light_on():
 
 
 # Function to enable or disable Night Light mode
-def enable_or_disable_night_light(query):
+def enable_or_disable_night_light(intent_data):
     try:
         pyautogui.hotkey('win')
         time.sleep(0.2)
@@ -368,15 +422,22 @@ def enable_or_disable_night_light(query):
             pass
         else:
             # Settings app not found within 10 seconds, ask the user whether to continue waiting or exit
-            speak("The settings app is taking longer than usual to open. Do you want to continue waiting boss?")
+            speak("The settings app is taking longer than usual to open. Do you want to continue waiting sir?")
 
             while True:
-                confirm = listen()
-                if confirm == "":
+                query = listen()
+
+                if query == "":
                     continue
-                if "yes" in confirm:
+
+                confirm = recognize_intent(query)
+                if confirm['intent'] == "no" or confirm['intent'] == "assistant_sleep":
+                    speak("Closing settings sir")
+                    pyautogui.hotkey('alt', 'f4')
+                    return
+                elif confirm['intent'] == "yes":
                     if not check_settings_opening():
-                        if "on night light" in query:
+                        if intent_data['intent'] == "on_night_light_settings":
                             speak(
                                 "The settings app is still taking time to open. Please manually turn on Night Light mode")
                             return
@@ -384,28 +445,31 @@ def enable_or_disable_night_light(query):
                             speak(
                                 "The settings app is still taking time to open. Please manually turn off Night Light mode")
                             return
+                elif confirm['intent'] == "exit":
+                    speak(confirm["responses"])
+                    eel.close_window()
+                    exit()
                 else:
-                    speak("Closing settings boss")
-                    pyautogui.hotkey('alt', 'f4')
-                    return
+                    speak("Sorry sir, I didn't quite catch that.")
+                    continue
 
         if not check_window_maximized():
             pyautogui.hotkey('win', 'up')
             time.sleep(0.2)
 
         # Check if Night Light mode is already on
-        if "on night light" in query and is_night_light_on():
-            speak("Night Light mode is already on boss")
+        if intent_data['intent'] == "on_night_light_settings" and is_night_light_on():
+            speak("Night Light mode is already on sir")
             pyautogui.hotkey('alt', 'f4')
             return
 
         # Check if Night Light mode is already off
-        if "off night light" in query and not is_night_light_on():
-            speak("Night Light mode is already off boss")
+        if intent_data['intent'] == "off_night_light_settings" and not is_night_light_on():
+            speak("Night Light mode is already off sir")
             pyautogui.hotkey('alt', 'f4')
             return
 
-        if "on night light" in query:
+        if intent_data['intent'] == "on_night_light_settings":
             # Click on the Night Light toggle to turn it on
             # Adjust the coordinates based on the location of the Night Light toggle on your screen
             try:
@@ -416,9 +480,9 @@ def enable_or_disable_night_light(query):
                     night_light_toggle_location = pyautogui.locateCenterOnScreen(
                         "images/dark_mode/settings/toggle_off.png", confidence=0.9, grayscale=True)
                 pyautogui.click(night_light_toggle_location)
-                speak("Night Light mode is turned on boss")
+                speak("Night Light mode is turned on sir")
             except pyautogui.ImageNotFoundException:
-                speak("Night Light toggle not found boss")
+                speak("Night Light toggle not found sir")
             pyautogui.hotkey('alt', 'f4')
         else:
             # Click on the Night Light toggle to turn it off
@@ -431,18 +495,18 @@ def enable_or_disable_night_light(query):
                     night_light_toggle_location = pyautogui.locateCenterOnScreen(
                         "images/dark_mode/settings/toggle_on.png", confidence=0.9, grayscale=True)
                 pyautogui.click(night_light_toggle_location)
-                speak("Night Light mode is turned off boss")
+                speak("Night Light mode is turned off sir")
             except pyautogui.ImageNotFoundException:
-                speak("Night Light toggle not found boss")
+                speak("Night Light toggle not found sir")
             pyautogui.hotkey('alt', 'f4')
 
     except Exception as e:
         # Handle any errors that may occur
         speak("Error changing Night Light mode status")
-        if "on night light" in query:
-            speak("Sorry, I couldn't turn on Night Light mode boss")
+        if intent_data['intent'] == "on_night_light_settings":
+            speak("Sorry, I couldn't turn on Night Light mode sir")
         else:
-            speak("Sorry, I couldn't turn off Night Light mode boss")
+            speak("Sorry, I couldn't turn off Night Light mode sir")
         pyautogui.hotkey('alt', 'f4')
 
 
@@ -463,7 +527,7 @@ def is_do_not_disturb_on():
 
 
 # Function to enable or disable Do Not Disturb mode
-def enable_or_disable_do_not_disturb(query):
+def enable_or_disable_do_not_disturb(intent_data):
     try:
         pyautogui.hotkey('win')
         time.sleep(0.2)
@@ -478,15 +542,22 @@ def enable_or_disable_do_not_disturb(query):
             pass
         else:
             # Settings app not found within 10 seconds, ask the user whether to continue waiting or exit
-            speak("The settings app is taking longer than usual to open. Do you want to continue waiting boss?")
+            speak("The settings app is taking longer than usual to open. Do you want to continue waiting sir?")
 
             while True:
-                confirm = listen()
-                if confirm == "":
+                query = listen()
+
+                if query == "":
                     continue
-                if "yes" in confirm:
+
+                confirm = recognize_intent(query)
+                if confirm['intent'] == "no" or confirm['intent'] == "assistant_sleep":
+                    speak("Closing settings sir")
+                    pyautogui.hotkey('alt', 'f4')
+                    return
+                elif confirm['intent'] == "yes":
                     if not check_settings_opening():
-                        if "on do not disturb" in query:
+                        if intent_data['intent'] == "on_do_not_disturb":
                             speak(
                                 "The settings app is still taking time to open. Please manually turn on Do Not Disturb mode")
                             return
@@ -494,10 +565,13 @@ def enable_or_disable_do_not_disturb(query):
                             speak(
                                 "The settings app is still taking time to open. Please manually turn off Do Not Disturb mode")
                             return
+                elif confirm['intent'] == "exit":
+                    speak(confirm["responses"])
+                    eel.close_window()
+                    exit()
                 else:
-                    speak("Closing settings boss")
-                    pyautogui.hotkey('alt', 'f4')
-                    return
+                    speak("Sorry sir, I didn't quite catch that.")
+                    continue
 
         if not check_window_maximized():
             pyautogui.hotkey('win', 'up')
@@ -508,18 +582,18 @@ def enable_or_disable_do_not_disturb(query):
         pyautogui.press('tab')
 
         # Check if Do Not Disturb mode is already on
-        if "on do not disturb" in query and is_do_not_disturb_on():
-            speak("Do Not Disturb mode is already on boss")
+        if intent_data['intent'] == "on_do_not_disturb" and is_do_not_disturb_on():
+            speak("Do Not Disturb mode is already on sir")
             pyautogui.hotkey('alt', 'f4')
             return
 
         # Check if Do Not Disturb mode is already off
-        if "off do not disturb" in query and not is_do_not_disturb_on():
-            speak("Do Not Disturb mode is already off boss")
+        if intent_data['intent'] == "off_do_not_disturb" and not is_do_not_disturb_on():
+            speak("Do Not Disturb mode is already off sir")
             pyautogui.hotkey('alt', 'f4')
             return
 
-        if "on do not disturb" in query:
+        if intent_data['intent'] == "on_do_not_disturb":
             # Click on the Do Not Disturb toggle to turn it on
             # Adjust the coordinates based on the location of the Do Not Disturb toggle on your screen
             try:
@@ -530,9 +604,9 @@ def enable_or_disable_do_not_disturb(query):
                     do_not_disturb_toggle_location = pyautogui.locateCenterOnScreen(
                         "images/dark_mode/settings/focused_toggle_off.png", confidence=0.9, grayscale=True)
                 pyautogui.click(do_not_disturb_toggle_location)
-                speak("Do Not Disturb mode is turned on boss")
+                speak("Do Not Disturb mode is turned on sir")
             except pyautogui.ImageNotFoundException:
-                speak("Do Not Disturb toggle not found boss")
+                speak("Do Not Disturb toggle not found sir")
             pyautogui.hotkey('alt', 'f4')
         else:
             # Click on the Do Not Disturb toggle to turn it off
@@ -545,18 +619,18 @@ def enable_or_disable_do_not_disturb(query):
                     do_not_disturb_toggle_location = pyautogui.locateCenterOnScreen(
                         "images/dark_mode/settings/focused_toggle_on.png", confidence=0.9, grayscale=True)
                 pyautogui.click(do_not_disturb_toggle_location)
-                speak("Do Not Disturb mode is turned off boss")
+                speak("Do Not Disturb mode is turned off sir")
             except pyautogui.ImageNotFoundException:
-                speak("Do Not Disturb toggle not found boss")
+                speak("Do Not Disturb toggle not found sir")
             pyautogui.hotkey('alt', 'f4')
 
     except Exception as e:
         # Handle any errors that may occur
         speak("Error changing Do Not Disturb mode status")
-        if "on do not disturb" in query:
-            speak("Sorry, I couldn't turn on Do Not Disturb mode boss")
+        if intent_data['intent'] == "on_do_not_disturb":
+            speak("Sorry, I couldn't turn on Do Not Disturb mode sir")
         else:
-            speak("Sorry, I couldn't turn off Do Not Disturb mode boss")
+            speak("Sorry, I couldn't turn off Do Not Disturb mode sir")
         pyautogui.hotkey('alt', 'f4')
 
 
@@ -577,7 +651,7 @@ def is_nearby_share_on():
 
 
 # Function to enable or disable Nearby Share mode
-def enable_or_disable_nearby_share(query):
+def enable_or_disable_nearby_share(intent_data):
     try:
         pyautogui.hotkey('win')
         time.sleep(0.2)
@@ -592,15 +666,22 @@ def enable_or_disable_nearby_share(query):
             pass
         else:
             # Settings app not found within 10 seconds, ask the user whether to continue waiting or exit
-            speak("The settings app is taking longer than usual to open. Do you want to continue waiting boss?")
+            speak("The settings app is taking longer than usual to open. Do you want to continue waiting sir?")
 
             while True:
-                confirm = listen()
-                if confirm == "":
+                query = listen()
+
+                if query == "":
                     continue
-                if "yes" in confirm:
+
+                confirm = recognize_intent(query)
+                if confirm['intent'] == "no" or confirm['intent'] == "assistant_sleep":
+                    speak("Closing settings sir")
+                    pyautogui.hotkey('alt', 'f4')
+                    return
+                elif confirm['intent'] == "yes":
                     if not check_settings_opening():
-                        if "on nearby share" in query or "on nearby sharing" in query:
+                        if intent_data['intent'] == "on_nearby_share_settings":
                             speak(
                                 "The settings app is still taking time to open. Please manually turn on Nearby Share mode")
                             return
@@ -608,28 +689,31 @@ def enable_or_disable_nearby_share(query):
                             speak(
                                 "The settings app is still taking time to open. Please manually turn off Nearby Share mode")
                             return
+                elif confirm['intent'] == "exit":
+                    speak(confirm["responses"])
+                    eel.close_window()
+                    exit()
                 else:
-                    speak("Closing settings boss")
-                    pyautogui.hotkey('alt', 'f4')
-                    return
+                    speak("Sorry sir, I didn't quite catch that.")
+                    continue
 
         if not check_window_maximized():
             pyautogui.hotkey('win', 'up')
             time.sleep(0.2)
 
         # Check if Nearby Share mode is already on
-        if ("on nearby share" in query or "on nearby sharing" in query) and is_nearby_share_on():
-            speak("Nearby Share mode is already on boss")
+        if intent_data['intent'] == "on_nearby_share_settings" and is_nearby_share_on():
+            speak("Nearby Share mode is already on sir")
             pyautogui.hotkey('alt', 'f4')
             return
 
         # Check if Nearby Share mode is already off
-        if ("off nearby share" in query or "off nearby sharing" in query) and not is_nearby_share_on():
-            speak("Nearby Share mode is already off boss")
+        if intent_data['intent'] == "off_nearby_share_settings" and not is_nearby_share_on():
+            speak("Nearby Share mode is already off sir")
             pyautogui.hotkey('alt', 'f4')
             return
 
-        if "on nearby share" in query or "on nearby sharing" in query:
+        if intent_data['intent'] == "on_nearby_share_settings":
             # Click on the Nearby Share toggle to turn it on
             # Adjust the coordinates based on the location of the Nearby Share toggle on your screen
             try:
@@ -640,9 +724,9 @@ def enable_or_disable_nearby_share(query):
                     nearby_share_toggle_location = pyautogui.locateCenterOnScreen(
                         "images/dark_mode/settings/nearby_share_on_button.png", confidence=0.9, grayscale=True)
                 pyautogui.click(nearby_share_toggle_location)
-                speak("Nearby Share mode is turned on boss")
+                speak("Nearby Share mode is turned on sir")
             except pyautogui.ImageNotFoundException:
-                speak("Nearby Share toggle not found boss")
+                speak("Nearby Share toggle not found sir")
             pyautogui.hotkey('alt', 'f4')
         else:
             # Click on the Nearby Share toggle to turn it off
@@ -655,18 +739,18 @@ def enable_or_disable_nearby_share(query):
                     nearby_share_toggle_location = pyautogui.locateCenterOnScreen(
                         "images/dark_mode/settings/nearby_share_off_button.png", confidence=0.9, grayscale=True)
                 pyautogui.click(nearby_share_toggle_location)
-                speak("Nearby Share mode is turned off boss")
+                speak("Nearby Share mode is turned off sir")
             except pyautogui.ImageNotFoundException:
-                speak("Nearby Share toggle not found boss")
+                speak("Nearby Share toggle not found sir")
             pyautogui.hotkey('alt', 'f4')
 
     except Exception as e:
         # Handle any errors that may occur
         speak("Error changing Nearby Share mode status")
-        if "on nearby share" in query or "on nearby sharing" in query:
-            speak("Sorry, I couldn't turn on Nearby Share mode boss")
+        if intent_data['intent'] == "on_nearby_share_settings":
+            speak("Sorry, I couldn't turn on Nearby Share mode sir")
         else:
-            speak("Sorry, I couldn't turn off Nearby Share mode boss")
+            speak("Sorry, I couldn't turn off Nearby Share mode sir")
         pyautogui.hotkey('alt', 'f4')
 
 
@@ -687,7 +771,7 @@ def is_wifi_on():
 
 
 # Function to turn on or off Wi-Fi
-def enable_or_disable_wifi(query):
+def enable_or_disable_wifi(intent_data):
     try:
         pyautogui.hotkey('win')
         time.sleep(0.2)
@@ -702,15 +786,22 @@ def enable_or_disable_wifi(query):
             pass
         else:
             # Settings app not found within 10 seconds, ask the user whether to continue waiting or exit
-            speak("The settings app is taking longer than usual to open. Do you want to continue waiting boss?")
+            speak("The settings app is taking longer than usual to open. Do you want to continue waiting sir?")
 
             while True:
-                confirm = listen()
-                if confirm == "":
+                query = listen()
+
+                if query == "":
                     continue
-                if "yes" in confirm:
+
+                confirm = recognize_intent(query)
+                if confirm['intent'] == "no" or confirm['intent'] == "assistant_sleep":
+                    speak("Closing settings sir")
+                    pyautogui.hotkey('alt', 'f4')
+                    return
+                elif confirm['intent'] == "yes":
                     if not check_settings_opening():
-                        if "on Wi-Fi mode" in query:
+                        if intent_data['intent'] == "on_wifi_settings":
                             speak(
                                 "The settings app is still taking time to open. Please manually turn on Wi-Fi")
                             return
@@ -718,43 +809,57 @@ def enable_or_disable_wifi(query):
                             speak(
                                 "The settings app is still taking time to open. Please manually turn off Wi-Fi")
                             return
+                elif confirm['intent'] == "exit":
+                    speak(confirm["responses"])
+                    eel.close_window()
+                    exit()
                 else:
-                    speak("Closing settings boss")
-                    pyautogui.hotkey('alt', 'f4')
-                    return
+                    speak("Sorry sir, I didn't quite catch that.")
+                    continue
 
         if not check_window_maximized():
             pyautogui.hotkey('win', 'up')
             time.sleep(0.2)
 
         # Check if Wi-Fi is already on
-        if "on wi-fi" in query and is_wifi_on():
-            speak("Wi-Fi is already on boss")
+        if intent_data['intent'] == "on_wifi_settings" and is_wifi_on():
+            speak("Wi-Fi is already on sir")
             pyautogui.hotkey('alt', 'f4')
             return
 
         # Warning message for enabling Wi-Fi
-        if "on wi-fi" in query and not is_wifi_on() and check_internet():
+        if intent_data['intent'] == "on_wifi_settings" and not is_wifi_on() and check_internet():
             speak(
-                "Warning! Enabling Wi-Fi will turn off your current internet connection. Do you want to continue boss?")
+                "Warning! Enabling Wi-Fi will turn off your current internet connection. Do you want to continue sir?")
+
             while True:
-                confirm = listen()
-                if confirm == "":
+                query = listen()
+
+                if query == "":
                     continue
-                if "yes" in confirm:
-                    break
-                else:
-                    speak("Wi-Fi not enabled boss.")
+
+                confirm = recognize_intent(query)
+                if confirm['intent'] == "no" or confirm['intent'] == "assistant_sleep":
+                    speak("Wi-Fi not enabled sir.")
                     pyautogui.hotkey('alt', 'f4')
                     return
+                elif confirm['intent'] == "yes":
+                    break
+                elif confirm['intent'] == "exit":
+                    speak(confirm["responses"])
+                    eel.close_window()
+                    exit()
+                else:
+                    speak("Sorry sir, I didn't quite catch that.")
+                    continue
 
         # Check if Wi-Fi is already off
-        if "off wi-fi" in query and not is_wifi_on():
-            speak("Wi-Fi is already off boss")
+        if intent_data['intent'] == "off_wifi_settings" and not is_wifi_on():
+            speak("Wi-Fi is already off sir")
             pyautogui.hotkey('alt', 'f4')
             return
 
-        if "on wi-fi" in query:
+        if intent_data['intent'] == "on_wifi_settings":
             # Click on the Wi-Fi toggle to turn it on
             # Adjust the coordinates based on the location of the Wi-Fi toggle on your screen
             try:
@@ -765,9 +870,9 @@ def enable_or_disable_wifi(query):
                     wifi_toggle_location = pyautogui.locateCenterOnScreen(
                         "images/dark_mode/settings/toggle_off.png", confidence=0.9, grayscale=True)
                 pyautogui.click(wifi_toggle_location)
-                speak("Wi-Fi is turned on boss")
+                speak("Wi-Fi is turned on sir")
             except pyautogui.ImageNotFoundException:
-                speak("Wi-Fi toggle not found boss")
+                speak("Wi-Fi toggle not found sir")
             pyautogui.hotkey('alt', 'f4')
         else:
             # Click on the Wi-Fi toggle to turn it off
@@ -780,18 +885,18 @@ def enable_or_disable_wifi(query):
                     wifi_toggle_location = pyautogui.locateCenterOnScreen(
                         "images/dark_mode/settings/toggle_on.png", confidence=0.9, grayscale=True)
                 pyautogui.click(wifi_toggle_location)
-                speak("Wi-Fi is turned off boss")
+                speak("Wi-Fi is turned off sir")
             except pyautogui.ImageNotFoundException:
-                speak("Wi-Fi toggle not found boss")
+                speak("Wi-Fi toggle not found sir")
             pyautogui.hotkey('alt', 'f4')
 
     except Exception as e:
         # Handle any errors that may occur
         speak("Error changing Wi-Fi status")
-        if "on wi-fi" in query:
-            speak("Sorry, I couldn't turn on Wi-Fi boss")
+        if intent_data['intent'] == "on_wifi_settings":
+            speak("Sorry, I couldn't turn on Wi-Fi sir")
         else:
-            speak("Sorry, I couldn't turn off Wi-Fi boss")
+            speak("Sorry, I couldn't turn off Wi-Fi sir")
         pyautogui.hotkey('alt', 'f4')
 
 
@@ -812,22 +917,33 @@ def settings_show_wifi_networks():
             pass
         else:
             # Settings app not found within 10 seconds, ask the user whether to continue waiting or exit
-            speak("The settings app is taking longer than usual to open. Do you want to continue waiting boss?")
+            speak("The settings app is taking longer than usual to open. Do you want to continue waiting sir?")
 
             while True:
-                confirm = listen()
-                if confirm == "":
-                    continue
-                if "yes" in confirm:
-                    if not check_settings_opening():
-                        speak(
-                            "The settings app is still taking time to open. Please manually open Wi-Fi settings.")
+                query = listen()
 
-                        return
-                else:
-                    speak("Closing settings boss")
+                if query == "":
+                    continue
+
+                confirm = recognize_intent(query)
+                if confirm['intent'] == "no" or confirm['intent'] == "assistant_sleep":
+                    speak("Closing settings sir")
                     pyautogui.hotkey('alt', 'f4')
                     return
+                elif confirm['intent'] == "yes":
+                    if not check_settings_opening():
+                        if not check_settings_opening():
+                            speak(
+                                "The settings app is still taking time to open. Please manually open Wi-Fi settings.")
+
+                            return
+                elif confirm['intent'] == "exit":
+                    speak(confirm["responses"])
+                    eel.close_window()
+                    exit()
+                else:
+                    speak("Sorry sir, I didn't quite catch that.")
+                    continue
 
         if not check_window_maximized():
             pyautogui.hotkey('win', 'up')
@@ -835,18 +951,24 @@ def settings_show_wifi_networks():
 
         # Check if Wi-Fi is already on
         if not is_wifi_on():
-            speak("Wi-Fi is off boss")
+            speak("Wi-Fi is off sir")
 
             speak("Please note that available Wi-Fi networks won't be visible until Wi-Fi is turned on.")
 
             # Ask the user whether to turn on Wi-Fi
-            speak("Would you like me to turn on Wi-Fi boss?")
+            speak("Would you like me to turn on Wi-Fi sir?")
 
             while True:
-                response = listen()
-                if response == "":
+                query = listen()
+
+                if query == "":
                     continue
-                if "yes" in response:
+
+                confirm = recognize_intent(query)
+                if confirm['intent'] == "no" or confirm['intent'] == "assistant_sleep":
+                    speak("Got it sir. I'll leave Wi-Fi as it is.")
+                    return
+                elif confirm['intent'] == "yes":
                     # Click on the Wi-Fi icon to turn it on
                     # Adjust the coordinates based on the location of the Wi-Fi icon on your screen
                     try:
@@ -857,15 +979,19 @@ def settings_show_wifi_networks():
                             wifi_icon_location = pyautogui.locateCenterOnScreen(
                                 "images/dark_mode/settings/toggle_off.png", confidence=0.9, grayscale=True)
                         pyautogui.click(wifi_icon_location)
-                        speak("Wi-Fi is turned on boss")
+                        speak("Wi-Fi is turned on sir")
                         break
 
                     except pyautogui.ImageNotFoundException:
-                        speak("Wi-Fi toggle not found boss")
+                        speak("Wi-Fi toggle not found sir")
                         return
+                elif confirm['intent'] == "exit":
+                    speak(confirm["responses"])
+                    eel.close_window()
+                    exit()
                 else:
-                    speak("Got it boss. I'll leave Wi-Fi as it is.")
-                    return
+                    speak("Sorry sir, I didn't quite catch that.")
+                    continue
 
         # Check for the "Show available networks" button
         try:
@@ -879,16 +1005,16 @@ def settings_show_wifi_networks():
             pyautogui.click(show_networks_button)
             time.sleep(1)  # Wait for the available networks page to load
 
-            speak("Available Wi-Fi networks displayed boss")
+            speak("Available Wi-Fi networks displayed sir")
 
         except pyautogui.ImageNotFoundException:
-            speak("Show available networks button not found boss")
+            speak("Show available networks button not found sir")
             return
 
     except Exception as e:
         # Handle any errors that may occur
         speak("Error displaying Wi-Fi networks")
-        speak("Sorry, I couldn't display Wi-Fi networks boss")
+        speak("Sorry, I couldn't display Wi-Fi networks sir")
 
 
 # Mobile Hotspot
@@ -908,7 +1034,7 @@ def is_hotspot_on():
 
 
 # Function to turn on or off Hotspot
-def enable_or_disable_hotspot(query):
+def enable_or_disable_hotspot(intent_data):
     try:
         pyautogui.hotkey('win')
         time.sleep(0.2)
@@ -923,15 +1049,22 @@ def enable_or_disable_hotspot(query):
             pass
         else:
             # Settings app not found within 10 seconds, ask the user whether to continue waiting or exit
-            speak("The settings app is taking longer than usual to open. Do you want to continue waiting boss?")
+            speak("The settings app is taking longer than usual to open. Do you want to continue waiting sir?")
 
             while True:
-                confirm = listen()
-                if confirm == "":
+                query = listen()
+
+                if query == "":
                     continue
-                if "yes" in confirm:
+
+                confirm = recognize_intent(query)
+                if confirm['intent'] == "no" or confirm['intent'] == "assistant_sleep":
+                    speak("Closing settings sir")
+                    pyautogui.hotkey('alt', 'f4')
+                    return
+                elif confirm['intent'] == "yes":
                     if not check_settings_opening():
-                        if "on hotspot" in query:
+                        if intent_data['intent'] == "on_hotspot":
                             speak(
                                 "The settings app is still taking time to open. Please manually turn on Hotspot")
                             return
@@ -939,30 +1072,33 @@ def enable_or_disable_hotspot(query):
                             speak(
                                 "The settings app is still taking time to open. Please manually turn off Hotspot")
                             return
+                elif confirm['intent'] == "exit":
+                    speak(confirm["responses"])
+                    eel.close_window()
+                    exit()
                 else:
-                    speak("Closing settings boss")
-                    pyautogui.hotkey('alt', 'f4')
-                    return
+                    speak("Sorry sir, I didn't quite catch that.")
+                    continue
 
         if not check_window_maximized():
             pyautogui.hotkey('win', 'up')
             time.sleep(0.2)
 
         # Check if Hotspot is already on
-        if "on hotspot" in query and is_hotspot_on():
-            speak("Hotspot is already on boss")
+        if intent_data['intent'] == "on_hotspot" and is_hotspot_on():
+            speak("Hotspot is already on sir")
             pyautogui.hotkey('alt', 'f4')
             return
 
         time.sleep(1)
 
         # Check if Hotspot is already off
-        if "off hotspot" in query and not is_hotspot_on():
-            speak("Hotspot is already off boss")
+        if intent_data['intent'] == "off_hotspot" and not is_hotspot_on():
+            speak("Hotspot is already off sir")
             pyautogui.hotkey('alt', 'f4')
             return
 
-        if "on hotspot" in query:
+        if intent_data['intent'] == "on_hotspot":
             # Click on the Hotspot toggle to turn it on
             # Adjust the coordinates based on the location of the Hotspot toggle on your screen
             try:
@@ -973,9 +1109,9 @@ def enable_or_disable_hotspot(query):
                     hotspot_toggle_location = pyautogui.locateCenterOnScreen(
                         "images/dark_mode/settings/toggle_off.png", confidence=0.9, grayscale=True)
                 pyautogui.click(hotspot_toggle_location)
-                speak("Hotspot is turned on boss")
+                speak("Hotspot is turned on sir")
             except pyautogui.ImageNotFoundException:
-                speak("Hotspot toggle not found boss")
+                speak("Hotspot toggle not found sir")
             pyautogui.hotkey('alt', 'f4')
         else:
             # Click on the Hotspot toggle to turn it off
@@ -988,18 +1124,18 @@ def enable_or_disable_hotspot(query):
                     hotspot_toggle_location = pyautogui.locateCenterOnScreen(
                         "images/dark_mode/settings/toggle_on.png", confidence=0.9, grayscale=True)
                 pyautogui.click(hotspot_toggle_location)
-                speak("Hotspot is turned off boss")
+                speak("Hotspot is turned off sir")
             except pyautogui.ImageNotFoundException:
-                speak("Hotspot toggle not found boss")
+                speak("Hotspot toggle not found sir")
             pyautogui.hotkey('alt', 'f4')
 
     except Exception as e:
         # Handle any errors that may occur
         speak(f"Error changing Hotspot status")
-        if "on hotspot" in query:
-            speak("Sorry, I couldn't turn on Hotspot boss")
+        if intent_data['intent'] == "on_hotspot":
+            speak("Sorry, I couldn't turn on Hotspot sir")
         else:
-            speak("Sorry, I couldn't turn off Hotspot boss")
+            speak("Sorry, I couldn't turn off Hotspot sir")
         pyautogui.hotkey('alt', 'f4')
 
 
@@ -1012,26 +1148,26 @@ def show_hotspot_details():
         time.sleep(0.2)
         pyautogui.press('enter')
         time.sleep(2)
-        speak("Hotspot details displayed boss")
+        speak("Hotspot details displayed sir")
     except Exception as e:
         # Handle any errors that may occur
         speak("Error displaying Hotspot details")
-        speak("Sorry, I couldn't display Hotspot details boss")
+        speak("Sorry, I couldn't display Hotspot details sir")
         pyautogui.hotkey('alt', 'f4')
 
 
 # Light or Dark mode
 # Function to turn on or off Light Mode
-def enable_or_disable_light_or_dark_mode(query):
+def enable_or_disable_light_or_dark_mode(intent_data):
     try:
         # Check if Light Mode is already on
-        if ("on light mode" in query or "off dark mode" in query) and not check_dark_mode():
-            speak("Light Mode is already on boss")
+        if intent_data['intent'] == "on_light_dark_mode" and not check_dark_mode():
+            speak("Light Mode is already on sir")
             return
 
         # Check if Dark Mode is already on
-        if ("off light mode" in query or "on dark mode" in query) and check_dark_mode():
-            speak("Dark Mode is already on boss")
+        if intent_data['intent'] == "off_light_dark_mode" and check_dark_mode():
+            speak("Dark Mode is already on sir")
             return
 
         pyautogui.hotkey('win')
@@ -1047,15 +1183,22 @@ def enable_or_disable_light_or_dark_mode(query):
             pass
         else:
             # Settings app not found within 10 seconds, ask the user whether to continue waiting or exit
-            speak("The settings app is taking longer than usual to open. Do you want to continue waiting boss?")
+            speak("The settings app is taking longer than usual to open. Do you want to continue waiting sir?")
 
             while True:
-                confirm = listen()
-                if confirm == "":
+                query = listen()
+
+                if query == "":
                     continue
-                if "yes" in confirm:
+
+                confirm = recognize_intent(query)
+                if confirm['intent'] == "no" or confirm['intent'] == "assistant_sleep":
+                    speak("Closing settings sir")
+                    pyautogui.hotkey('alt', 'f4')
+                    return
+                elif confirm['intent'] == "yes":
                     if not check_settings_opening():
-                        if "on light mode" in query:
+                        if intent_data['intent'] == "on_light_dark_mode":
                             speak(
                                 "The settings app is still taking time to open. Please manually turn on Light Mode")
                             return
@@ -1063,16 +1206,19 @@ def enable_or_disable_light_or_dark_mode(query):
                             speak(
                                 "The settings app is still taking time to open. Please manually turn on Dark Mode")
                             return
+                elif confirm['intent'] == "exit":
+                    speak(confirm["responses"])
+                    eel.close_window()
+                    exit()
                 else:
-                    speak("Closing settings boss")
-                    pyautogui.hotkey('alt', 'f4')
-                    return
+                    speak("Sorry sir, I didn't quite catch that.")
+                    continue
 
         if not check_window_maximized():
             pyautogui.hotkey('win', 'up')
             time.sleep(0.2)
 
-        if "on light mode" in query or "off dark mode" in query:
+        if intent_data['intent'] == "on_light_dark_mode":
             pyautogui.press('enter')
             time.sleep(0.2)
             pyautogui.press('up')
@@ -1080,7 +1226,7 @@ def enable_or_disable_light_or_dark_mode(query):
             pyautogui.press('enter')
             time.sleep(0.2)
             pyautogui.hotkey('alt', 'f4')
-            speak("Light Mode is turned on boss")
+            speak("Light Mode is turned on sir")
         else:
             pyautogui.press('enter')
             time.sleep(0.2)
@@ -1089,13 +1235,13 @@ def enable_or_disable_light_or_dark_mode(query):
             pyautogui.press('enter')
             time.sleep(0.2)
             pyautogui.hotkey('alt', 'f4')
-            speak("Dark Mode is turned on boss")
+            speak("Dark Mode is turned on sir")
 
     except Exception as e:
         # Handle any errors that may occur
         speak("Error changing Light Mode status")
-        if "on light mode" in query or "off dark mode" in query:
-            speak("Sorry, I couldn't turn on Light Mode boss")
+        if intent_data['intent'] == "on_light_dark_mode":
+            speak("Sorry, I couldn't turn on Light Mode sir")
         else:
-            speak("Sorry, I couldn't turn on Dark Mode boss")
+            speak("Sorry, I couldn't turn on Dark Mode sir")
         pyautogui.hotkey('alt', 'f4')

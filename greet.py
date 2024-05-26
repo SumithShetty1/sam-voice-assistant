@@ -2,13 +2,10 @@ from datetime import datetime
 from sam_functions.speak import speak
 
 
-def greet(intent_data):
+def greet(query, intent_data):
     try:
-        # Check if the determined greeting matches any entity
-        detected_entity = None
-
-        if intent_data["detected_entities"] != []:
-            detected_entity = intent_data["detected_entities"]
+        # Detect the entity in the query
+        detected_entity = next((entity for entity in intent_data.get('entities', []) if entity in query.lower()), None)
 
         # Get the current hour
         current_hour = datetime.now().hour
@@ -23,21 +20,23 @@ def greet(intent_data):
 
         # Respond based on the detected entity and the current time of day
         if detected_entity == "morning" and greeting == "Good morning":
-            speak(f"{greeting} boss.")
+            speak(f"{greeting} sir.")
         elif detected_entity == "afternoon" and greeting == "Good afternoon":
-            speak(f"{greeting} boss.")
+            speak(f"{greeting} sir.")
         elif detected_entity == "night" and greeting == "Good evening":
-            speak(f"Good night boss.")
+            speak(f"Good night sir.")
         elif detected_entity == "evening" and greeting == "Good evening":
-            speak(f"{greeting} boss.")
+            speak(f"{greeting} sir.")
         elif detected_entity == "morning" and greeting != "Good morning":
-            speak(f"It's not morning anymore, but {greeting} boss.")
+            speak(f"It's not morning anymore, but {greeting} sir.")
         elif detected_entity == "afternoon" and greeting != "Good afternoon":
-            speak(f"It's not afternoon anymore, but {greeting} boss.")
+            speak(f"It's not afternoon anymore, but {greeting} sir.")
         elif detected_entity == "night" and greeting != "Good evening":
-            speak(f"It's not night yet, but Good night boss.")
+            speak(f"It's not night yet, but Good night sir.")
+        elif detected_entity == "evening" and greeting != "Good evening" and greeting == "Good afternoon":
+            speak(f"It's not evening yet, but {greeting} sir.")
         elif detected_entity == "evening" and greeting != "Good evening":
-            speak(f"It's not evening anymore, but {greeting} boss.")
+            speak(f"It's not evening anymore, but {greeting} sir.")
         else:
             # Use a random response from the JSON data
             from random import choice
@@ -46,4 +45,4 @@ def greet(intent_data):
 
     except Exception as e:
         speak("An error occurred")
-        speak("Oops! Something went wrong while trying to greet you boss.")
+        speak("Oops! Something went wrong while trying to greet you sir.")

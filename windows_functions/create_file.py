@@ -27,35 +27,38 @@ file_types = {
 
 
 # Function to create different types of files
-def create_file(query):
+def create_file(query, intent_data):
     try:
+        # Detect the entity in the query
+        detected_entity = next((entity for entity in intent_data.get('entities', []) if entity in query.lower()), None)
+
         # Extract the file type from the query
         file_type = None
-        if "text file" in query:
+        if detected_entity == "text":
             file_type = ".txt"
-        elif "document file" in query:
+        elif detected_entity == "document":
             file_type = ".doc"
-        elif "excel file" in query:
+        elif detected_entity == "excel":
             file_type = ".xls"
-        elif "powerpoint file" in query:
+        elif detected_entity == "powerpoint":
             file_type = ".ppt"
-        elif "python file" in query:
+        elif detected_entity == "python":
             file_type = ".py"
-        elif "html file" in query:
+        elif detected_entity == "html":
             file_type = ".html"
-        elif "css file" in query:
+        elif detected_entity == "css":
             file_type = ".css"
-        elif "javascript file" in query:
+        elif detected_entity == "javascript":
             file_type = ".js"
-        elif "c file" in query:
+        elif detected_entity == "c":
             file_type = ".c"
-        elif "c++ file" in query:
+        elif detected_entity == "c++":
             file_type = ".cpp"
-        elif "c# file" in query:
+        elif detected_entity == "c#":
             file_type = ".cs"
-        elif "java file" in query:
+        elif detected_entity == "java":
             file_type = ".java"
-        elif "php file" in query:
+        elif detected_entity == "php":
             file_type = ".php"
 
         file_name = "file"
@@ -63,9 +66,13 @@ def create_file(query):
         if file_type:
             file_name = file_types[file_type].lower()
 
-        if "name it as" in query or "save it as" in query:
-            name_query = query.split("name it as ")[1] if "name it as" in query else query.split("save it as ")[1]
-            file_name = name_query.split()[0]
+        # Loop through each preposition pattern
+        for prep in intent_data['text']:
+            if prep in query:
+                # Extract file name from the query based on the preposition
+                name_query = query.split(prep)[1].strip()
+                file_name = name_query.split()[0] + ".jpg"
+                break
 
         if file_type:
             base_directory = os.path.join(os.path.expanduser("~"), "Documents", "Sam Virtual Assistant", "Documents"
@@ -85,10 +92,10 @@ def create_file(query):
 
             updated_file_name = f"{file_name} ({count - 1}){file_type}" if count > 1 else f"{file_name}{file_type}"
 
-            speak(f"{updated_file_name} has been created boss.")
+            speak(f"{updated_file_name} has been created sir.")
 
         else:
-            speak("Sorry, I couldn't determine the file type from the query boss.")
+            speak("Sorry, I couldn't determine the file type from the query sir.")
     except Exception as e:
         speak("An error occurred")
-        speak("Oops! Something went wrong while trying to create the file boss.")
+        speak("Oops! Something went wrong while trying to create the file sir.")

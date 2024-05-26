@@ -2,7 +2,6 @@ import time
 import pyautogui
 from sam_functions.speak import speak
 
-
 # Define a dictionary to map spoken key names to their corresponding keys
 key_mapping = {
     "page down": "pagedown",
@@ -51,9 +50,29 @@ key_mapping = {
 
 
 # Function to perform various keyboard shortcuts and actions based on the provided query
-def keyboard_keys(query):
+def keyboard_keys(query, intent_data):
     try:
-        key = query.split("press ")[1]
+        key = None
+
+        # Loop through each preposition pattern
+        for prep in intent_data['text']:
+            if prep in query:
+                # Extract key from the query based on the preposition
+                parts = query.split(prep)
+                if len(parts) > 1:
+                    key = parts[1].strip()
+                break
+
+        # Check if 'key' is extracted and if it contains "key" or "button"
+        if key:
+            # Remove "key" or "button" if present in the extracted key
+            key = key.replace("key", "").replace("button", "").strip()
+
+        # If there is no specific setting to open, open the Settings app directly
+        if not key:
+            # Handle the case where the query is not properly formatted
+            speak("Please provide a valid query to press a keyboard key sir.")
+            return
 
         # Check if the key is valid
         if key in key_mapping:
@@ -63,18 +82,15 @@ def keyboard_keys(query):
                 time.sleep(0.2)
 
                 # Inform the user that the key has been pressed
-                speak(f"{key} key pressed boss.")
+                speak(f"{key} key pressed sir.")
 
             except Exception as e:
                 speak("Error")
-                speak(f"Sorry boss. I encountered an issue while pressing the {key} key boss.")
+                speak(f"Sorry sir. I encountered an issue while pressing the {key} key sir.")
         else:
-            speak(f"Sorry, {key} is not a valid key boss.")
+            speak(f"Sorry, it is not a valid key sir.")
 
-    except IndexError:
-        # Handle the case where the query is not properly formatted
-        speak("Please provide a valid query to press a keyboard key boss.")
     except Exception as e:
         # Handle any other errors that might occur
         speak("An error occurred")
-        speak("Oops! Something went wrong while pressing the keyboard key boss.")
+        speak("Oops! Something went wrong while pressing the keyboard key sir.")

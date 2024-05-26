@@ -5,6 +5,8 @@ import os
 from sam_functions.speak import speak
 from sam_functions.listen import listen
 from check_functions import check_camera_opening
+import eel
+from intent_detect.load_model import recognize_intent
 
 
 # Function to create a directory if it doesn't exist
@@ -28,20 +30,30 @@ def take_photo_in_camera():
             pass
         else:
             # Camera app not found within 10 seconds, ask the user whether to continue waiting or exit
-            speak("The camera app is taking longer than usual to open. Do you want to continue waiting boss?")
+            speak("The camera app is taking longer than usual to open. Do you want to continue waiting sir?")
 
             while True:
-                confirm = listen()
-                if confirm == "":
+                query = listen()
+
+                if query == "":
                     continue
-                if "yes" in confirm:
+
+                confirm = recognize_intent(query)
+                if confirm['intent'] == "no" or confirm['intent'] == "assistant_sleep":
+                    speak("Closing camera app sir")
+                    pyautogui.hotkey('alt', 'f4')
+                    return
+                elif confirm['intent'] == "yes":
                     if not check_camera_opening():
                         speak("The camera app is still taking time to open. Please manually open the camera app.")
                         return
+                elif confirm['intent'] == "exit":
+                    speak(confirm["responses"])
+                    eel.close_window()
+                    exit()
                 else:
-                    speak("Closing camera app boss")
-                    pyautogui.hotkey('alt', 'f4')
-                    return
+                    speak("Sorry sir, I didn't quite catch that.")
+                    continue
 
         # Attempt to locate the video icon
         try:
@@ -64,29 +76,34 @@ def take_photo_in_camera():
         pyautogui.locateCenterOnScreen("images/light_mode/camera/photo.png", confidence=0.9, grayscale=True)
 
         # Prompt user that photo will be taken after 3 seconds
-        speak("I'll capture a photo in 3 seconds boss.")
+        speak("I'll capture a photo in 3 seconds sir.")
         time.sleep(3)
         pyautogui.press('enter')
         time.sleep(1)
-        speak(f"Photo has been taken boss.")
+        speak(f"Photo has been taken sir.")
     except Exception as e:
         speak("An error occurred")
-        speak("Oops! Something went wrong while trying to capture the photo boss.")
+        speak("Oops! Something went wrong while trying to capture the photo sir.")
         pyautogui.hotkey('alt', 'f4')
 
 
 # Function to take a photo using the webcam
-def take_photo(query):
+def take_photo(query, intent_data):
     try:
-        if "in camera" in query:
+        if intent_data['intent'] == "camera_take_photo":
             take_photo_in_camera()
             return
 
-        # Extract file name from query if mentioned
+        # Initialize file_name with default value
         file_name = "photo.jpg"
-        if "name it as" in query or "save it as" in query:
-            name_query = query.split("name it as ")[1] if "name it as" in query else query.split("save it as ")[1]
-            file_name = name_query.split()[0] + ".jpg"
+
+        # Loop through each preposition pattern
+        for prep in intent_data['text']:
+            if prep in query:
+                # Extract file name from the query based on the preposition
+                name_query = query.split(prep)[1].strip()
+                file_name = name_query.split()[0] + ".jpg"
+                break
 
         # Define the base directory for the camera roll
         base_directory = os.path.join(os.path.expanduser("~"), "Documents", "Sam Virtual Assistant", "Pictures",
@@ -113,11 +130,11 @@ def take_photo(query):
 
         # Check if the camera is opened successfully
         if not cap.isOpened():
-            speak("Sorry, I couldn't open the camera boss.")
+            speak("Sorry, I couldn't open the camera sir.")
             return
 
         # Prompt user that photo will be taken after 3 seconds
-        speak("I'll capture a photo in 3 seconds boss.")
+        speak("I'll capture a photo in 3 seconds sir.")
 
         # Create a window to display the live feed from the webcam
         cv2.namedWindow("Live Feed", cv2.WINDOW_NORMAL)
@@ -142,7 +159,7 @@ def take_photo(query):
         if ret:
             # Save the captured frame as an img
             cv2.imwrite(file_path, frame)
-            speak(f"Photo has been taken and saved as {file_name} boss.")
+            speak(f"Photo has been taken and saved as {file_name} sir.")
 
         # Release the camera
         cap.release()
@@ -150,4 +167,4 @@ def take_photo(query):
 
     except Exception as e:
         speak("An error occurred")
-        speak("Oops! Something went wrong while trying to capture the photo boss.")
+        speak("Oops! Something went wrong while trying to capture the photo sir.")

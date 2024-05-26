@@ -15,11 +15,11 @@ def volume_up(step):
     # Check if the new volume is equal to the current volume
     if new_volume == current_volume:
         # Print and speak a message indicating that the volume is already at its maximum
-        speak("Volume is already at its maximum boss")
+        speak("Volume is already at its maximum sir")
     else:
         # Set the master volume level to the new volume
         volume.SetMasterVolumeLevel(new_volume, None)
-        speak("Volume increased boss")
+        speak("Volume increased sir")
 
 
 # Function to decrease volume
@@ -32,11 +32,11 @@ def volume_down(step):
     new_volume = max(current_volume - step, min_volume)
     # Check if the absolute difference between the new volume and the current volume is very small
     if abs(new_volume - current_volume) < 0.01:  # Using a tolerance threshold for comparison
-        speak('Volume is already at its minimum boss')
+        speak('Volume is already at its minimum sir')
     else:
         # Set the master volume level to the new volume
         volume.SetMasterVolumeLevel(new_volume, None)
-        speak("Volume decreased boss")
+        speak("Volume decreased sir")
 
 
 # Function to mute volume
@@ -50,9 +50,9 @@ def mute_volume():
     if not is_muted:
         # Mute volume
         volume.SetMute(1, None)
-        speak("Volume muted boss")
+        speak("Volume muted sir")
     else:
-        speak("Volume is already muted boss")
+        speak("Volume is already muted sir")
 
 
 # Function to unmute volume
@@ -66,6 +66,6 @@ def unmute_volume():
     if is_muted:
         # Unmute volume
         volume.SetMute(0, None)
-        speak("Volume unmuted boss")
+        speak("Volume unmuted sir")
     else:
-        speak("Volume is already unmuted boss")
+        speak("Volume is already unmuted sir")

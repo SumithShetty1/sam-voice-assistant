@@ -5,6 +5,8 @@ from sam_functions.speak import speak
 from sam_functions.listen import listen
 from check_functions import check_youtube_opening, check_spotify_opening, check_dark_mode
 from AppOpener import open
+import eel
+from intent_detect.load_model import recognize_intent
 
 
 def play_track_in_spotify(track_name):
@@ -21,21 +23,31 @@ def play_track_in_spotify(track_name):
             else:
                 # Spotify not found within 10 seconds, ask the user whether to continue waiting or exit
                 speak(
-                    "Spotify is taking longer than usual to open. Do you want to continue waiting boss?")
+                    "Spotify is taking longer than usual to open. Do you want to continue waiting sir?")
 
                 while True:
-                    confirm = listen()
-                    if confirm == "":
+                    query = listen()
+
+                    if query == "":
                         continue
-                    if "yes" in confirm:
+
+                    confirm = recognize_intent(query)
+                    if confirm['intent'] == "no" or confirm['intent'] == "assistant_sleep":
+                        speak("Closing Spotify sir")
+                        pyautogui.hotkey('alt', 'f4')
+                        return
+                    elif confirm['intent'] == "yes":
                         if not check_spotify_opening():
                             # Handle the case if Spotify still not found
                             speak(f"Spotify is still taking time to open. Please manually play {track_name}")
                             return
+                    elif confirm['intent'] == "exit":
+                        speak(confirm["responses"])
+                        eel.close_window()
+                        exit()
                     else:
-                        speak("Closing Spotify boss")
-                        pyautogui.hotkey('alt', 'f4')
-                        return
+                        speak("Sorry sir, I didn't quite catch that.")
+                        continue
 
             # Search for the track
             pyautogui.hotkey('ctrl', 'l')
@@ -57,21 +69,31 @@ def play_track_in_spotify(track_name):
             else:
                 # Spotify not found within 10 seconds, ask the user whether to continue waiting or exit
                 speak(
-                    "Spotify is taking longer than usual to open. Do you want to continue waiting boss?")
+                    "Spotify is taking longer than usual to open. Do you want to continue waiting sir?")
 
                 while True:
-                    confirm = listen()
-                    if confirm == "":
+                    query = listen()
+
+                    if query == "":
                         continue
-                    if "yes" in confirm:
+
+                    confirm = recognize_intent(query)
+                    if confirm['intent'] == "no" or confirm['intent'] == "assistant_sleep":
+                        speak("Closing Spotify sir")
+                        pyautogui.hotkey('alt', 'f4')
+                        return
+                    elif confirm['intent'] == "yes":
                         if not check_spotify_opening():
                             # Handle the case if Spotify still not found
                             speak(f"Spotify is still taking time to open. Please manually play {track_name}")
                             return
+                    elif confirm['intent'] == "exit":
+                        speak(confirm["responses"])
+                        eel.close_window()
+                        exit()
                     else:
-                        speak("Closing Spotify boss")
-                        pyautogui.hotkey('alt', 'f4')
-                        return
+                        speak("Sorry sir, I didn't quite catch that.")
+                        continue
 
             # Search for the track
             pyautogui.hotkey('ctrl', 'shift', 'l')
@@ -87,13 +109,15 @@ def play_track_in_spotify(track_name):
         pyautogui.press('enter')
         time.sleep(1)
         # Speak confirmation message
-        speak(f"Playing {track_name} on Spotify boss.")
+        speak(f"Playing {track_name} on Spotify sir.")
         time.sleep(0.6)
         pyautogui.press('enter')
+        sleeping = True
+        return sleeping
 
     except Exception as e:
         # Handle errors
-        speak("Sorry, I couldn't play the track on Spotify boss.")
+        speak("Sorry, I couldn't play the track on Spotify sir.")
 
 
 def play_video_on_youtube(video_name):
@@ -109,21 +133,30 @@ def play_video_on_youtube(video_name):
         else:
             # YouTube not found within 10 seconds, ask the user whether to continue waiting or exit
             speak(
-                "YouTube is taking longer than usual to open. Do you want to continue waiting boss?")
+                "YouTube is taking longer than usual to open. Do you want to continue waiting sir?")
 
             while True:
-                confirm = listen()
-                if confirm == "":
+                query = listen()
+
+                if query == "":
                     continue
-                if "yes" in confirm:
+
+                confirm = recognize_intent(query)
+                if confirm['intent'] == "no" or confirm['intent'] == "assistant_sleep":
+                    speak("Closing YouTube sir")
+                    pyautogui.hotkey('alt', 'f4')
+                    return
+                elif confirm['intent'] == "yes":
                     if not check_youtube_opening():
                         # Handle the case if YouTube still not found
                         speak(f"YouTube is still taking time to open. Please manually play {video_name}")
                         return
+                elif confirm['intent'] == "exit":
+                    speak(confirm["responses"])
+                    eel.close_window()
+                    exit()
                 else:
-                    speak("Closing YouTube boss")
-                    pyautogui.hotkey('alt', 'f4')
-                    return
+                    speak("Sorry sir, I didn't quite catch that.")                   
 
         # Search for the video
         pyautogui.press('/')
@@ -152,25 +185,57 @@ def play_video_on_youtube(video_name):
         if first_video_position:
             pyautogui.click(first_video_position)
             # Speak confirmation message
-            speak(f"Playing {video_name} on YouTube boss.")
+            speak(f"Playing {video_name} on YouTube sir.")
+            sleeping = True
+            return sleeping
         else:
-            speak("Please pick a video from the list of videos manually boss.")
+            speak("Please pick a video from the list of videos manually sir.")
 
     except Exception as e:
         # Handle errors
-        speak("Sorry, I couldn't play the video on YouTube boss.")
+        speak("Sorry, I couldn't play the video on YouTube sir.")
 
 
 # Function to play music or video
-def play_functions(query):
+def play_functions(query, intent_data):
     try:
-        if "spotify" in query:
-            track_name = query.split("play ")[1]
+        if intent_data['intent'] == "play_media_spotify":
+            # Remove the specific phrases and clean up the query
+            track_name = ""
+
+            for prep in intent_data['text']:
+                if prep in query:
+                    # Extract search query from the query based on the preposition
+                    parts = query.split(prep)
+                    if len(parts) > 1:
+                        track_name = parts[1].strip()
+                    break
+
+            # Check if 'search_query' is extracted and perform necessary replacements
+            if track_name:
+                # Remove specific phrases
+                track_name = track_name.replace("play", "").replace("spotify", "").replace("on spotify", "").strip()
+
             play_track_in_spotify(track_name)
         else:
-            video_name = query.split("play ")[1]
+            # Remove the specific phrases and clean up the query
+            video_name = ""
+
+            for prep in intent_data['text']:
+                if prep in query:
+                    # Extract search query from the query based on the preposition
+                    parts = query.split(prep)
+                    if len(parts) > 1:
+                        video_name = parts[1].strip()
+                    break
+
+            # Check if 'search_query' is extracted and perform necessary replacements
+            if video_name:
+                # Remove specific phrases
+                video_name = video_name.replace("play", "").replace("youtube", "").replace("on youtube", "").strip()
+
             play_video_on_youtube(video_name)
 
     except Exception as e:
         # Handle errors
-        speak("Please specify what to play boss")
+        speak("Please specify what to play sir")
