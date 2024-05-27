@@ -1,71 +1,71 @@
-from sam_functions.speak import speak
 from ctypes import cast, POINTER
-from comtypes import CLSCTX_ALL
+from comtypes import CLSCTX_ALL, COMError
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+from sam_functions.speak import speak
+import eel
 
 
-# Function to increase volume
+def get_audio_interface():
+    devices = AudioUtilities.GetSpeakers()  # Get the speakers' devices
+    interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL,
+                                 None)  # Activate the interface for the audio endpoint volume
+    return cast(interface, POINTER(IAudioEndpointVolume))  # Cast the interface to an audio endpoint volume pointer
+
+
 def volume_up(step):
-    devices = AudioUtilities.GetSpeakers()  # Get the speakers' devices
-    interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)  # Activate the interface for the audio endpoint volume
-    volume = cast(interface, POINTER(IAudioEndpointVolume))  # Cast the interface to an audio endpoint volume pointer
-    current_volume = volume.GetMasterVolumeLevel()  # Get the current master volume level
-    max_volume = 0
-    new_volume = min(current_volume + step, max_volume)
-    # Check if the new volume is equal to the current volume
-    if new_volume == current_volume:
-        # Print and speak a message indicating that the volume is already at its maximum
-        speak("Volume is already at its maximum sir")
-    else:
-        # Set the master volume level to the new volume
-        volume.SetMasterVolumeLevel(new_volume, None)
-        speak("Volume increased sir")
+    try:
+        volume = get_audio_interface()
+        current_volume = volume.GetMasterVolumeLevel()
+        max_volume = 0
+        new_volume = min(current_volume + step, max_volume)
+        if new_volume == current_volume:
+            speak("Volume is already at its maximum sir")
+        else:
+            volume.SetMasterVolumeLevel(new_volume, None)
+            speak("Volume increased sir")
+    except COMError as e:
+        speak(f"Failed to increase volume")
 
 
-# Function to decrease volume
 def volume_down(step):
-    devices = AudioUtilities.GetSpeakers()  # Get the speakers' devices
-    interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)  # Activate the interface for the audio endpoint volume
-    volume = cast(interface, POINTER(IAudioEndpointVolume))  # Cast the interface to an audio endpoint volume pointer
-    current_volume = volume.GetMasterVolumeLevel()
-    min_volume = -65.25
-    new_volume = max(current_volume - step, min_volume)
-    # Check if the absolute difference between the new volume and the current volume is very small
-    if abs(new_volume - current_volume) < 0.01:  # Using a tolerance threshold for comparison
-        speak('Volume is already at its minimum sir')
-    else:
-        # Set the master volume level to the new volume
-        volume.SetMasterVolumeLevel(new_volume, None)
-        speak("Volume decreased sir")
+    try:
+        volume = get_audio_interface()
+        current_volume = volume.GetMasterVolumeLevel()
+        min_volume = -65.25
+        new_volume = max(current_volume - step, min_volume)
+        if abs(new_volume - current_volume) < 0.01:
+            speak("Volume is already at its minimum sir")
+        else:
+            volume.SetMasterVolumeLevel(new_volume, None)
+            speak("Volume decreased sir")
+    except COMError as e:
+        speak(f"Failed to decrease volume")
 
 
-# Function to mute volume
 def mute_volume():
-    devices = AudioUtilities.GetSpeakers()
-    interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-    volume = cast(interface, POINTER(IAudioEndpointVolume))
-    # Get the current mute status
-    is_muted = volume.GetMute()
-    # Check if volume is not already muted
-    if not is_muted:
-        # Mute volume
-        volume.SetMute(1, None)
-        speak("Volume muted sir")
-    else:
-        speak("Volume is already muted sir")
+    try:
+        volume = get_audio_interface()
+        is_muted = volume.GetMute()
+        if not is_muted:
+            volume.SetMute(1, None)
+            eel.DisplayMessage("Volume muted sir")
+            eel.receiverText("Volume muted sir")
+        else:
+            eel.DisplayMessage("Volume is already muted sir")
+            eel.receiverText("Volume is already muted sir")
+    except COMError as e:
+        eel.DisplayMessage("Failed to mute volume")
+        eel.receiverText("Failed to mute volume")
 
 
-# Function to unmute volume
 def unmute_volume():
-    devices = AudioUtilities.GetSpeakers()
-    interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-    volume = cast(interface, POINTER(IAudioEndpointVolume))
-    # Get the current mute status
-    is_muted = volume.GetMute()
-    # Check if volume is currently muted
-    if is_muted:
-        # Unmute volume
-        volume.SetMute(0, None)
-        speak("Volume unmuted sir")
-    else:
-        speak("Volume is already unmuted sir")
+    try:
+        volume = get_audio_interface()
+        is_muted = volume.GetMute()
+        if is_muted:
+            volume.SetMute(0, None)
+            speak("Volume unmuted sir")
+        else:
+            speak("Volume is already unmuted sir")
+    except COMError as e:
+        speak(f"Failed to unmute volume")
