@@ -10,18 +10,10 @@ def create_directory(directory):
 
 
 # Function to capture the entire screen
-def capture_full_screen(query, intent_data):
+def capture_full_screen():
     try:
         # Initialize file_name with default value
         file_name = "screenshot.png"
-
-        # Loop through each preposition pattern
-        for prep in intent_data['text']:
-            if prep in query:
-                # Extract file name from the query based on the preposition
-                name_query = query.split(prep)[1].strip()
-                file_name = name_query.split()[0] + ".jpg"
-                break
         
         # Define the base directory for the camera roll
         base_directory = os.path.join(os.path.expanduser("~"), "Documents", "Sam Virtual Assistant", "Pictures",
@@ -70,4 +62,4 @@ def screenshot(query, intent_data):
     if intent_data['intent'] == "snipping_tool_take_screenshot":
         capture_snipping()
     else:
-        capture_full_screen(query, intent_data)
+        capture_full_screen()

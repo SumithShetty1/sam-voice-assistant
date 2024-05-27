@@ -23,7 +23,7 @@ def take_photo_in_camera():
         pyautogui.typewrite('Camera')
         time.sleep(0.2)
         pyautogui.press('enter')
-        time.sleep(3)
+        time.sleep(8)
 
         if check_camera_opening():
             # Camera app opening found, proceed with the operation
@@ -55,6 +55,7 @@ def take_photo_in_camera():
                     speak("Sorry sir, I didn't quite catch that.")
                     continue
 
+
         # Attempt to locate the video icon
         try:
             pyautogui.locateCenterOnScreen("images/light_mode/camera/video.png", confidence=0.9, grayscale=True)
@@ -82,13 +83,14 @@ def take_photo_in_camera():
         time.sleep(1)
         speak(f"Photo has been taken sir.")
     except Exception as e:
+        print(e)
         speak("An error occurred")
         speak("Oops! Something went wrong while trying to capture the photo sir.")
         pyautogui.hotkey('alt', 'f4')
 
 
 # Function to take a photo using the webcam
-def take_photo(query, intent_data):
+def take_photo(intent_data):
     try:
         if intent_data['intent'] == "camera_take_photo":
             take_photo_in_camera()
@@ -96,14 +98,6 @@ def take_photo(query, intent_data):
 
         # Initialize file_name with default value
         file_name = "photo.jpg"
-
-        # Loop through each preposition pattern
-        for prep in intent_data['text']:
-            if prep in query:
-                # Extract file name from the query based on the preposition
-                name_query = query.split(prep)[1].strip()
-                file_name = name_query.split()[0] + ".jpg"
-                break
 
         # Define the base directory for the camera roll
         base_directory = os.path.join(os.path.expanduser("~"), "Documents", "Sam Virtual Assistant", "Pictures",

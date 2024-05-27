@@ -369,7 +369,7 @@ def take_query():
         # Camera
         # Take a photo
         elif intent_data['intent'] == "take_photo" or intent_data['intent'] == "camera_take_photo":
-            take_photo(query, intent_data)
+            take_photo(intent_data)
 
         # Start a video
         elif intent_data['intent'] == "camera_start_video":

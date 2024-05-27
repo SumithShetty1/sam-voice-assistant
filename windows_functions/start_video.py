@@ -13,7 +13,7 @@ def start_video():
         pyautogui.typewrite('Camera')
         time.sleep(0.2)
         pyautogui.press('enter')
-        time.sleep(3)
+        time.sleep(8)
 
         if check_camera_opening():
             # Camera app opening found, proceed with the operation
@@ -34,6 +34,7 @@ def start_video():
                     speak("Closing camera app sir")
                     pyautogui.hotkey('alt', 'f4')
                     return
+
 
         # Attempt to locate the photo icon
         try:

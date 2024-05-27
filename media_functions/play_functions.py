@@ -14,7 +14,7 @@ def play_track_in_spotify(track_name):
         try:
             # Attempting to open the spotify application
             open("spotify", throw_error=True, match_closest=True)
-            time.sleep(3)
+            time.sleep(8)
 
             # Check for Spotify continuously for 10 seconds
             if check_spotify_opening():
@@ -51,7 +51,7 @@ def play_track_in_spotify(track_name):
 
             # Search for the track
             pyautogui.hotkey('ctrl', 'l')
-            time.sleep(1)
+            time.sleep(2)
 
             pyautogui.write(track_name)
             pyautogui.press('enter')
@@ -60,7 +60,7 @@ def play_track_in_spotify(track_name):
         except Exception as e:
             search_url = f"https://open.spotify.com/"
             webbrowser.open(search_url)
-            time.sleep(3)
+            time.sleep(8)
 
             # Check for Spotify continuously for 10 seconds
             if check_spotify_opening():
@@ -95,6 +95,8 @@ def play_track_in_spotify(track_name):
                         speak("Sorry sir, I didn't quite catch that.")
                         continue
 
+            time.sleep(2)
+
             # Search for the track
             pyautogui.hotkey('ctrl', 'shift', 'l')
             time.sleep(1)
@@ -107,7 +109,7 @@ def play_track_in_spotify(track_name):
         pyautogui.press('tab')
         time.sleep(0.2)
         pyautogui.press('enter')
-        time.sleep(1)
+        time.sleep(2)
         # Speak confirmation message
         speak(f"Playing {track_name} on Spotify sir.")
         time.sleep(0.6)
@@ -124,7 +126,7 @@ def play_video_on_youtube(video_name):
     try:
         search_url = f"https://www.youtube.com/"
         webbrowser.open(search_url)
-        time.sleep(3.5)
+        time.sleep(8)
 
         # Check for YouTube continuously for 10 seconds
         if check_youtube_opening():
@@ -156,11 +158,13 @@ def play_video_on_youtube(video_name):
                     eel.close_window()
                     exit()
                 else:
-                    speak("Sorry sir, I didn't quite catch that.")                   
+                    speak("Sorry sir, I didn't quite catch that.")
+
+        time.sleep(2)
 
         # Search for the video
         pyautogui.press('/')
-        time.sleep(1)
+        time.sleep(2)
 
         pyautogui.write(video_name)
         time.sleep(0.2)
@@ -201,38 +205,22 @@ def play_functions(query, intent_data):
     try:
         if intent_data['intent'] == "play_media_spotify":
             # Remove the specific phrases and clean up the query
-            track_name = ""
-
-            for prep in intent_data['text']:
-                if prep in query:
-                    # Extract search query from the query based on the preposition
-                    parts = query.split(prep)
-                    if len(parts) > 1:
-                        track_name = parts[1].strip()
-                    break
+            track_name = query.split("play ")[1]
 
             # Check if 'search_query' is extracted and perform necessary replacements
             if track_name:
                 # Remove specific phrases
-                track_name = track_name.replace("play", "").replace("spotify", "").replace("on spotify", "").strip()
+                track_name = track_name.replace("on spotify", "").strip()
 
             play_track_in_spotify(track_name)
         else:
             # Remove the specific phrases and clean up the query
-            video_name = ""
-
-            for prep in intent_data['text']:
-                if prep in query:
-                    # Extract search query from the query based on the preposition
-                    parts = query.split(prep)
-                    if len(parts) > 1:
-                        video_name = parts[1].strip()
-                    break
+            video_name = query.split("play ")[1]
 
             # Check if 'search_query' is extracted and perform necessary replacements
             if video_name:
                 # Remove specific phrases
-                video_name = video_name.replace("play", "").replace("youtube", "").replace("on youtube", "").strip()
+                video_name = video_name.replace("youtube", "").replace("on youtube", "").strip()
 
             play_video_on_youtube(video_name)
 

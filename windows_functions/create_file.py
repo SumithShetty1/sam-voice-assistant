@@ -71,7 +71,7 @@ def create_file(query, intent_data):
             if prep in query:
                 # Extract file name from the query based on the preposition
                 name_query = query.split(prep)[1].strip()
-                file_name = name_query.split()[0] + ".jpg"
+                file_name = name_query.split()[0]
                 break
 
         if file_type:
