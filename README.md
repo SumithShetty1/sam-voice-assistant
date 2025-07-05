@@ -121,3 +121,7 @@ You just have to change an import in __init__.py in the eel module.
 - and replace it with the one below:
   ```bash
   import bottle_websocket as wbs
+  ```
+
+## Disclaimer
+This project is a personal/portfolio project created for educational and demonstration purposes. It is not affiliated with or endorsed by any existing company or product that may share a similar name.
