@@ -1,5 +1,6 @@
 import tensorflow as tf
 from keras._tf_keras.keras.preprocessing.sequence import pad_sequences
+from keras._tf_keras.keras.initializers import Orthogonal
 import numpy as np
 import random
 import json
@@ -16,17 +17,9 @@ with open('intent_detect/Intent.json', 'r') as f:
 with open('intent_detect/tokenizer.json', 'r') as f:
     tokenizer = tf.keras.preprocessing.text.tokenizer_from_json(json.load(f))
 
-
-def clean(line):
-    cleaned_line = ''
-    for char in line:
-        if char.isalpha() or char.isspace():
-            cleaned_line += char
-        else:
-            cleaned_line += ' '
-    cleaned_line = ' '.join(cleaned_line.split())
-    return cleaned_line
-
+# Text cleaning function
+def clean(text):
+    return ' '.join(''.join(char if char.isalpha() or char.isspace() else ' ' for char in text).split())
 
 # List of unique intents
 unique_intents = [intent['intent'] for intent in data['intents']]
@@ -36,8 +29,10 @@ intent_to_index = {intent: i for i, intent in enumerate(unique_intents)}
 index_to_intent = {i: intent for intent, i in intent_to_index.items()}
 
 # Load the trained model
-model = tf.keras.models.load_model('intent_detect/intent_model.keras')
-
+model = tf.keras.models.load_model(
+    'intent_detect/intent_model.keras',
+    custom_objects={'Orthogonal': Orthogonal}
+)
 
 def recognize_intent(query):
     words = clean(query).split()
