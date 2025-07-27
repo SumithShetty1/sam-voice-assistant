@@ -15,11 +15,9 @@ warnings.filterwarnings('ignore')
 with open('Intent.json', 'r') as f:
     data = json.load(f)
 
-
 # Text cleaning function
 def clean(text):
     return ' '.join(''.join(char if char.isalpha() or char.isspace() else ' ' for char in text).split())
-
 
 # Prepare training data
 text_input, intents = [], []
