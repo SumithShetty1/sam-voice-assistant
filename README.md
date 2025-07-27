@@ -13,13 +13,20 @@ SAM is an AI-powered voice assistant designed to assist users with various tasks
 ## Technologies Used
 - **Frontend**: HTML, CSS, JavaScript, Bootstrap
 - **Backend**: Python
-- **Machine Learning**: TensorFlow
+- **Desktop Interface**: Eel (for integrating Python backend with an HTML/CSS/JS frontend)
+- **Deep Learning**: TensorFlow (Keras API)
 - **Model Training**: The model was trained using a Bidirectional LSTM neural network with an embedding layer, trained for 100 epochs on a dataset of intents defined in `Intent.json`. The model uses the Adam optimizer with a learning rate of 0.001 and categorical crossentropy loss.
 
 ## Model Performance
+- **Total Samples**: 3,045 natural language utterances (user queries) defined in `Intent.json`
+- **Train-Test Split**: 80% for training (2,436 samples), 20% for testing (609 samples)
 - **Test Accuracy**: 89.98%
 - **Test Loss**: 0.9145
-- **Classification Metrics**: Macro average precision: 0.86, recall: 0.86, and F1-score: 0.85 across 609 test samples.
+- **Classification Metrics**:
+  - **Macro Average Precision**: 0.86
+  - **Macro Average Recall**: 0.86
+  - **Macro Average F1-Score**: 0.85
+- The model was evaluated using a multi-class classification setup across all defined intents.
 
 ## Getting Started
 To get a local copy up and running, follow these steps:
