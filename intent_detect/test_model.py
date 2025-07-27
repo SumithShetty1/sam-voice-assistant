@@ -44,9 +44,14 @@ padded_sequences = pad_sequences(sequences, padding="pre")
 categorical_labels = tf.keras.utils.to_categorical(y_indices, num_classes=len(unique_intents))
 
 # Split test set
-_, X_test, _, y_test = train_test_split(
+X_train, X_test, y_train, y_test = train_test_split(
     padded_sequences, categorical_labels, test_size=0.2, stratify=y_indices, random_state=42
 )
+
+# Print split details
+print(f"Total Samples: {len(padded_sequences)}")
+print(f"Training Samples: {len(X_train)}")
+print(f"Test Samples: {len(X_test)}")
 
 # Load model
 model = tf.keras.models.load_model("intent_model.keras")

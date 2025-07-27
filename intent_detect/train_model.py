@@ -84,6 +84,11 @@ model.fit(X_train, y_train, validation_split=0.1, epochs=epochs, verbose=1)
 # Save trained model
 model.save('intent_model.keras')
 
+# Print split details
+print(f"Total Samples: {len(padded_sequences)}")
+print(f"Training Samples: {len(X_train)}")
+print(f"Test Samples: {len(X_test)}")
+
 # Evaluate the model
 loss, accuracy = model.evaluate(X_test, y_test, verbose=1)
 print(f'\nTest Loss: {loss:.4f}, Test Accuracy: {accuracy:.4f}')

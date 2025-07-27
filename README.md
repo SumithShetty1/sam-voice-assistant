@@ -20,12 +20,12 @@ SAM is an AI-powered voice assistant designed to assist users with various tasks
 ## Model Performance
 - **Total Samples**: 3,045 natural language utterances (user queries) defined in `Intent.json`
 - **Train-Test Split**: 80% for training (2,436 samples), 20% for testing (609 samples)
-- **Test Accuracy**: 89.98%
-- **Test Loss**: 0.9145
+- **Test Accuracy**: 90.64%
+- **Test Loss**: 0.7605
 - **Classification Metrics**:
-  - **Macro Average Precision**: 0.86
-  - **Macro Average Recall**: 0.86
-  - **Macro Average F1-Score**: 0.85
+  - **Macro Average Precision**: 0.87
+  - **Macro Average Recall**: 0.87
+  - **Macro Average F1-Score**: 0.86
 - The model was evaluated using a multi-class classification setup across all defined intents.
 
 ## Getting Started
