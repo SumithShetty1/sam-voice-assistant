@@ -59,7 +59,7 @@ SAM is an AI-powered voice assistant designed to assist users with various tasks
 
 ### Bluetooth Functions
 - Toggle Bluetooth (Action Center / Settings)
-- Show Paired Bluetooth Devices (Action Center / Settings)
+- Show Bluetooth Devices (Action Center / Settings)
 
 ### Airplane Mode
 - Toggle Airplane Mode (Action Center / Settings)
