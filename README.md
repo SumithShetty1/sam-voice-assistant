@@ -28,18 +28,113 @@ SAM is an AI-powered voice assistant designed to assist users with various tasks
   - **Macro Average F1-Score**: 0.86
 - The model was evaluated using a multi-class classification setup across all defined intents.
 
-## Getting Started
-To get a local copy up and running, follow these steps:
+## Capabilities
 
-**1. Clone the repository:**
+### System Controls
+- Lock System
+- Sleep System
+- Sign Out
+- Restart System
+- Shutdown System
+
+### Assistant Controls
+- Assistant State Control (Wake Up, Sleep Assistant, Exit SAM)
+- Simple Dialogues (Greeting, Name, User Identity, Status, Capabilities, Thank You, Goodbye, Apology, Hobbies, Dreams, Meaning of Life, Robot, Good Day)
+
+### Date and Time
+- Get Current Time / Hour / Date / Day / Month / Year
+- Get Yesterday's Date / Day / Month / Year
+- Get Day Before Yesterday
+- Get Tomorrow's Date / Day / Month / Year
+- Get Day After Tomorrow
+- Tell Combined Time and Date Info (e.g., Time and Date, Time and Day)
+
+### Internet & Network
+- Check Internet Connection
+- Respond to Internet On / Off Commands (acknowledges user requests, does not toggle internet)
+
+### Wi-Fi Functions
+- Toggle Wi-Fi (Action Center / Settings)
+- Show Available Wi-Fi Networks (Action Center / Settings)
+
+### Bluetooth Functions
+- Toggle Bluetooth (Action Center / Settings)
+- Show Paired Bluetooth Devices (Action Center / Settings)
+
+### Airplane Mode
+- Toggle Airplane Mode (Action Center / Settings)
+
+### Power Modes & Display
+- Toggle Battery Saver
+- Toggle Night Light Mode (Action Center / Settings)
+- Toggle Do Not Disturb Mode
+- Toggle Nearby Sharing (Action Center / Settings)
+- Toggle Hotspot
+- Toggle Light / Dark Mode
+
+### File and Window Operations
+- Open Application
+- Close Application
+- Close Current Window
+- Access System Settings (launch both general or specific settings pages)
+- Create File
+
+### Hardware Controls
+- Increase / Decrease / Set Brightness
+- Increase / Decrease Volume
+- Mute / Unmute Volume
+
+### Keyboard & Shortcut Control
+- Simulate Individual Key Presses (e.g., F1-F12, media keys, arrows, etc.)
+- Execute Voice-Triggered Keyboard Shortcuts:
+  - Clipboard: Copy, Cut, Paste, Undo, Redo, Select All
+  - Search/File: Find, Save, Print, New Tab, New Window
+  - Window Management: Task View, Switch Apps, Show Desktop, Minimize/Maximize/Snap Windows
+  - Formatting: Bold, Italic, Underline, Align Left/Center/Right
+  - System: Open Start Menu, Run Dialog, Power User Menu, System Properties
+
+### Search & Information
+- Search on Windows
+- Search in File Explorer
+- Search on Web Platforms (Google, YouTube, Spotify, LinkedIn, Amazon, Twitter, GitHub, Wikipedia, Facebook, Instagram, Netflix, Bing)
+
+### Camera & Media
+- Take Photo
+- Start Video Recording
+- Scan Barcode
+- Take Screenshot (Normal / Snipping Tool)
+- Record Screen (Normal / Snipping Tool)
+- Record Audio
+- Play Songs on Spotify
+- Play Videos on YouTube
+
+### Location-Based Environment Info
+- Get Current Temperature of a Location
+- Get Current Weather Condition of a Location
+
+## How to Use This Source Code
+
+### Prerequisites
+- Python 3.12.3 
+- PyCharm (recommended IDE for development)
+
+### 1. Clone the Repository:
    ```bash
    git clone https://github.com/SumithShetty1/sam-voice-assistant.git
-   ```
-**2. Install the required packages:**
-   ```bash
+  ```
+
+### 2. Navigate to the Project Directory:
+  ```bash
+   cd sam-voice-assistant
+  ```
+
+### 3. Install the Required Python Packages:
+  ```bash
    pip install -r requirements.txt
-   ```
-**3. Run the program**
+  ```
+
+### 4. Run the Program:
+You can run the project directly from PyCharm or by using the terminal.
 
 ## Installed Packages
 - [Setuptools](https://pypi.org/project/setuptools/): A package development library for Python, enhancing the functionality of the built-in `distutils`. It simplifies the process of packaging and distributing Python projects.
