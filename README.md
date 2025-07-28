@@ -115,26 +115,38 @@ SAM is an AI-powered voice assistant designed to assist users with various tasks
 ## How to Use This Source Code
 
 ### Prerequisites
+- Windows 11
 - Python 3.12.3 
 - PyCharm (recommended IDE for development)
 
 ### 1. Clone the Repository:
-   ```bash
-   git clone https://github.com/SumithShetty1/sam-voice-assistant.git
+  ```bash
+  git clone https://github.com/SumithShetty1/sam-voice-assistant.git
   ```
 
 ### 2. Navigate to the Project Directory:
   ```bash
-   cd sam-voice-assistant
+  cd sam-voice-assistant
   ```
-
-### 3. Install the Required Python Packages:
+### 3. Create a Virtual Environment:
   ```bash
-   pip install -r requirements.txt
+  python -m venv venv
+  ```
+### 4. Activate the Virtual Environment:
+  ```bash
+  venv\Scripts\activate
   ```
 
-### 4. Run the Program:
-You can run the project directly from PyCharm or by using the terminal.
+### 5. Install the Required Python Packages:
+  ```bash
+  pip install -r requirements.txt
+  ```
+
+### 6. Run the Program:
+  You can run the project directly from PyCharm or by using the terminal.
+  ```bash
+  python main.py
+  ```
 
 ## Installed Packages
 - [Setuptools](https://pypi.org/project/setuptools/): A package development library for Python, enhancing the functionality of the built-in `distutils`. It simplifies the process of packaging and distributing Python projects.
