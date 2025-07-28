@@ -143,7 +143,7 @@ SAM is an AI-powered voice assistant designed to assist users with various tasks
   ```
 
 ### 6. Run the Program:
-  You can run the project directly from PyCharm or by using the terminal.
+  You can run the project directly from PyCharm or by using the terminal:
   ```bash
   python main.py
   ```
